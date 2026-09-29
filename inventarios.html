@@ -17,7 +17,6 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / IMS · Inventarios</div>
     <h1>IMS · Inventarios y compras <span class="scope-pill" data-prop-name></span></h1>
-    <p>¿Qué hay que comprar, recibir o ajustar hoy? Busca un producto y actúa desde ahí.</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" data-hash="transferir" data-wz-open="tr" data-icon="truck">Transferir</a>
@@ -30,7 +29,6 @@
 
 <div class="mt">
     <div class="bigsearch" id="imsSearch"><span data-icon="search"></span><input class="input" type="search" id="mFilter" placeholder="Buscar en el maestro: SKU o producto (p. ej. «ron», «AB-1602»)…" autocomplete="off"></div>
-    <p class="small muted" style="margin:8px 2px 0">Catálogo sincronizado con el ERP (<span id="erpName">Profit Plus · Saint · a2</span>) hace 14 min. Clic en un producto para pedir, transferir o ajustar.</p>
 </div>
 
 <div class="grid g-2-1 mt" style="align-items:start">
@@ -67,7 +65,7 @@
       <tbody id="ocBody"></tbody>
     </table></div>
     <details class="acc flat">
-      <summary><span class="grow">Últimas notas de entrada <span class="muted">· cada recepción genera la nota en el ERP y actualiza el costo promedio</span></span></summary>
+      <summary><span class="grow">Últimas notas de entrada</span></summary>
       <div class="table-wrap"><table class="table" data-searchable>
         <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>ERP</th></tr></thead>
         <tbody id="neBody"></tbody>
@@ -100,7 +98,7 @@
       <tbody id="ajBody"></tbody>
     </table></div>
     <details class="acc flat">
-      <summary><span class="grow">Conteos de inventario <span class="muted">· cíclicos semanales (A&amp;B y licores) y general mensual</span></span></summary>
+      <summary><span class="grow">Conteos de inventario</span></summary>
       <div class="table-wrap"><table class="table" data-searchable>
         <thead><tr><th>Conteo</th><th>Almacén</th><th>Responsable</th><th style="min-width:130px">Avance</th><th class="num">Diferencia</th><th>Estado</th></tr></thead>
         <tbody id="cBody"></tbody>
@@ -137,7 +135,7 @@
   </div>
 </section>
   <section class="card" style="position:sticky;top:80px">
-    <div class="card-h"><div><h2>Pendiente de tu acción</h2><p>Aprobar, despachar y recibir con un clic</p></div><span class="badge b-warn" id="inboxCount">0</span></div>
+    <div class="card-h"><div><h2>Pendiente de tu acción</h2></div><span class="badge b-warn" id="inboxCount">0</span></div>
     <ul class="list inbox" id="inbox"></ul>
   </section>
 </div>
@@ -255,7 +253,6 @@
   }
   function renderMaestro(p) {
     var low = 0;
-    document.getElementById("erpName").textContent = p === "todas" ? "Profit Plus · Saint · a2" : PROPS.find(function (h) { return h.id === p; }).erp;
     document.getElementById("mHead").innerHTML = '<tr><th style="min-width:220px">Producto</th><th class="num">Existencia</th><th class="num">Mínimo</th><th class="num">Costo prom.</th><th>Estado</th></tr>';
     document.getElementById("mBody").innerHTML = P.map(function (pr, i) {
       var st = stockOf(p, i);
@@ -522,7 +519,7 @@
       return oc.lines.map(function (l) { var pr = BYSKU[l[0]], antes = Math.round(l[1] * oc.rec), ahora = l[1] - antes - (r() < 0.35 ? Math.round(l[1] * 0.1) : 0); return { pr: pr, ped: l[1], antes: antes, ahora: ahora, lote: "L-" + (2600 + Math.floor(r() * 99)) + (/Proteínas|Pescados|Lácteos/.test(pr[2]) ? " · vence " + (4 + Math.floor(r() * 10)) + "/10" : "") }; });
     }
     App.wizard({
-      title: "Recibir mercancía", sub: "Contra orden de compra · genera la nota de entrada en el ERP", wide: true, state: st,
+      title: "Recibir mercancía", wide: true, state: st,
       steps: [
         { t: "Orden", html: function (st) {
           return '<ul class="list" style="border:1px solid var(--border);border-radius:8px">' + open.map(function (x) { return '<li><input type="radio" name="wzOc" value="' + x.id + '"' + (x.id === st.id ? " checked" : "") + ' style="accent-color:var(--gold);margin-top:4px"><div class="grow"><b>' + x.id + " · " + x.prov + "</b><small>" + (x.sede === "todas" ? "Cadena" : nom(x.sede)) + " · " + money(x.monto) + " · " + Math.round(x.rec * 100) + '% recibido</small></div><span class="badge ' + OCST[x.st] + '">' + x.st + "</span></li>"; }).join("") + "</ul>";
@@ -530,7 +527,7 @@
         { t: "Contar lo recibido", html: function (st) {
           var oc = OC.find(function (x) { return x.id === st.id; });
           st.L = st.L || lines(oc);
-          return '<p class="small muted" style="margin-top:0">Factura FAC-00' + (18230 + st.id.charCodeAt(9) * 7) + " · escribe lo que llegó; el sistema calcula lo pendiente.</p>" +
+          return '<p class="small muted" style="margin-top:0">Factura FAC-00' + (18230 + st.id.charCodeAt(9) * 7) + "</p>" +
             '<div class="table-wrap" style="border:1px solid var(--border);border-radius:8px"><table class="table"><thead><tr><th>Producto</th><th class="num">Pendiente</th><th class="num">Llegó</th><th>Lote</th></tr></thead><tbody>' +
             st.L.map(function (l, k) { return '<tr><td class="strong">' + l.pr[1] + '<span class="sub">' + l.pr[0] + " · pedido " + num(l.ped) + " " + l.pr[3] + '</span></td><td class="num">' + num(l.ped - l.antes) + '</td><td class="num"><input class="input input-sm" type="number" min="0" data-r="' + k + '" value="' + l.ahora + '" style="width:84px;text-align:right"></td><td class="small">' + l.lote + "</td></tr>"; }).join("") + "</tbody></table></div>";
         }, read: function (el, st) { st.L.forEach(function (l, k) { var i = el.querySelector('[data-r="' + k + '"]'); if (i) l.ahora = Math.max(0, +i.value || 0); }); } },
@@ -553,9 +550,9 @@
   WZ.tr = function (o) {
     var des = curSede(), st = { ori: des === "morrocoy" ? "margarita" : "morrocoy", des: des, sku: o.sku || "AB-1102", q: 12 };
     App.wizard({
-      title: "Solicitar transferencia entre hoteles", sub: "La aprueba el gerente del hotel de origen", state: st,
+      title: "Solicitar transferencia entre hoteles", state: st,
       steps: [
-        { t: "Ruta", html: function (st) { return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Desde (origen)</label><select class="select" id="wzOri">' + propOpts(st.ori) + '</select></div><div class="field"><label>Hacia (destino)</label><select class="select" id="wzDes">' + propOpts(st.des) + "</select></div></div>" + '<p class="small muted" style="margin:0">Sugerencia: Morrocoy tiene excedente de vinos y lencería esta semana.</p>'; },
+        { t: "Ruta", html: function (st) { return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Desde (origen)</label><select class="select" id="wzOri">' + propOpts(st.ori) + '</select></div><div class="field"><label>Hacia (destino)</label><select class="select" id="wzDes">' + propOpts(st.des) + "</select></div></div>"; },
           read: function (el, st) { st.ori = el.querySelector("#wzOri").value; st.des = el.querySelector("#wzDes").value; } },
         { t: "Producto", html: function (st) {
           return '<div class="field"><label>Producto (del maestro)</label><select class="select" id="wzProd">' + prodOpts(st.sku) + '</select></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Cantidad</label><input class="input" type="number" id="wzQ" value="' + st.q + '" min="1"></div><div class="field"><label>Fecha requerida</label><input class="input" type="date" value="2026-10-03"></div></div><div class="field" style="margin:0"><label>Justificación</label><input class="input" value="Cubrir evento del fin de semana"></div>';
@@ -574,7 +571,7 @@
     var sku = o.sku || "AB-2310", st = { sku: sku, sede: curSede(), alm: BYSKU[sku][6], q: -2, mot: "Merma (porcionado)" };
     var MOT = ["Merma (porcionado)", "Rotura", "Vencimiento", "Diferencia de conteo", "Consumo interno (eventos)", "Baja por desgaste", "Sobrante de conteo"];
     App.wizard({
-      title: "Registrar merma o ajuste", sub: "Todo ajuste requiere motivo y aprobación", state: st,
+      title: "Registrar merma o ajuste", state: st,
       steps: [
         { t: "Producto", html: function (st) { return '<div class="field"><label>Producto</label><select class="select" id="wzProd">' + prodOpts(st.sku) + '</select></div><div class="grid g-2" style="gap:0 12px"><div class="field" style="margin:0"><label>Hotel</label><select class="select" id="wzSede">' + propOpts(st.sede) + '</select></div><div class="field" style="margin:0"><label>Almacén</label><select class="select" id="wzAlm">' + ALM.map(function (a) { return "<option" + (a === st.alm ? " selected" : "") + ">" + a + "</option>"; }).join("") + "</select></div></div>"; },
           read: function (el, st) { st.sku = el.querySelector("#wzProd").value; st.sede = el.querySelector("#wzSede").value; st.alm = el.querySelector("#wzAlm").value; } },
@@ -595,8 +592,8 @@
   };
 
   WZ.ct = function () {
-    App.wizard({ title: "Nuevo conteo de inventario", sub: "Se asigna al responsable del almacén", steps: [{ t: "Conteo", html: function () {
-      return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo</label><select class="select"><option>Cíclico A&amp;B</option><option>Cíclico licores</option><option>Cíclico lencería</option><option>General mensual</option></select></div><div class="field"><label>Almacén</label><select class="select">' + ALM.map(function (a) { return "<option>" + nom(curSede()) + " · " + a + "</option>"; }).join("") + '</select></div><div class="field"><label>Fecha</label><input class="input" type="date" value="2026-09-30"></div><div class="field"><label>Responsable</label><input class="input" value="Yusmary C."></div></div><p class="small muted" style="margin:0">Conteo a ciegas: el responsable no ve la existencia teórica hasta cerrar.</p>';
+    App.wizard({ title: "Nuevo conteo de inventario", steps: [{ t: "Conteo", html: function () {
+      return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo</label><select class="select"><option>Cíclico A&amp;B</option><option>Cíclico licores</option><option>Cíclico lencería</option><option>General mensual</option></select></div><div class="field"><label>Almacén</label><select class="select">' + ALM.map(function (a) { return "<option>" + nom(curSede()) + " · " + a + "</option>"; }).join("") + '</select></div><div class="field"><label>Fecha</label><input class="input" type="date" value="2026-09-30"></div><div class="field"><label>Responsable</label><input class="input" value="Yusmary C."></div></div>';
     } }], done: { label: "Programar conteo", toast: "Conteo CI-0290 programado · se notificó al responsable (demo)" } });
   };
 

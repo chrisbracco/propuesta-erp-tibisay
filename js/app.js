@@ -128,7 +128,7 @@
     var aside = document.createElement("aside");
     aside.className = "sidebar";
     aside.innerHTML =
-      '<div class="sb-brand"><span class="sb-logo">' + logo() + '</span><div class="sb-text"><b>Gestión Hotelera</b><small>Hoteles Tibisay</small></div></div>' +
+      '<a class="sb-brand" href="dashboard.html" title="Hoteles Tibisay · Inicio"><span class="sb-logo">' + logo() + "</span></a>" +
       '<nav class="sb-nav">' + navHTML(page) + "</nav>" +
       '<div class="sb-foot"><button class="sb-link sb-collapse" type="button" title="Plegar menú">' + icon("panel") + '<span class="sb-text">Plegar menú</span></button></div>';
     document.body.prepend(aside);

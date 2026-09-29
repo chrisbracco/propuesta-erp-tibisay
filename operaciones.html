@@ -17,7 +17,6 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Operaciones</div>
     <h1>Operaciones · Hotel Tibisay <span data-prop-hotel></span></h1>
-    <p>¿Cómo va el día? Martes 29/09/2026 · reservas desde <b id="pmsName">Opera</b>, actualizado hace 1 min.</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" id="btnFalla" data-hash="reportar" data-icon="wrench">Reportar falla</a>
@@ -38,17 +37,17 @@
 
   <!-- ============ HOY: timeline + journey ============ -->
   <div class="tab-panel active" data-panel="hoy">
-    <div class="card-h"><div><h2>Línea de tiempo del día</h2><p>Llegadas, salidas, eventos, restaurante, pisos y fallas en una sola vista · clic en un elemento para ver el detalle</p></div>
+    <div class="card-h"><div><h2>Línea de tiempo del día</h2></div>
       <div class="legend"><span><i style="background:var(--gold-soft)"></i>Llegada</span><span><i style="background:var(--warn-bg)"></i>Salida</span><span><i style="background:var(--teal)"></i>Evento</span><span><i style="background:var(--champagne-soft)"></i>Restaurante</span><span><i style="background:var(--danger-bg)"></i>Falla</span></div></div>
     <div class="dayline"><div class="dl-inner" id="dayline"></div></div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Journey del huésped</h2><p>Reserva → check-in → estancia → check-out · cada huésped con su siguiente paso</p></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Journey del huésped</h2></div>
       <a class="btn btn-ghost btn-sm" href="#" id="btnWalkin" data-hash="walkin" data-icon="plus">Walk-in</a></div>
     <div class="card-b"><div class="journey" id="journey"></div></div>
   </div>
 
   <!-- ============ HABITACIONES ============ -->
   <div class="tab-panel" data-panel="rooms">
-    <div class="card-h"><div><h2>Estado de habitaciones por piso</h2><p>Estado de la estadía + estado de limpieza · pasa el cursor para ver el detalle</p></div>
+    <div class="card-h"><div><h2>Estado de habitaciones por piso</h2></div>
       <div class="legend"><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--warn-bg)"></i>Salida hoy</span><span><i style="background:var(--gold-soft)"></i>Llegada</span><span><i style="background:var(--ok-bg)"></i>Vacía lista</span><span><i style="background:var(--danger-bg)"></i>Vacía sucia</span><span><i style="background:#ece9e3"></i>F/S</span></div></div>
     <div class="card-b" id="rack"></div>
   </div>
@@ -56,13 +55,13 @@
   <!-- ============ HOUSEKEEPING ============ -->
   <div class="tab-panel" data-panel="hk">
     <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="hkSum"></div></div>
-    <div class="card-h"><div><h2>Por inspeccionar</h2><p>La supervisora libera la habitación a recepción al aprobarla · llegadas primero</p></div></div>
+    <div class="card-h"><div><h2>Por inspeccionar</h2></div></div>
     <div class="table-wrap"><table class="table" data-searchable>
       <thead><tr><th>Hab.</th><th>Limpió</th><th>Llegada asignada</th><th></th></tr></thead>
       <tbody id="inspBody"></tbody>
     </table></div>
     <details class="acc flat">
-      <summary><span class="grow">Asignación por camarera <span class="muted">· turno A 7:00–15:00 · automática por piso</span></span></summary>
+      <summary><span class="grow">Asignación por camarera</span></summary>
       <div class="acc-b"><div class="grid g-3" id="maids"></div></div>
     </details>
   </div>
@@ -93,12 +92,12 @@
         </table></div>
       </div>
       <div>
-        <div class="card-h"><div><h2>Salones · hoy</h2><p>Montajes y eventos del día por espacio</p></div></div>
+        <div class="card-h"><div><h2>Salones · hoy</h2></div></div>
         <div class="card-b"><div class="grid" style="gap:10px" id="venues"></div></div>
       </div>
     </div>
     <details class="acc flat">
-      <summary><span class="grow">Agenda de salones · semana 40 <span class="muted">· BEO vinculado desde CRM</span></span></summary>
+      <summary><span class="grow">Agenda de salones · semana 40</span></summary>
       <div class="table-wrap"><table class="table" data-searchable>
         <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
         <tbody>
@@ -268,7 +267,6 @@
     var ocup = c(function (x) { return x.fd === "ocupada" || x.fd === "salida"; });
     var lleg = c(function (x) { return x.fd === "llegada"; }), sal = c(function (x) { return x.fd === "salida"; }), fuera = c(function (x) { return x.fd === "fuera"; });
     var listas = c(function (x) { return x.fd === "vacia" && x.hk === "limpia"; });
-    document.getElementById("pmsName").textContent = prop.pms;
     var sinLib = c(function (x) { return x.fd === "llegada" && x.hk !== "limpia"; });
     document.getElementById("opsHero").innerHTML = App.hero(
       { label: "Llegadas pendientes de check-in", value: lleg - Math.min(3, lleg), unit: "de " + lleg, sub: Math.min(3, lleg) + " ya registradas · " + sinLib + " sin habitación lista" },
@@ -410,7 +408,7 @@
   });
   document.getElementById("btnFalla").addEventListener("click", function (e) {
     e.preventDefault();
-    App.wizard({ title: "Reportar falla", sub: "Se asigna al técnico de turno según la categoría", steps: [{ t: "Falla", html: function () {
+    App.wizard({ title: "Reportar falla", steps: [{ t: "Falla", html: function () {
       return '<div class="field"><label>Ubicación</label><input class="input" value="Hab. 410"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Categoría</label><select class="select"><option>Climatización</option><option>Plomería</option><option>Electricidad</option><option>Cerrajería</option><option>Electrónica</option></select></div>' +
         '<div class="field"><label>Prioridad</label><select class="select"><option>Urgente</option><option selected>Alta</option><option>Media</option><option>Baja</option></select></div></div><div class="field"><label>Qué pasa</label><input class="input" placeholder="Ej.: el A/A no enfría"></div>';
     } }], done: { label: "Crear ticket", toast: "Ticket MT-6160 creado y asignado a José A. Rivas (demo)" } });

@@ -17,7 +17,6 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Gestión Humana</div>
     <h1>Gestión Humana <span class="scope-pill" data-prop-name></span></h1>
-    <p>¿Está completo el personal hoy? Asistencia, turnos, nómina y reclutamiento.</p>
   </div>
   <div class="actions">
     <a class="btn btn-primary" href="#" id="btnMarc" data-hash="marcar" data-icon="clock">Marcación manual</a>
@@ -48,7 +47,7 @@
     </table></div>
     <div class="pager"><span id="marcCount">—</span><span>Biométricos sincronizados hace 3 min · tolerancia 5 min</span></div>
     <details class="acc flat" id="sedeAcc">
-      <summary><span class="grow">Semáforo por sede <span class="muted">· turnos que ya iniciaron (A 7:00, administrativo 8:00, C de anoche)</span></span></summary>
+      <summary><span class="grow">Semáforo por sede</span></summary>
       <div class="table-wrap"><table class="table">
         <thead><tr><th>Sede</th><th class="num">Programados</th><th class="num">A tiempo</th><th class="num">Tardanza</th><th class="num">Ausencia</th><th style="min-width:180px">Puntualidad</th><th>Semáforo</th></tr></thead>
         <tbody id="sedeBody"></tbody>
@@ -131,7 +130,7 @@
   <!-- ============ RECLUTAMIENTO ============ -->
   <div class="tab-panel" data-panel="recl">
     <div class="card-b">
-      <div class="between" style="flex-wrap:wrap;margin-bottom:12px"><div><h2>Temporada alta · diciembre 2026 a carnaval 2027</h2><p class="small muted" style="margin:2px 0 0">Plantilla adicional calculada con la ocupación proyectada (84% dic · 91% carnaval) y los eventos confirmados.</p></div>
+      <div class="between" style="flex-wrap:wrap;margin-bottom:12px"><div><h2>Temporada alta · diciembre 2026 a carnaval 2027</h2><p class="small muted" style="margin:2px 0 0">Ocupación proyectada 84% dic · 91% carnaval</p></div>
         <a class="btn btn-ghost btn-sm" href="#" data-hash="nueva-vacante" data-toast="Vacante publicada en portal de empleo y redes (demo)" data-icon="plus">Nueva vacante</a></div>
       <div class="steps">
         <span class="done">Publicada · 23</span><em>→</em><span class="done">Preselección · 142</span><em>→</em><span class="now">Entrevistas · 38</span><em>→</em><span>Prueba práctica · 11</span><em>→</em><span>Oferta · 6</span><em>→</em><span>Contratados · 9</span>
@@ -279,7 +278,7 @@
     e.preventDefault();
     var p = App.prop(), sedes = p === "todas" ? D.propiedades : D.propiedades.filter(function (x) { return x.id === p; });
     var list = [].concat.apply([], sedes.map(function (s) { return POR_SEDE[s.id]; })).slice(0, 40);
-    App.wizard({ title: "Marcación manual", sub: "Queda pendiente de aprobación del supervisor", steps: [{ t: "Marcación", html: function () {
+    App.wizard({ title: "Marcación manual", steps: [{ t: "Marcación", html: function () {
       return '<div class="field"><label>Colaborador</label><select class="select">' + list.map(function (x) { return "<option>" + x.n + " · " + x.cargo + " · " + D.sedeNombre(x.sede) + "</option>"; }).join("") + "</select></div>" +
         '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo</label><select class="select"><option>Entrada</option><option>Salida</option></select></div><div class="field"><label>Hora</label><input class="input" type="time" value="10:42"></div></div>' +
         '<div class="field" style="margin:0"><label>Motivo</label><select class="select"><option>Olvidó marcar</option><option>Biométrico fuera de línea</option><option>Trabajo fuera de la sede</option><option>Error de la app móvil</option></select></div>';

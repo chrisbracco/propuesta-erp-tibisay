@@ -139,11 +139,9 @@ svg { flex-shrink: 0; }
   display: flex; flex-direction: column;
   transition: width .2s ease, transform .2s ease;
 }
-.sb-brand { height: var(--top-h); display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid rgba(255, 255, 255, .08); overflow: hidden; }
-.sb-logo { flex-shrink: 0; height: 44px; padding: 4px 8px; border-radius: var(--r); background: var(--cream); display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(192, 176, 144, .45); }
-.sb-logo img { height: 36px; width: auto; display: block; }
-.sb-brand b { display: block; color: var(--on-dark); font-size: 13px; letter-spacing: .02em; }
-.sb-brand small { display: block; font-size: 11px; color: rgba(244, 241, 234, .55); }
+.sb-brand { height: var(--top-h); display: flex; align-items: center; justify-content: center; padding: 0 14px; border-bottom: 1px solid rgba(255, 255, 255, .08); overflow: hidden; }
+.sb-logo { height: 54px; padding: 3px 22px; border-radius: 10px; background: var(--cream); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(192, 176, 144, .35); }
+.sb-logo img { height: 48px; width: auto; max-width: 100%; object-fit: contain; display: block; }
 .sb-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 10px; }
 .sb-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .38); padding: 14px 12px 6px; white-space: nowrap; }
 .sb-link {
@@ -165,8 +163,8 @@ body.sb-min .sidebar { width: var(--sb-w-min); }
 body.sb-min .main-wrap { margin-left: var(--sb-w-min); }
 body.sb-min .sb-text, body.sb-min .sb-label, body.sb-min .sb-count { display: none; }
 body.sb-min .sb-brand { justify-content: center; padding: 0; }
-body.sb-min .sb-logo { width: 48px; height: 40px; padding: 3px; }
-body.sb-min .sb-logo img { width: 100%; height: auto; }
+body.sb-min .sb-logo { width: 50px; height: 42px; padding: 4px; border-radius: 8px; }
+body.sb-min .sb-logo img { width: 100%; height: 100%; }
 body.sb-min .sb-link { justify-content: center; padding: 0; }
 body.sb-min .sb-collapse .ico { transform: rotate(180deg); }
 

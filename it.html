@@ -17,7 +17,6 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Panel de IT</div>
     <h1>Panel de IT <span class="scope-pill" data-prop-name></span></h1>
-    <p>¿Está operativa la infraestructura? Incidencias, tickets y respaldos · actualizado hace 1 min.</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" data-toast="Reporte mensual de IT exportado en PDF (demo)" data-icon="download">Reporte mensual</a>
@@ -37,9 +36,9 @@
 
   <!-- ============ ESTADO ============ -->
   <div class="tab-panel active" data-panel="infra">
-    <div class="card-h"><div><h2>Incidencias activas</h2><p>Primero lo caído, luego lo degradado</p></div></div>
+    <div class="card-h"><div><h2>Incidencias activas</h2></div></div>
     <ul class="list inbox" id="incList"></ul>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado por sede</h2><p>Pasa el cursor sobre un punto para ver el detalle</p></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado por sede</h2></div>
       <div class="legend"><span><span class="status-dot ok"></span> Operativo</span><span><span class="status-dot warn"></span> Degradado</span><span><span class="status-dot danger"></span> Caído</span></div></div>
     <div class="table-wrap"><table class="table matrix">
       <thead><tr><th>Sede</th><th>Internet ppal.</th><th>Internet resp.</th><th>LAN</th><th>Wi-Fi huésp.</th><th>Wi-Fi oper.</th><th>Servidor</th><th>Telefonía</th><th>CCTV</th><th>Respaldo</th></tr></thead>
@@ -58,7 +57,7 @@
       <tbody id="tkBody"></tbody>
     </table></div>
     <details class="acc flat">
-      <summary><span class="grow">Estadísticas del mes <span class="muted">· por sede y por categoría</span></span></summary>
+      <summary><span class="grow">Estadísticas del mes</span></summary>
       <div class="acc-b"><div class="grid g-2">
         <div><h3 style="margin-bottom:10px">Tickets abiertos por sede</h3><div id="tkChart"></div></div>
         <div><h3 style="margin-bottom:10px">Por categoría (mes)</h3><div class="donut-wrap"><div id="tkDonut"></div><ul class="donut-list" id="tkDonutList"></ul></div></div>
@@ -70,16 +69,16 @@
   <div class="tab-panel" data-panel="mon">
     <div class="grid g-2-1" style="gap:0">
       <div style="border-right:1px solid var(--border)">
-        <div class="card-h"><div><h2>Disponibilidad · últimos 30 días</h2><p>Cada barra es un día</p></div></div>
+        <div class="card-h"><div><h2>Disponibilidad · últimos 30 días</h2></div></div>
         <div class="card-b" id="uptime"></div>
       </div>
       <div>
-        <div class="card-h"><div><h2>Alertas recientes</h2><p>Del sistema de monitoreo</p></div></div>
+        <div class="card-h"><div><h2>Alertas recientes</h2></div></div>
         <ul class="list" id="alerts"></ul>
       </div>
     </div>
     <details class="acc flat">
-      <summary><span class="grow">Latencia hacia la nube (ms) · hoy <span class="muted">· enlace principal por sede</span></span><span class="legend" id="latLegend"></span></summary>
+      <summary><span class="grow">Latencia hacia la nube (ms) · hoy</span><span class="legend" id="latLegend"></span></summary>
       <div class="acc-b"><div id="latChart"></div></div>
     </details>
   </div>
@@ -250,7 +249,7 @@
   document.getElementById("btnTk").addEventListener("click", function (e) {
     e.preventDefault();
     var p = App.prop();
-    App.wizard({ title: "Nuevo ticket de soporte IT", sub: "Se asigna al técnico de guardia según la categoría", steps: [{ t: "Ticket", html: function () {
+    App.wizard({ title: "Nuevo ticket de soporte IT", steps: [{ t: "Ticket", html: function () {
       return '<div class="field"><label>Asunto</label><input class="input" placeholder="Ej.: la impresora fiscal no imprime"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Sede</label><select class="select">' + D.propiedades.map(function (h) { return "<option" + (h.id === p ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + '</select></div>' +
         '<div class="field"><label>Categoría</label><select class="select"><option>Internet / Wi-Fi</option><option>Punto de venta</option><option>Impresora fiscal</option><option>Accesos y usuarios</option><option>Servidores</option><option>CCTV</option><option>Telefonía</option></select></div></div>' +
         '<div class="field" style="margin:0"><label>Prioridad</label><div class="seg" style="display:flex"><button type="button">Baja</button><button type="button" class="active">Media</button><button type="button">Alta</button><button type="button">Crítica</button></div></div>';

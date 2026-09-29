@@ -17,7 +17,6 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / CRM &amp; Huéspedes</div>
     <h1>CRM &amp; Huéspedes <span class="scope-pill" data-prop-name></span></h1>
-    <p>¿Qué oportunidades y huéspedes necesitan seguimiento hoy?</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" data-toast="Nuevo huésped (demo)" data-icon="plus">Nuevo huésped</a>
@@ -37,7 +36,6 @@
   <!-- ============ PIPELINE ============ -->
   <div class="tab-panel active" data-panel="eventos">
     <div class="card-b">
-      <p class="small muted" style="margin:0 0 12px">Cada solicitud de WhatsApp se vuelve una cotización y avanza por etapas. Clic en una tarjeta para ver cotización y conversación.</p>
       <div class="kanban" id="pipeline"></div>
     </div>
   </div>
@@ -70,14 +68,14 @@
         <div class="stat"><small><span class="badge b-teal">Platino</span> 20+ noches / año</small><b>172</b><span>2 ptos por $ · upgrade garantizado · traslado · lounge</span></div>
       </div>
     </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2><p>Puntos y avance al siguiente nivel (noches de los últimos 12 meses)</p></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2></div>
       <div class="seg" id="tierSeg"><button class="active" data-v="">Todos</button><button data-v="Platino">Platino</button><button data-v="Oro">Oro</button><button data-v="Plata">Plata</button></div></div>
     <div class="table-wrap"><table class="table" data-searchable id="memberTable">
       <thead><tr><th>Miembro</th><th>Nivel</th><th class="num">Puntos</th><th style="min-width:190px">Avance al siguiente nivel</th><th class="num">Ptos. por vencer</th></tr></thead>
       <tbody></tbody>
     </table></div>
     <details class="acc flat">
-      <summary><span class="grow">Campañas <span class="muted">· segmentadas por nivel e historial</span></span></summary>
+      <summary><span class="grow">Campañas</span></summary>
       <div class="table-wrap"><table class="table" data-searchable>
         <thead><tr><th>Campaña</th><th>Segmento</th><th>Canal</th><th class="num">Enviados</th><th class="num">Apertura</th><th class="num">Reservas</th><th class="num">Ingreso</th><th>Estado</th></tr></thead>
         <tbody>
@@ -265,7 +263,7 @@
       '<div class="row" style="margin-bottom:12px"><input class="input input-sm" id="noteIn" placeholder="Agregar nota para el equipo…"><button class="btn btn-ghost btn-sm" id="noteAdd">Guardar</button></div>' +
       '<ul class="tline" id="p360Tl">' + ev.map(function (e) { return '<li class="' + e.c + '"><b>' + e.t + "</b><small>" + e.d + " · " + e.s + "</small></li>"; }).join("") + "</ul>" +
       '<details class="acc flat mt"><summary><span class="grow">Contacto</span></summary><div class="acc-b"><dl class="dl"><dt>Teléfono</dt><dd>' + g.tel + "</dd><dt>Correo</dt><dd>" + g.mail + "</dd><dt>Ciudad</dt><dd>" + g.c + "</dd><dt>Cumpleaños</dt><dd>" + g.cumple + "</dd><dt>Idioma</dt><dd>" + g.idioma + "</dd><dt>Canal preferido</dt><dd>" + g.canal + "</dd>" + (g.socio !== "—" ? "<dt>N.º socio</dt><dd>" + g.socio + "</dd>" : "") + "</dl></div></details>" +
-      '<details class="acc flat"><summary><span class="grow">Preferencias <span class="muted">· ' + g.pref.length + " · se envían al PMS</span></span></summary>" + '<div class="acc-b">' + '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + "</ul></div></details>" +
+      '<details class="acc flat"><summary><span class="grow">Preferencias <span class="muted">· ' + g.pref.length + "</span></span></summary>" + '<div class="acc-b">' + '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + "</ul></div></details>" +
       '<details class="acc flat" style="border-bottom-width:1px"><summary><span class="grow">Consumos por área <span class="muted">· ' + $(sum) + "</span></span></summary>" + '<div class="acc-b">' + g.con.map(function (c) { var p = Math.round(c[1] / sum * 100); return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") + "</div></details>";
     App.more(document.getElementById("p360Tl"), 5);
   }
@@ -439,13 +437,13 @@
     e.preventDefault();
     var p = App.prop();
     App.wizard({
-      title: "Nueva cotización", sub: "Solo lo esencial: el detalle se completa en el borrador",
+      title: "Nueva cotización",
       steps: [{ t: "Datos", html: function () {
         return '<div class="field"><label>Cliente o empresa</label><input class="input" id="nqCli" value="Asociación Hotelera de Nueva Esparta"></div>' +
           '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo de evento</label><select class="select" id="nqTipo">' + TIPOS.map(function (t) { return "<option>" + t + "</option>"; }).join("") + '</select></div>' +
           '<div class="field"><label>Propiedad</label><select class="select" id="nqSede">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === (p === "todas" ? "margarita" : p) ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + "</select></div>" +
           '<div class="field"><label>Fecha</label><input class="input" type="date" id="nqFecha" value="2026-11-20"></div><div class="field"><label>Invitados</label><input class="input" type="number" id="nqPax" value="120" min="1"></div></div>' +
-          '<p class="small muted" style="margin:0">Se crea en <b>Borrador</b> con el salón y el menú sugeridos para esa cantidad de invitados.</p>';
+          '';
       }, read: function (el, st) { st.cli = el.querySelector("#nqCli").value || "Cliente nuevo"; st.tipo = el.querySelector("#nqTipo").value; st.sede = el.querySelector("#nqSede").value; st.fecha = el.querySelector("#nqFecha").value; st.pax = Math.max(1, +el.querySelector("#nqPax").value || 50); } }],
       done: { label: "Crear borrador", toast: function (st) { return "Cotización creada en borrador para " + st.cli + " (demo)"; }, fn: function (st) {
         var f = st.fecha.split("-"), n = 437 + Q.filter(function (x) { return x.nuevo; }).length;
