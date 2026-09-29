@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de IT · Tibisay ERP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Panel de IT</div>
+    <h1>Panel de IT <span class="scope-pill" data-prop-name></span></h1>
+    <p>Estado de la infraestructura, tickets de soporte por sede y monitoreo · actualizado hace 1 min.</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn-ghost" href="#" data-toast="Reporte mensual de IT exportado en PDF (demo)" data-icon="download">Reporte mensual</a>
+    <a class="btn btn-primary" href="#" data-toast="Nuevo ticket de soporte IT (demo)" data-icon="plus">Nuevo ticket</a>
+  </div>
+</div>
+
+<div class="grid g-4" id="kpis"></div>
+
+<section class="card mt" data-tabs>
+  <div class="tabs">
+    <button class="tab active" data-tab="infra">Infraestructura</button>
+    <button class="tab" data-tab="tk">Tickets de soporte <span class="badge nodot b-danger" id="bTk">0</span></button>
+    <button class="tab" data-tab="mon">Monitoreo</button>
+    <button class="tab" data-tab="bk">Respaldos</button>
+  </div>
+
+  <!-- ============ INFRAESTRUCTURA ============ -->
+  <div class="tab-panel active" data-panel="infra">
+    <div class="card-h"><div><h2>Estado por sede</h2><p>Verde = operativo · amarillo = degradado · rojo = caído</p></div>
+      <div class="legend"><span><span class="status-dot ok"></span> Operativo</span><span><span class="status-dot warn"></span> Degradado</span><span><span class="status-dot danger"></span> Caído</span></div></div>
+    <div class="table-wrap"><table class="table matrix">
+      <thead><tr><th>Sede</th><th>Internet ppal.</th><th>Internet resp.</th><th>LAN</th><th>Wi-Fi huésp.</th><th>Wi-Fi oper.</th><th>Servidor</th><th>Telefonía</th><th>CCTV</th><th>Respaldo</th></tr></thead>
+      <tbody id="matrix"></tbody>
+    </table></div>
+    <div class="card-b" style="border-top:1px solid var(--border)"><div class="grid g-4" id="infraCards"></div></div>
+  </div>
+
+  <!-- ============ TICKETS ============ -->
+  <div class="tab-panel" data-panel="tk">
+    <div class="toolbar">
+      <div class="seg" id="tkSeg"><button class="active" data-v="">Abiertos y en curso</button><button data-v="Nuevo">Nuevos</button><button data-v="En curso">En curso</button><button data-v="Esperando usuario">Esperando usuario</button><button data-v="Resuelto">Resueltos hoy</button></div>
+      <span class="small muted" style="margin-left:auto">SLA · crítica 1 h · alta 4 h · media 1 día · baja 3 días</span>
+    </div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Ticket</th><th>Sede</th><th>Asunto</th><th>Categoría</th><th>Solicitante</th><th>Prioridad</th><th>Estado</th><th>Asignado</th><th>Abierto</th><th>SLA</th></tr></thead>
+      <tbody id="tkBody"></tbody>
+    </table></div>
+    <div class="card-b" style="border-top:1px solid var(--border)">
+      <div class="grid g-2">
+        <div><h3 style="margin-bottom:10px">Tickets abiertos por sede</h3><div id="tkChart"></div></div>
+        <div><h3 style="margin-bottom:10px">Por categoría (mes)</h3>
+          <div class="donut-wrap"><div id="tkDonut"></div><ul class="donut-list" id="tkDonutList"></ul></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MONITOREO ============ -->
+  <div class="tab-panel" data-panel="mon">
+    <div class="grid g-2-1" style="gap:0">
+      <div style="border-right:1px solid var(--border)">
+        <div class="card-h"><div><h2>Disponibilidad · últimos 30 días</h2><p>Cada barra es un día</p></div></div>
+        <div class="card-b" id="uptime"></div>
+        <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Latencia hacia la nube (ms) · hoy</h2><p>Enlace principal por sede · promedio cada 2 h</p></div><div class="legend" id="latLegend"></div></div>
+        <div class="card-b"><div id="latChart"></div></div>
+      </div>
+      <div>
+        <div class="card-h"><div><h2>Alertas recientes</h2><p>Del sistema de monitoreo</p></div></div>
+        <ul class="list" id="alerts"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RESPALDOS ============ -->
+  <div class="tab-panel" data-panel="bk">
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Sistema</th><th>Sede</th><th>Tipo</th><th>Última ejecución</th><th>Duración</th><th class="num">Tamaño</th><th>Destino</th><th>Estado</th><th>Última prueba de restauración</th></tr></thead>
+      <tbody>
+        <tr data-sede="margarita"><td class="strong">Base de datos Opera PMS</td><td>Margarita</td><td>Incremental c/ 4 h + completo diario</td><td>Hoy 02:00 a.m.</td><td>18 min</td><td class="num">42 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Base de datos Opera PMS</td><td>Maracaibo</td><td>Incremental c/ 4 h + completo diario</td><td>Hoy 02:00 a.m.</td><td>15 min</td><td class="num">36 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="margarita"><td class="strong">Profit Plus (contabilidad)</td><td>Margarita</td><td>Completo diario</td><td>Hoy 01:00 a.m.</td><td>9 min</td><td class="num">11 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>05/09/2026 · OK</td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Saint Enterprise</td><td>Morrocoy</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>—</td><td class="num">—</td><td>NAS local + nube</td><td><span class="badge b-danger">Falló · servidor sin respuesta</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="merida"><td class="strong">Saint Enterprise</td><td>Mérida</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>7 min</td><td class="num">6 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="maturin"><td class="strong">Saint Enterprise</td><td>Maturín</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>6 min</td><td class="num">5 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="canaima"><td class="strong">a2 Softway</td><td>Canaima</td><td>Completo diario</td><td>Hoy 01:45 a.m.</td><td>31 min</td><td class="num">3 GB</td><td>Nube (enlace satelital)</td><td><span class="badge b-warn">Lento · enlace saturado</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="catatumbo"><td class="strong">a2 Softway</td><td>Catatumbo</td><td>Completo diario</td><td>Hoy 01:45 a.m.</td><td>8 min</td><td class="num">4 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="todas"><td class="strong">Plataforma Tibisay (CRM, IMS, RR. HH.)</td><td>Nube · cadena</td><td>Continuo (réplica) + diario</td><td>Hoy 03:00 a.m.</td><td>4 min</td><td class="num">28 GB</td><td>Nube (2 regiones)</td><td><span class="badge b-ok">Correcto</span></td><td>20/09/2026 · OK</td></tr>
+        <tr data-sede="todas"><td class="strong">Servidor de archivos corporativo</td><td>Oficina central</td><td>Incremental diario</td><td>Hoy 00:30 a.m.</td><td>22 min</td><td class="num">310 GB</td><td>NAS + cinta semanal</td><td><span class="badge b-ok">Correcto</span></td><td>01/09/2026 · OK</td></tr>
+      </tbody>
+    </table></div>
+    <div class="card-f">Política 3-2-1: 3 copias, 2 medios distintos, 1 fuera de la sede. Prueba de restauración mensual por sistema.</div>
+  </div>
+</section>
+</main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var D = TIBISAY;
+  var S = ["ok", "warn", "danger"];
+  // Estado por sede: internet ppal, respaldo, LAN, wifi huésp, wifi op, servidor, telefonía, CCTV, respaldo anoche
+  var INFRA = {
+    margarita: [0, 0, 0, 1, 0, 0, 0, 0, 0], canaima: [1, 0, 0, 1, 0, 0, 0, 0, 1], catatumbo: [0, 0, 0, 0, 0, 0, 0, 1, 0],
+    maracaibo: [0, 0, 0, 0, 0, 0, 0, 0, 0], morrocoy: [0, 0, 0, 0, 0, 2, 0, 0, 2], merida: [0, 0, 0, 0, 0, 0, 0, 0, 0], maturin: [0, 1, 0, 0, 0, 0, 0, 0, 0]
+  };
+  var NOTE = {
+    "margarita|3": "Wi-Fi huéspedes · 3 AP del piso 3 con alta carga", "canaima|0": "Satelital principal con pérdida de paquetes 4%", "canaima|3": "Wi-Fi huéspedes lento por enlace saturado", "canaima|8": "Respaldo lento",
+    "catatumbo|7": "Cámara 12 (estacionamiento) sin señal", "morrocoy|5": "Servidor local Saint sin respuesta desde 09:12", "morrocoy|8": "Respaldo de Saint falló", "maturin|1": "Enlace de respaldo en mantenimiento del proveedor"
+  };
+  var LBL = ["Operativo", "Degradado", "Caído"];
+
+  var TK = [
+    ["IT-3318", "morrocoy", "Servidor de Saint no responde", "Servidores", "Contabilidad · Kelly S.", "Crítica", "En curso", "Jorge L.", 92, 60],
+    ["IT-3317", "margarita", "Impresora fiscal de recepción no imprime", "Impresora fiscal", "Recepción · turno A", "Alta", "En curso", "Ricardo P.", 45, 240],
+    ["IT-3316", "canaima", "Internet lento en churuatas", "Internet / Wi-Fi", "Gerencia · Héctor S.", "Alta", "Esperando proveedor", "Jorge L.", 190, 240],
+    ["IT-3315", "maracaibo", "POS del lounge bar se reinicia", "Punto de venta", "A&B · capitán", "Alta", "Nuevo", "—", 12, 240],
+    ["IT-3314", "catatumbo", "Cámara 12 del estacionamiento sin señal", "CCTV", "Seguridad", "Media", "Nuevo", "—", 75, 1440],
+    ["IT-3313", "margarita", "Wi-Fi débil en piso 3 (quejas de huéspedes)", "Internet / Wi-Fi", "Recepción", "Media", "En curso", "Ricardo P.", 260, 1440],
+    ["IT-3312", "merida", "Crear usuario Opera/Prestige a recepcionista nueva", "Accesos y usuarios", "RR. HH. · José G. R.", "Media", "Esperando usuario", "Ana M.", 380, 1440],
+    ["IT-3311", "maturin", "Correo de ventas no sincroniza en el teléfono", "Correo", "Ventas · Carlos M.", "Baja", "En curso", "Ana M.", 610, 4320],
+    ["IT-3310", "maracaibo", "Proyector de Sala Coquivacoa sin HDMI", "Audiovisual", "Eventos", "Media", "Resuelto", "Ricardo P.", 140, 1440],
+    ["IT-3309", "margarita", "Teléfono de la hab. 604 sin tono", "Telefonía", "Housekeeping", "Baja", "Resuelto", "Ricardo P.", 300, 4320],
+    ["IT-3308", "morrocoy", "Reloj biométrico de cocina no marca", "Biométricos", "RR. HH.", "Alta", "Resuelto", "Jorge L.", 55, 240],
+    ["IT-3307", "canaima", "Renovar licencia antivirus (12 equipos)", "Licencias", "Administración", "Baja", "Nuevo", "—", 1300, 4320]
+  ];
+  var PR = { "Crítica": "b-danger", "Alta": "b-warn", "Media": "b-info", "Baja": "b-muted" };
+  var TST = { "Nuevo": "b-danger", "En curso": "b-gold", "Esperando usuario": "b-info", "Esperando proveedor": "b-warn", "Resuelto": "b-ok" };
+  var TECH = ["Jorge L.", "Ricardo P.", "Ana M."];
+
+  function ago(m) { return m < 60 ? "hace " + m + " min" : m < 1440 ? "hace " + Math.floor(m / 60) + " h " + (m % 60) + " min" : "hace " + Math.floor(m / 1440) + " días"; }
+
+  function render(p) {
+    var sedes = p === "todas" ? D.propiedades : D.propiedades.filter(function (h) { return h.id === p; });
+    // Matriz
+    document.getElementById("matrix").innerHTML = sedes.map(function (h) {
+      return '<tr><td class="strong">' + h.nombre + "</td>" + INFRA[h.id].map(function (v, i) {
+        var note = NOTE[h.id + "|" + i];
+        return '<td title="' + (note || LBL[v]) + '"><span class="status-dot ' + S[v] + '"></span>' + (v ? '<span class="sub" style="color:var(--' + (v === 2 ? "danger" : "warn") + ')">' + LBL[v] + "</span>" : "") + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+
+    // Tarjetas de infraestructura
+    var fac = sedes.reduce(function (a, h) { return a + h.hab; }, 0) / 532;
+    var aps = Math.round(212 * fac), apsOff = p === "todas" ? 5 : p === "margarita" ? 3 : p === "canaima" ? 2 : 0;
+    var srv = sedes.length + (p === "todas" ? 3 : 0), srvDown = sedes.some(function (h) { return h.id === "morrocoy"; }) ? 1 : 0;
+    var cards = [
+      ["wifi", "Internet y enlaces", sedes.filter(function (h) { return INFRA[h.id][0] === 0; }).length + "/" + sedes.length, "enlaces principales operativos", sedes.some(function (h) { return INFRA[h.id][0] || INFRA[h.id][1]; }) ? "warn" : "ok", "Uso pico hoy " + (p === "canaima" ? "96%" : "71%") + " del ancho de banda"],
+      ["wifi", "Wi-Fi (puntos de acceso)", (aps - apsOff) + "/" + aps, "AP en línea · " + Math.round(1840 * fac) + " dispositivos conectados", apsOff ? "warn" : "ok", apsOff ? apsOff + " AP con alta carga o sin respuesta" : "Sin incidencias"],
+      ["server", "Servidores", (srv - srvDown) + "/" + srv, "servidores en línea · CPU media 34%", srvDown ? "danger" : "ok", srvDown ? "Morrocoy · servidor Saint caído" : "Disco más lleno: 71%"],
+      ["archive", "Respaldos de anoche", sedes.filter(function (h) { return INFRA[h.id][8] !== 2; }).length + "/" + sedes.length, "sedes con respaldo correcto", srvDown ? "danger" : sedes.some(function (h) { return INFRA[h.id][8] === 1; }) ? "warn" : "ok", srvDown ? "Morrocoy · reintentar tras recuperar servidor" : "Último: hoy 03:00 a.m."]
+    ];
+    document.getElementById("infraCards").innerHTML = cards.map(function (c) {
+      return '<div class="card infra"><div class="infra-h"><span class="kpi-ico teal">' + App.icon(c[0]) + "</span><h3>" + c[1] + '</h3><span class="status-dot ' + c[4] + '"></span></div><div class="kpi-value">' + c[2] + '</div><div class="kpi-sub">' + c[3] + '</div><div class="small mt" style="color:var(--' + (c[4] === "ok" ? "text-3" : c[4] === "warn" ? "warn" : "danger") + ')">' + c[5] + "</div></div>";
+    }).join("");
+
+    // KPIs
+    var tks = TK.filter(function (t) { return p === "todas" || t[1] === p; }), open = tks.filter(function (t) { return t[6] !== "Resuelto"; });
+    var inc = sedes.filter(function (h) { return INFRA[h.id].some(function (v) { return v; }); }).length;
+    var avail = p === "todas" ? "99,82%" : p === "morrocoy" ? "99,41%" : p === "canaima" ? "98,90%" : "99,9" + (sedes[0].hab % 9) + "%";
+    document.getElementById("kpis").innerHTML = [
+      ["Disponibilidad de red (30 d)", avail, "meta 99,5%", "wifi", true],
+      ["Sedes con incidencias", inc + " / " + sedes.length, inc ? "ver matriz de infraestructura" : "todo operativo", "building"],
+      ["Tickets IT abiertos", open.length, open.filter(function (t) { return t[5] === "Crítica" || t[5] === "Alta"; }).length + " de prioridad alta o crítica", "wrench"],
+      ["Respaldos de anoche", sedes.filter(function (h) { return INFRA[h.id][8] !== 2; }).length + " / " + sedes.length, srvDown ? "1 falló · Morrocoy" : "todos correctos", "archive"]
+    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
+
+    // Tickets
+    document.getElementById("bTk").textContent = open.length;
+    document.getElementById("tkBody").innerHTML = tks.map(function (t) {
+      var late = t[6] !== "Resuelto" && t[6] !== "Esperando proveedor" && t[6] !== "Esperando usuario" && t[8] > t[9];
+      var sla = t[6] === "Resuelto" ? '<span class="sem ok">Cumplido</span>' : t[6].indexOf("Esperando") === 0 ? '<span class="sem muted">Pausado</span>' : late ? '<span class="sem danger">Vencido</span>' : '<span class="sem ok">En tiempo</span>';
+      return '<tr data-st="' + t[6] + '"><td class="strong">' + t[0] + "</td><td>" + D.sedeNombre(t[1]) + '</td><td class="strong">' + t[2] + "</td><td>" + t[3] + '</td><td class="small">' + t[4] + '</td><td><span class="badge ' + PR[t[5]] + '">' + t[5] + '</span></td><td><span class="badge nodot ' + TST[t[6]] + '">' + t[6] + "</span></td><td>" + (t[7] === "—" ? '<a class="small" href="#" data-toast="' + t[0] + ' asignado a ' + TECH[t[0].charCodeAt(6) % 3] + ' (demo)">Asignar</a>' : t[7]) + "</td><td>" + ago(t[8]) + "</td><td>" + sla + "</td></tr>";
+    }).join("") || '<tr><td colspan="10" class="muted">Sin tickets para esta sede</td></tr>';
+    filterTk();
+
+    var bySede = D.propiedades.map(function (h) { return TK.filter(function (t) { return t[1] === h.id && t[6] !== "Resuelto"; }).length + (h.hab > 100 ? 2 : 0); });
+    App.barChart(document.getElementById("tkChart"), { labels: D.propiedades.map(function (h) { return h.nombre.slice(0, 4) + "."; }), series: [{ data: bySede }], values: true, highlight: p === "todas" ? -1 : D.propiedades.findIndex(function (h) { return h.id === p; }) });
+    var cats = [["Internet / Wi-Fi", 34, "#c99d6b"], ["Punto de venta", 18, "#1c2e2e"], ["Impresora fiscal", 14, "#2f6377"], ["Accesos y usuarios", 12, "#a8690f"], ["Otros", 22, "#d6cfc3"]];
+    App.donut(document.getElementById("tkDonut"), cats.map(function (c) { return { v: c[1], color: c[2] }; }), ["100", "tickets"]);
+    document.getElementById("tkDonutList").innerHTML = cats.map(function (c) { return '<li><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + c[2] + ';margin-right:8px"></i>' + c[0] + "</span><b>" + c[1] + "</b></li>"; }).join("");
+
+    // Monitoreo
+    var svcs = [["PMS (Opera / Prestige)", "pms"], ["ERP (Profit Plus / Saint / a2)", "erp"], ["Internet principal", "net"], ["Wi-Fi huéspedes", "wifi"], ["Plataforma Tibisay (nube)", "cloud"]];
+    document.getElementById("uptime").innerHTML = svcs.map(function (s, k) {
+      var bars = "", bad = 0;
+      for (var d = 0; d < 30; d++) {
+        var v = "";
+        if (s[1] === "erp" && d === 29 && sedes.some(function (h) { return h.id === "morrocoy"; })) v = "d";
+        else if (s[1] === "net" && (d === 11 || d === 23) && sedes.some(function (h) { return h.id === "canaima"; })) v = "w";
+        else if (s[1] === "wifi" && d === 27) v = "w";
+        else if (s[1] === "pms" && d === 4) v = "w";
+        if (v) bad++;
+        bars += '<i class="' + v + '" title="Día ' + (d + 1) + '"></i>';
+      }
+      var up = s[1] === "cloud" ? "100%" : (100 - bad * 0.07 - (s[1] === "erp" && bad ? 0.3 : 0)).toFixed(2).replace(".", ",") + "%";
+      return '<div style="margin-bottom:14px"><div class="between small"><b>' + s[0] + '</b><span class="muted">' + up + ' disponible</span></div><div class="uptime">' + bars + "</div></div>";
+    }).join("") + '<div class="between small muted"><span>hace 30 días</span><span>hoy</span></div>';
+
+    var lab = ["0h", "2h", "4h", "6h", "8h", "10h", "12h", "14h", "16h", "18h", "20h", "22h"];
+    var lines = (p === "todas" ? ["margarita", "maracaibo", "canaima"] : [p]).map(function (id, j) {
+      var base = id === "canaima" ? 620 : id === "morrocoy" ? 70 : 38 + j * 6;
+      return { data: lab.map(function (_, i) { return Math.round(base * (1 + (i >= 5 && i <= 10 ? 0.35 : 0) + ((i * 7 + j * 3) % 5) / 20)); }), color: ["#c99d6b", "#1c2e2e", "#2f6377"][j], area: j === 0, name: D.sedeNombre(id) };
+    });
+    App.lineChart(document.getElementById("latChart"), { labels: lab, series: lines, min: 0, fmt: function (v) { return v; } });
+    document.getElementById("latLegend").innerHTML = lines.map(function (l) { return '<span><i class="line" style="background:' + l.color + '"></i>' + l.name + "</span>"; }).join("");
+
+    var AL = [
+      ["danger", "server", "Servidor Saint sin respuesta", "Morrocoy · desde 09:12 · ticket IT-3318", "morrocoy", "hace 1 h 30 min"],
+      ["warn", "wifi", "Pérdida de paquetes 4% en enlace satelital", "Canaima · proveedor notificado", "canaima", "hace 3 h"],
+      ["warn", "wifi", "3 AP del piso 3 con más de 60 clientes", "Margarita · balanceo automático activado", "margarita", "hace 4 h"],
+      ["danger", "camera", "Cámara 12 sin señal", "Catatumbo · estacionamiento", "catatumbo", "hace 1 h 15 min"],
+      ["warn", "archive", "Respaldo de a2 tardó 31 min (normal 8)", "Canaima · enlace saturado", "canaima", "hoy 02:16 a.m."],
+      ["ok", "check", "Enlace de respaldo restablecido", "Maturín · mantenimiento del proveedor terminado", "maturin", "hace 20 min"],
+      ["ok", "shield", "Parches de seguridad aplicados", "Maracaibo · 38 equipos · sin reinicios pendientes", "maracaibo", "ayer 11:40 p.m."],
+      ["ok", "key", "Certificado SSL renovado", "Plataforma Tibisay · vence 29/09/2027", "todas", "ayer 6:00 p.m."]
+    ];
+    document.getElementById("alerts").innerHTML = AL.filter(function (a) { return p === "todas" || a[4] === p || a[4] === "todas"; }).map(function (a) {
+      return '<li><span class="alert-ico b-' + a[0] + '">' + App.icon(a[1]) + '</span><div class="grow"><b>' + a[2] + "</b><small>" + a[3] + '</small></div><span class="small muted" style="white-space:nowrap">' + a[5] + "</span></li>";
+    }).join("");
+  }
+
+  function filterTk() {
+    var v = (document.querySelector("#tkSeg button.active") || { dataset: {} }).dataset.v || "";
+    document.querySelectorAll("#tkBody tr[data-st]").forEach(function (tr) {
+      var st = tr.dataset.st;
+      tr.hidden = v ? (v === "En curso" ? st !== "En curso" : v === "Esperando usuario" ? st.indexOf("Esperando") !== 0 : st !== v) : st === "Resuelto";
+    });
+  }
+  document.querySelectorAll("#tkSeg button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(filterTk); }); });
+
+  App.onProp(render);
+})();
+</script>
+</body>
+</html>

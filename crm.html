@@ -20,48 +20,40 @@
     <p>Perfil 360 unificado desde Opera/Prestige, puntos de venta y WhatsApp.</p>
   </div>
   <div class="actions">
+    <a class="btn btn-ghost" href="#" data-tour-start data-icon="eye">Cómo usar este módulo</a>
     <a class="btn btn-ghost" href="#" data-toast="Importando perfiles desde el PMS (demo)" data-icon="refresh">Sincronizar PMS</a>
     <a class="btn btn-primary" href="#" data-toast="Nuevo huésped (demo)" data-icon="plus">Nuevo huésped</a>
   </div>
 </div>
 
-<div class="grid g-4">
+<div class="grid g-4" id="crmKpis">
   <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Perfiles activos</span><span class="kpi-ico" data-icon="users"></span></div><div class="kpi-value">18.426</div><div class="kpi-sub"><span class="delta up">▲ 6,2%</span>vs. trimestre anterior</div></div>
   <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Reservas directas</span><span class="kpi-ico" data-icon="calendar"></span></div><div class="kpi-value">41%</div><div class="kpi-sub"><span class="delta up">▲ 9 pts</span>vs. OTAs</div></div>
   <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Miembros Club Tibisay</span><span class="kpi-ico" data-icon="star"></span></div><div class="kpi-value">3.912</div><div class="kpi-sub"><span class="delta up">+214</span>este mes</div></div>
-  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Eventos en pipeline</span><span class="kpi-ico" data-icon="chat"></span></div><div class="kpi-value">$ 186.400</div><div class="kpi-sub">27 cotizaciones abiertas</div></div>
+  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Cotizaciones abiertas</span><span class="kpi-ico" data-icon="chat"></span></div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">—</div></div>
 </div>
 
-<section class="card mt" data-tabs>
+<section class="card mt" data-tabs id="crmTabs">
   <div class="tabs">
-    <button class="tab active" data-tab="huespedes">Huéspedes 360</button>
-    <button class="tab" data-tab="club">Club Tibisay</button>
-    <button class="tab" data-tab="eventos">Eventos &amp; banquetes <span class="badge nodot b-gold">27</span></button>
+    <button class="tab active" data-tab="huespedes" id="tabHuespedes">Huéspedes 360</button>
+    <button class="tab" data-tab="club" id="tabClub">Club Tibisay</button>
+    <button class="tab" data-tab="eventos" id="tabEventos">Eventos &amp; cotizaciones <span class="badge nodot b-gold" id="tabEvCount">0</span></button>
   </div>
 
   <!-- ============ HUÉSPEDES ============ -->
   <div class="tab-panel active" data-panel="huespedes">
     <div class="grid g-2-1" style="gap:0">
-      <div style="border-right:1px solid var(--border)">
-        <div class="toolbar">
-          <div class="search"><span data-icon="search"></span><input class="input" type="search" placeholder="Filtrar huéspedes…" oninput="this.closest('.tab-panel').querySelectorAll('tbody tr').forEach(function(r){r.hidden=r.textContent.toLowerCase().indexOf(event.target.value.toLowerCase())<0})"></div>
-          <select class="select select-sm" style="width:auto"><option>Todos los segmentos</option><option>Corporativo</option><option>Placer</option><option>Eventos / bodas</option></select>
-          <span class="small muted" style="margin-left:auto">Clic en un huésped para ver su ficha</span>
+      <div style="border-right:1px solid var(--border)" id="guestList">
+        <div class="toolbar" id="guestTools">
+          <div class="search"><span data-icon="search"></span><input class="input" type="search" id="guestFilter" placeholder="Nombre, empresa o ciudad…"></div>
+          <select class="select select-sm" style="width:auto" id="segFilter"><option value="">Todos los segmentos</option><option>Corporativo</option><option>Placer</option><option>Eventos / bodas</option></select>
+          <span class="small muted" style="margin-left:auto">Clic en un huésped para ver su ficha 360</span>
         </div>
         <div class="table-wrap"><table class="table" data-searchable id="guestTable">
-          <thead><tr><th>Huésped</th><th>Segmento</th><th>Club</th><th class="num">Estancias</th><th class="num">Gasto hist.</th><th>Última visita</th></tr></thead>
-          <tbody>
-            <tr data-sede="maracaibo" data-g="0" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm">AM</span><div class="strong">Andrés Mendoza Rivas<span class="sub">Petroandina C.A.</span></div></div></td><td>Corporativo</td><td><span class="badge b-gold">Oro</span></td><td class="num">23</td><td class="num">$ 14.870</td><td>12/09/2026 · Maracaibo</td></tr>
-            <tr data-sede="margarita" data-g="1" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm avatar-gold">VR</span><div class="strong">Valentina Rojas<span class="sub">Caracas</span></div></div></td><td>Placer</td><td><span class="badge b-teal">Platino</span></td><td class="num">31</td><td class="num">$ 22.410</td><td>En casa · Margarita</td></tr>
-            <tr data-sede="margarita" data-g="2" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm">RH</span><div class="strong">Robert &amp; Linda Hayes<span class="sub">Houston, EE. UU.</span></div></div></td><td>Placer</td><td><span class="badge b-gold">Oro</span></td><td class="num">9</td><td class="num">$ 11.320</td><td>Llega hoy · Margarita</td></tr>
-            <tr data-sede="canaima" data-g="3" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm avatar-gold">MP</span><div class="strong">Mariana Pérez Lugo<span class="sub">Valencia</span></div></div></td><td>Eventos / bodas</td><td><span class="badge b-info">Plata</span></td><td class="num">3</td><td class="num">$ 2.940</td><td>04/08/2026 · Canaima</td></tr>
-            <tr data-sede="merida" data-g="4" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm">JR</span><div class="strong">José Rafael Briceño<span class="sub">Laboratorios Leti</span></div></div></td><td>Corporativo</td><td><span class="badge b-info">Plata</span></td><td class="num">7</td><td class="num">$ 3.180</td><td>21/09/2026 · Mérida</td></tr>
-            <tr data-sede="morrocoy" data-g="5" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm avatar-gold">CG</span><div class="strong">Carolina González<span class="sub">Barquisimeto</span></div></div></td><td>Placer</td><td><span class="badge b-gold">Oro</span></td><td class="num">12</td><td class="num">$ 6.750</td><td>30/08/2026 · Morrocoy</td></tr>
-            <tr data-sede="maturin" data-g="6" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm">PV</span><div class="strong">Pedro Villarroel<span class="sub">Servicios Petroleros Orinoco</span></div></div></td><td>Corporativo</td><td><span class="badge b-muted">—</span></td><td class="num">15</td><td class="num">$ 4.310</td><td>26/09/2026 · Maturín</td></tr>
-            <tr data-sede="catatumbo" data-g="7" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm avatar-gold">LU</span><div class="strong">Luisa Urdaneta<span class="sub">Ganadera Sur del Lago</span></div></div></td><td>Corporativo</td><td><span class="badge b-info">Plata</span></td><td class="num">6</td><td class="num">$ 1.870</td><td>18/09/2026 · Catatumbo</td></tr>
-          </tbody>
+          <thead><tr><th style="min-width:210px">Huésped</th><th>Segmento</th><th>Club</th><th class="num">Estancias</th><th class="num">Gasto total</th><th>Estado / última visita</th></tr></thead>
+          <tbody></tbody>
         </table></div>
-        <div class="pager"><span>Mostrando 8 de 18.426 perfiles</span><span>‹ 1 2 3 … 2.304 ›</span></div>
+        <div class="pager"><span id="guestCount">—</span><span>‹ 1 2 3 … 921 ›</span></div>
       </div>
       <aside class="card-b" id="guestCard"></aside>
     </div>
@@ -69,13 +61,20 @@
 
   <!-- ============ CLUB ============ -->
   <div class="tab-panel" data-panel="club">
-    <div class="card-b">
+    <div class="card-b" id="clubTiers">
       <div class="grid g-3">
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Plata</span><span class="badge b-info">Registro</span></div><div class="kpi-value">2.804</div><div class="kpi-sub">Wi-Fi premium · 5% en A&amp;B</div></div>
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Oro</span><span class="badge b-gold">8 noches/año</span></div><div class="kpi-value">936</div><div class="kpi-sub">Upgrade sujeto a disponibilidad · late check-out</div></div>
-        <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Platino</span><span class="badge b-teal">20 noches/año</span></div><div class="kpi-value">172</div><div class="kpi-sub">Upgrade garantizado · traslado · lounge</div></div>
+        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Plata</span><span class="badge b-info">Al registrarse</span></div><div class="kpi-value">2.804</div><div class="kpi-sub">1 pto por $ · Wi-Fi premium · 5% en A&amp;B</div></div>
+        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Oro</span><span class="badge b-gold">8+ noches / año</span></div><div class="kpi-value">936</div><div class="kpi-sub">1,5 ptos por $ · upgrade sujeto a disp. · late check-out 2 p.m.</div></div>
+        <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Platino</span><span class="badge b-teal">20+ noches / año</span></div><div class="kpi-value">172</div><div class="kpi-sub">2 ptos por $ · upgrade garantizado · traslado · lounge</div></div>
       </div>
     </div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2><p>Puntos, nivel y avance al siguiente nivel (noches de los últimos 12 meses)</p></div>
+      <div class="seg" id="tierSeg"><button class="active" data-v="">Todos</button><button data-v="Platino">Platino</button><button data-v="Oro">Oro</button><button data-v="Plata">Plata</button></div></div>
+    <div class="table-wrap"><table class="table" data-searchable id="memberTable">
+      <thead><tr><th>Miembro</th><th>N.º socio</th><th>Nivel</th><th class="num">Puntos</th><th class="num">Noches 12 m</th><th style="min-width:170px">Avance al siguiente nivel</th><th class="num">Ptos. por vencer</th><th>Último canje</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Campañas</h2><p>Segmentadas por nivel e historial</p></div></div>
     <div class="table-wrap"><table class="table" data-searchable>
       <thead><tr><th>Campaña</th><th>Segmento</th><th>Canal</th><th class="num">Enviados</th><th class="num">Apertura</th><th class="num">Reservas</th><th class="num">Ingreso</th><th>Estado</th></tr></thead>
       <tbody>
@@ -83,6 +82,7 @@
         <tr data-sede="margarita"><td class="strong">Aniversarios de octubre</td><td>Parejas con fecha registrada</td><td>WhatsApp + correo</td><td class="num">286</td><td class="num">64%</td><td class="num">31</td><td class="num">$ 21.700</td><td><span class="badge b-ok">Activa</span></td></tr>
         <tr data-sede="maracaibo"><td class="strong">Tarifa corporativa 2027</td><td>Empresas Zulia</td><td>Correo</td><td class="num">142</td><td class="num">48%</td><td class="num">12</td><td class="num">Convenios</td><td><span class="badge b-info">Programada</span></td></tr>
         <tr data-sede="morrocoy"><td class="strong">Carnaval en Morrocoy · preventa</td><td>Plata</td><td>WhatsApp</td><td class="num">2.340</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="badge b-muted">Borrador</span></td></tr>
+        <tr data-sede="merida"><td class="strong">Puntos por vencer · diciembre</td><td>Oro con &gt; 5.000 ptos</td><td>WhatsApp</td><td class="num">318</td><td class="num">58%</td><td class="num">22</td><td class="num">$ 9.460</td><td><span class="badge b-ok">Activa</span></td></tr>
       </tbody>
     </table></div>
   </div>
@@ -90,65 +90,18 @@
   <!-- ============ EVENTOS ============ -->
   <div class="tab-panel" data-panel="eventos">
     <div class="card-b">
-      <div class="kanban">
-        <div class="kcol"><div class="kcol-h">Nuevas <span class="badge nodot b-muted">6</span></div>
-          <div class="kcard" data-sede="merida"><b>Convención Farmacéutica Andina</b>Mérida · 80 pax · abr 2027<div class="between"><span>WhatsApp</span><span>$ 22.000</span></div></div>
-          <div class="kcard" data-sede="maracaibo"><b>Cena de gala Cámara Zuliana</b>Maracaibo · 220 pax · dic 2026<div class="between"><span>Correo</span><span>$ 18.700</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">Cotizadas <span class="badge nodot b-muted">9</span></div>
-          <div class="kcard" data-sede="margarita" style="border-color:var(--gold)"><b>Boda González–Salazar</b>Margarita · 150 pax · mar 2027<div class="between"><span>Daniela R.</span><span>$ 31.140</span></div></div>
-          <div class="kcard" data-sede="canaima"><b>Retiro directivo Banco del Sur</b>Canaima · 24 pax · ene 2027<div class="between"><span>Luis P.</span><span>$ 31.200</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">Negociación <span class="badge nodot b-muted">7</span></div>
-          <div class="kcard" data-sede="maturin"><b>Lanzamiento automotriz</b>Maturín · 120 pax · nov 2026<div class="between"><span>Luis P.</span><span>$ 14.300</span></div></div>
-          <div class="kcard" data-sede="morrocoy"><b>Boda Pérez–Lugo</b>Morrocoy · 90 pax · feb 2027<div class="between"><span>Daniela R.</span><span>$ 21.600</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">Confirmadas <span class="badge nodot b-ok">5</span></div>
-          <div class="kcard" data-sede="maracaibo"><b>Congreso Ingeniería Petrolera</b>Maracaibo · 300 pax · oct 2026<div class="between"><span>Anticipo 50%</span><span>$ 42.800</span></div></div>
-          <div class="kcard" data-sede="margarita"><b>Aniversario Seguros Caribe</b>Margarita · 180 pax · nov 2026<div class="between"><span>BEO enviado</span><span>$ 27.900</span></div></div>
-        </div>
+      <div class="between" style="margin-bottom:12px;flex-wrap:wrap">
+        <div><h2>Pipeline de eventos y banquetes</h2><p class="small muted" style="margin:2px 0 0">Cada solicitud que llega por WhatsApp genera una cotización. Clic en una tarjeta para ver el detalle y la conversación.</p></div>
+        <a class="btn btn-primary btn-sm" href="#" data-toast="Nueva cotización en borrador (demo)" data-icon="plus">Nueva cotización</a>
       </div>
+      <div class="kanban" id="pipeline"></div>
 
-      <div class="grid g-2 mt-lg">
-        <div class="card" style="overflow:hidden">
-          <div class="chat-h"><span class="avatar avatar-sm" style="background:var(--gold);color:#fff">T</span><div><b>Tibisay Eventos · WhatsApp Business</b><small>Conversación con Mariana González · +58 414-•••-2231</small></div></div>
-          <div class="chat">
-            <div class="msg">¡Buenas tardes! Queremos casarnos en Margarita en marzo 2027. ¿Tienen disponibilidad?<small>3:12 p.m.</small></div>
-            <div class="msg out">¡Felicidades! 💍 ¿Cuántos invitados esperan y qué fecha tienen en mente?<small>3:12 p.m. · Asistente</small></div>
-            <div class="msg">Unos 150, sábado 20 de marzo. Ceremonia en la playa y recepción en la noche.<small>3:14 p.m.</small></div>
-            <div class="msg out">El 20/03 está disponible 🌴 Recomiendo jardín frente al mar + Gran Salón. ¿Desean bloque de habitaciones?<small>3:14 p.m. · Asistente</small></div>
-            <div class="msg">Sí, unas 40 habitaciones por 2 noches.<small>3:15 p.m.</small></div>
-            <div class="msg out">Soy Daniela, ejecutiva de eventos. Te adjunto la cotización con 3 opciones de menú 📄<small>3:21 p.m. · Daniela R.</small></div>
-          </div>
+      <div class="grid g-2 mt-lg" id="quoteDetail">
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column">
+          <div class="chat-h"><span class="avatar avatar-sm" style="background:var(--gold);color:#fff">T</span><div><b>Tibisay Eventos · WhatsApp Business</b><small id="chatWho">—</small></div></div>
+          <div class="chat" id="chat" style="flex:1"></div>
         </div>
-        <div class="card">
-          <div class="card-h"><div><h2>Cotización EV-2026-0418</h2><p>Creada automáticamente desde WhatsApp</p></div><span class="badge b-warn">Cotizando</span></div>
-          <div class="card-b">
-            <dl class="dl">
-              <dt>Tipo</dt><dd>Boda de destino</dd>
-              <dt>Propiedad</dt><dd>Margarita · Pampatar</dd>
-              <dt>Fecha</dt><dd>Sáb. 20/03/2027</dd>
-              <dt>Invitados</dt><dd>150</dd>
-              <dt>Espacios</dt><dd>Jardín frente al mar + Gran Salón</dd>
-            </dl>
-          </div>
-          <div class="table-wrap"><table class="table">
-            <thead><tr><th>Concepto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Total</th></tr></thead>
-            <tbody>
-              <tr><td>Menú banquete "Costa Azul" (3 tiempos)</td><td class="num">150</td><td class="num">$ 68</td><td class="num">$ 10.200</td></tr>
-              <tr><td>Barra libre nacional 5 h</td><td class="num">150</td><td class="num">$ 32</td><td class="num">$ 4.800</td></tr>
-              <tr><td>Montaje ceremonia en jardín</td><td class="num">1</td><td class="num">$ 2.400</td><td class="num">$ 2.400</td></tr>
-              <tr><td>Alquiler Gran Salón</td><td class="num">1</td><td class="num">$ 3.500</td><td class="num">$ 3.500</td></tr>
-              <tr><td>Bloque habitaciones Superior (40 × 2 noches)</td><td class="num">80</td><td class="num">$ 128</td><td class="num">$ 10.240</td></tr>
-              <tr><td>Suite nupcial (2 noches, cortesía)</td><td class="num">2</td><td class="num">$ 0</td><td class="num">$ 0</td></tr>
-            </tbody>
-            <tfoot><tr><td colspan="3">Total estimado (antes de IVA)</td><td class="num">$ 31.140</td></tr></tfoot>
-          </table></div>
-          <div class="card-f row" style="justify-content:flex-end">
-            <a class="btn btn-ghost btn-sm" href="#" data-toast="Salón bloqueado tentativamente 72 h (demo)">Bloquear salón</a>
-            <a class="btn btn-primary btn-sm" href="#" data-toast="Cotización enviada por WhatsApp (demo)" data-icon="chat">Enviar por WhatsApp</a>
-          </div>
-        </div>
+        <div class="card" id="quoteCard"></div>
       </div>
     </div>
   </div>
@@ -158,34 +111,359 @@
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/tour.js"></script>
 <script>
 (function () {
+  function $(n) { return "$ " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  function pts(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  var CLUB = { Platino: "b-teal", Oro: "b-gold", Plata: "b-info", "": "b-muted" };
+
+  /* ------------------------------------------------------------ Huéspedes */
   var G = [
-    { n: "Andrés Mendoza Rivas", i: "AM", e: "Director Comercial · Petroandina C.A.", club: "Oro · 28.450 pts", pref: ["Junior Suite, piso alto, vista al lago", "Almohada firme, sin plumas (alergia)", "Café negro sin azúcar al despertar", "Tarifa corporativa $ 118 · factura a la empresa"], hist: ["12/09 · Maracaibo · 3 noches · $ 612", "18/07 · Margarita · 5 noches · $ 1.940", "02/05 · Mérida · 2 noches · $ 348"], nota: "Prefiere todo por WhatsApp; no llamar a la habitación." },
-    { n: "Valentina Rojas", i: "VR", e: "Empresaria · Caracas", club: "Platino · 61.200 pts", pref: ["Suite Vista Mar 512", "Traslado desde aeropuerto Santiago Mariño", "Espumante brut a la llegada", "Mesa en terraza al atardecer"], hist: ["En casa · Margarita · 4 noches", "22/06 · Canaima · 3 noches · $ 2.380", "10/04 · Margarita · 6 noches · $ 3.920"], nota: "Cumpleaños el 2 de octubre: preparar detalle en la habitación." },
-    { n: "Robert & Linda Hayes", i: "RH", e: "Jubilados · Houston, EE. UU.", club: "Oro · 14.800 pts", pref: ["Junior Suite, cama king", "Idioma: inglés", "Excursión a Isla de Coche", "Sin gluten (Linda)"], hist: ["Llega hoy · Margarita · 7 noches", "15/01 · Margarita · 10 noches · $ 4.900"], nota: "Aniversario 40 de bodas: espumante de cortesía." },
-    { n: "Mariana Pérez Lugo", i: "MP", e: "Novia · boda feb. 2027 en Morrocoy", club: "Plata · 3.100 pts", pref: ["Habitación con vista al Parque", "Vegetariana", "Contacto por WhatsApp"], hist: ["04/08 · Canaima · 3 noches · $ 1.260"], nota: "En negociación boda Pérez–Lugo (90 pax)." },
-    { n: "José Rafael Briceño", i: "JR", e: "Gerente regional · Laboratorios Leti", club: "Plata · 5.600 pts", pref: ["Habitación Superior, piso bajo", "Desayuno temprano 6:00 a.m.", "Sala de reuniones con proyector"], hist: ["21/09 · Mérida · 2 noches · $ 348", "11/08 · Mérida · 2 noches · $ 336"], nota: "Organiza capacitaciones trimestrales." },
-    { n: "Carolina González", i: "CG", e: "Arquitecta · Barquisimeto", club: "Oro · 11.900 pts", pref: ["Cabaña frente a la playa", "Viaja con 2 niños", "Paseo a Cayo Sombrero"], hist: ["30/08 · Morrocoy · 4 noches · $ 1.320", "14/04 · Morrocoy · 5 noches · $ 1.610"], nota: "Interesada en carnaval 2027." },
-    { n: "Pedro Villarroel", i: "PV", e: "Supervisor · Servicios Petroleros Orinoco", club: "Sin afiliar", pref: ["Habitación estándar", "Estacionamiento para camioneta", "Lavandería exprés"], hist: ["26/09 · Maturín · 4 noches · $ 384", "02/09 · Maturín · 5 noches · $ 480"], nota: "Candidato a Club Oro: invitar a afiliarse." },
-    { n: "Luisa Urdaneta", i: "LU", e: "Directora · Ganadera Sur del Lago", club: "Plata · 4.020 pts", pref: ["Habitación Deluxe", "Almuerzo típico zuliano"], hist: ["18/09 · Catatumbo · 2 noches · $ 208"], nota: "Organiza la feria ganadera anual." }
+    { n: "Andrés Mendoza Rivas", e: "Director Comercial · Petroandina C.A.", c: "Maracaibo", seg: "Corporativo", sede: "maracaibo", club: "Oro", socio: "CT-004812", pts: 28450, noches: 17, venc: 0, canje: "Noche gratis · jul 2026",
+      estado: "Última: 12/09/2026", tel: "+58 414-•••-3390", mail: "a.mendoza@petroandina.com", cumple: "14/03", idioma: "Español", canal: "WhatsApp", nps: 9,
+      est: [["12/09/2026", "Maracaibo", 3, "Junior Suite 804", 118], ["18/07/2026", "Margarita", 5, "Suite Vista Mar 510", 212], ["02/05/2026", "Mérida", 2, "Superior 214", 98], ["20/02/2026", "Maracaibo", 4, "Junior Suite 804", 118], ["11/11/2025", "Maracaibo", 3, "Junior Suite 806", 112]],
+      con: [["Restaurante", 1840], ["Lounge bar", 1120], ["Room service", 690], ["Lavandería", 310], ["Salas de reuniones", 2400]],
+      pref: ["Junior Suite, piso alto, vista al lago", "Almohada firme, sin plumas (alergia)", "Café negro sin azúcar al despertar", "Tarifa corporativa $ 118 · factura a la empresa", "Periódico digital, no impreso"],
+      notas: [["Prefiere todo por WhatsApp; no llamar a la habitación.", "Recepción Maracaibo", "12/09/2026"], ["Reservó sala Coquivacoa para 12 personas en noviembre.", "Ventas corporativas", "03/09/2026"]] },
+    { n: "Valentina Rojas", e: "Empresaria · Caracas", c: "Caracas", seg: "Placer", sede: "margarita", club: "Platino", socio: "CT-000219", pts: 61200, noches: 29, venc: 4200, canje: "Traslado + spa · abr 2026",
+      estado: "En casa · Suite 512", casa: true, tel: "+58 412-•••-7788", mail: "vrojas@gmail.com", cumple: "02/10", idioma: "Español", canal: "WhatsApp", nps: 10,
+      est: [["27/09/2026", "Margarita", 4, "Suite Vista Mar 512", 265], ["22/06/2026", "Canaima", 3, "Churuata Premium 3", 390], ["10/04/2026", "Margarita", 6, "Suite Vista Mar 512", 240], ["28/12/2025", "Margarita", 5, "Suite Vista Mar 512", 310], ["15/08/2025", "Morrocoy", 3, "Cabaña Playa 7", 180]],
+      con: [["Restaurante", 4210], ["Lounge bar", 2380], ["Spa", 1960], ["Room service", 1240], ["Excursiones", 1650]],
+      pref: ["Suite Vista Mar 512", "Traslado desde aeropuerto Santiago Mariño", "Espumante brut a la llegada", "Mesa en terraza al atardecer", "Masaje descontracturante el segundo día"],
+      notas: [["Cumpleaños el 2 de octubre (durante esta estadía): torta y detalle en la habitación.", "Gerencia Margarita", "27/09/2026"], ["Reportó ruido del A/A en visita de abril; se asignó técnico preventivo.", "Mantenimiento", "11/04/2026"]] },
+    { n: "Robert & Linda Hayes", e: "Jubilados · Houston, EE. UU.", c: "Houston", seg: "Placer", sede: "margarita", club: "Oro", socio: "CT-002977", pts: 14800, noches: 10, venc: 0, canje: "—",
+      estado: "Llega hoy · 2:15 p.m.", casa: true, tel: "+1 713-•••-4410", mail: "rlhayes@outlook.com", cumple: "22/05", idioma: "Inglés", canal: "Correo", nps: 9,
+      est: [["29/09/2026", "Margarita", 7, "Junior Suite 406", 168], ["15/01/2026", "Margarita", 10, "Junior Suite 406", 158], ["03/02/2025", "Margarita", 8, "Junior Suite 408", 150]],
+      con: [["Restaurante", 3120], ["Excursiones", 1480], ["Lounge bar", 940], ["Spa", 620]],
+      pref: ["Junior Suite, cama king", "Idioma: inglés", "Excursión a Isla de Coche", "Sin gluten (Linda)", "Agua sin gas en la habitación"],
+      notas: [["Aniversario 40 de bodas: espumante de cortesía y decoración.", "Reservas", "20/09/2026"]] },
+    { n: "Mariana Pérez Lugo", e: "Novia · boda feb. 2027 en Morrocoy", c: "Valencia", seg: "Eventos / bodas", sede: "morrocoy", club: "Plata", socio: "CT-011402", pts: 3100, noches: 3, venc: 0, canje: "—",
+      estado: "Última: 04/08/2026", tel: "+58 424-•••-1122", mail: "marianaperezl@gmail.com", cumple: "09/07", idioma: "Español", canal: "WhatsApp", nps: 8,
+      est: [["04/08/2026", "Canaima", 3, "Churuata 5", 310]],
+      con: [["Restaurante", 420], ["Excursiones", 610]],
+      pref: ["Habitación con vista al Parque", "Vegetariana", "Contacto por WhatsApp, después de las 6 p.m."],
+      notas: [["Cotización boda Pérez–Lugo (90 pax) enviada; decide esta semana.", "Daniela R. · Eventos", "25/09/2026"]] },
+    { n: "José Rafael Briceño", e: "Gerente regional · Laboratorios Leti", c: "Mérida", seg: "Corporativo", sede: "merida", club: "Plata", socio: "CT-008830", pts: 5600, noches: 7, venc: 800, canje: "—",
+      estado: "Última: 21/09/2026", tel: "+58 416-•••-5501", mail: "jbriceno@leti.com.ve", cumple: "30/11", idioma: "Español", canal: "Correo", nps: 7,
+      est: [["21/09/2026", "Mérida", 2, "Superior 108", 98], ["11/08/2026", "Mérida", 2, "Superior 108", 96], ["14/05/2026", "Mérida", 3, "Superior 110", 94]],
+      con: [["Salas de reuniones", 1860], ["Restaurante", 540], ["Coffee break", 780]],
+      pref: ["Habitación Superior, piso bajo", "Desayuno temprano 6:00 a.m.", "Sala de reuniones con proyector y 2 micrófonos"],
+      notas: [["Organiza capacitaciones trimestrales; a 1 noche de subir a Oro.", "Ventas Mérida", "21/09/2026"]] },
+    { n: "Carolina González", e: "Arquitecta · Barquisimeto", c: "Barquisimeto", seg: "Placer", sede: "morrocoy", club: "Oro", socio: "CT-003390", pts: 11900, noches: 9, venc: 1500, canje: "Paseo en lancha · ago 2026",
+      estado: "Última: 30/08/2026", tel: "+58 414-•••-8012", mail: "carog.arq@gmail.com", cumple: "18/01", idioma: "Español", canal: "WhatsApp", nps: 9,
+      est: [["30/08/2026", "Morrocoy", 4, "Cabaña Playa 3", 132], ["14/04/2026", "Morrocoy", 5, "Cabaña Playa 3", 128], ["27/12/2025", "Mérida", 3, "Deluxe 305", 118]],
+      con: [["Restaurante", 1260], ["Pool bar", 580], ["Excursiones", 940], ["Kids club", 320]],
+      pref: ["Cabaña frente a la playa", "Viaja con 2 niños (8 y 11 años)", "Paseo a Cayo Sombrero", "Cuna no requerida"],
+      notas: [["Interesada en paquete de carnaval 2027; enviar preventa.", "Reservas Morrocoy", "02/09/2026"]] },
+    { n: "Pedro Villarroel", e: "Supervisor · Servicios Petroleros Orinoco", c: "Maturín", seg: "Corporativo", sede: "maturin", club: "", socio: "—", pts: 0, noches: 14, venc: 0, canje: "—",
+      estado: "En casa · hab. 214", casa: true, tel: "+58 414-•••-6630", mail: "pvillarroel@spo.com.ve", cumple: "05/06", idioma: "Español", canal: "Teléfono", nps: 8,
+      est: [["26/09/2026", "Maturín", 4, "Estándar 214", 96], ["02/09/2026", "Maturín", 5, "Estándar 214", 96], ["08/08/2026", "Maturín", 5, "Estándar 212", 96]],
+      con: [["Restaurante", 860], ["Lavandería", 410], ["Room service", 380]],
+      pref: ["Habitación estándar", "Estacionamiento para camioneta", "Lavandería exprés"],
+      notas: [["Con 14 noches califica para Club Oro: invitar a afiliarse en el check-out.", "CRM · sugerencia automática", "26/09/2026"]] },
+    { n: "Luisa Urdaneta", e: "Directora · Ganadera Sur del Lago", c: "Santa Bárbara", seg: "Corporativo", sede: "catatumbo", club: "Plata", socio: "CT-009117", pts: 4020, noches: 6, venc: 0, canje: "—",
+      estado: "Última: 18/09/2026", tel: "+58 426-•••-2045", mail: "lurdaneta@ganaderasur.com", cumple: "12/12", idioma: "Español", canal: "WhatsApp", nps: 8,
+      est: [["18/09/2026", "Catatumbo", 2, "Deluxe 206", 104], ["10/06/2026", "Catatumbo", 2, "Deluxe 206", 104]],
+      con: [["Restaurante", 510], ["Salón de eventos", 3200]],
+      pref: ["Habitación Deluxe", "Almuerzo típico zuliano", "Factura a nombre de la empresa"],
+      notas: [["Organiza la feria ganadera anual (nov.); cotizar salón + 30 habitaciones.", "Eventos Catatumbo", "18/09/2026"]] },
+    { n: "Stefania Russo", e: "Productora audiovisual · Caracas", c: "Caracas", seg: "Placer", sede: "canaima", club: "Oro", socio: "CT-005561", pts: 18300, noches: 11, venc: 0, canje: "Sobrevuelo Salto Ángel · mar 2026",
+      estado: "Reserva 14/10/2026", tel: "+58 412-•••-9034", mail: "srusso.films@gmail.com", cumple: "25/04", idioma: "Español / Italiano", canal: "WhatsApp", nps: 10,
+      est: [["22/03/2026", "Canaima", 4, "Churuata Premium 1", 360], ["14/12/2025", "Margarita", 4, "Suite Vista Mar 508", 240], ["01/09/2025", "Canaima", 3, "Churuata Premium 2", 340]],
+      con: [["Excursiones", 2860], ["Restaurante", 980], ["Lounge bar", 520]],
+      pref: ["Churuata con vista a la laguna", "Sobrevuelo temprano", "Equipaje de equipo audiovisual: permiso de dron"],
+      notas: [["Vuelve en octubre con equipo de 4 personas para rodaje; coordinar permisos de Inparques.", "Gerencia Canaima", "20/09/2026"]] },
+    { n: "Grupo Seguros Caribe", e: "Cuenta corporativa · Caracas", c: "Caracas", seg: "Eventos / bodas", sede: "margarita", club: "", socio: "—", pts: 0, noches: 64, venc: 0, canje: "—",
+      estado: "Evento 14/11/2026", tel: "+58 212-•••-4000", mail: "eventos@seguroscaribe.com", cumple: "—", idioma: "Español", canal: "Correo", nps: 9,
+      est: [["14/11/2025", "Margarita", 3, "Bloque 32 hab.", 138], ["20/05/2025", "Maracaibo", 2, "Bloque 18 hab.", 112]],
+      con: [["Banquetes", 18400], ["Salones", 7000], ["Lounge bar", 2100]],
+      pref: ["Gran Salón con montaje imperial", "Menú ejecutivo sin cerdo", "Factura única consolidada"],
+      notas: [["Aniversario 2026 confirmado, anticipo 50% recibido.", "Daniela R. · Eventos", "15/09/2026"]] },
+    { n: "Miguel Ángel Parra", e: "Médico cirujano · Maracaibo", c: "Maracaibo", seg: "Placer", sede: "merida", club: "Plata", socio: "CT-012006", pts: 2250, noches: 4, venc: 0, canje: "—",
+      estado: "Última: 15/08/2026", tel: "+58 414-•••-7120", mail: "maparra.md@gmail.com", cumple: "07/09", idioma: "Español", canal: "Web", nps: 6,
+      est: [["15/08/2026", "Mérida", 4, "Deluxe 302", 110]],
+      con: [["Restaurante", 390], ["Excursiones", 280]],
+      pref: ["Chimenea en la habitación", "Excursión al teleférico"],
+      notas: [["Encuesta NPS 6: esperó 25 min en check-in. Se envió disculpa y 1.000 ptos.", "Calidad", "17/08/2026"]] },
+    { n: "Daniela Chacón", e: "Gerente de compras · Alimentos Polar (Zulia)", c: "Maracaibo", seg: "Corporativo", sede: "maracaibo", club: "Platino", socio: "CT-001045", pts: 47900, noches: 24, venc: 0, canje: "Fin de semana Morrocoy · jun 2026",
+      estado: "En casa · hab. 702", casa: true, tel: "+58 424-•••-3301", mail: "dchacon@empresaspolar.com", cumple: "19/02", idioma: "Español", canal: "WhatsApp", nps: 9,
+      est: [["28/09/2026", "Maracaibo", 2, "Deluxe 702", 112], ["14/09/2026", "Maracaibo", 3, "Deluxe 702", 112], ["30/08/2026", "Maracaibo", 2, "Deluxe 702", 112], ["05/06/2026", "Morrocoy", 2, "Cabaña Playa 1", 0]],
+      con: [["Restaurante", 2340], ["Room service", 1180], ["Lavandería", 420]],
+      pref: ["Siempre hab. 702", "Check-in tardío (después de 10 p.m.)", "Frutas y agua de coco en la llegada"],
+      notas: [["Top 10 cliente corporativo Zulia. Renovar convenio 2027 en octubre.", "Ventas corporativas", "28/09/2026"]] },
+    { n: "Gabriel Salazar", e: "Socio · Salazar & Asociados (abogados)", c: "Caracas", seg: "Placer", sede: "margarita", club: "Platino", socio: "CT-000388", pts: 52300, noches: 22, venc: 0, canje: "Upgrade a suite · ago 2026",
+      estado: "Reserva 09/10/2026", tel: "+58 412-•••-2210", mail: "gsalazar@salazarasoc.com", cumple: "28/10", idioma: "Español / Inglés", canal: "WhatsApp", nps: 10,
+      est: [["14/08/2026", "Margarita", 5, "Suite Vista Mar 508", 248], ["20/05/2026", "Canaima", 3, "Churuata Premium 2", 380], ["02/01/2026", "Margarita", 6, "Suite Vista Mar 508", 290], ["10/10/2025", "Morrocoy", 4, "Cabaña Playa 2", 175]],
+      con: [["Restaurante", 3480], ["Lounge bar", 2940], ["Spa", 880], ["Excursiones", 1240]],
+      pref: ["Suite 508 o similar con jacuzzi", "Whisky 12 años en el minibar", "Reserva fija en La Caracola el primer día", "Traslado en camioneta ejecutiva"],
+      notas: [["Llega el 09/10 con su esposa por aniversario: decoración y cena en la terraza.", "Reservas Margarita", "26/09/2026"], ["Refirió 3 clientes corporativos en 2026.", "Ventas", "14/08/2026"]] },
+    { n: "Oriana Figueroa", e: "Novia · boda Marcano–Figueroa 03/10", c: "Porlamar", seg: "Eventos / bodas", sede: "margarita", club: "Plata", socio: "CT-012840", pts: 1800, noches: 2, venc: 0, canje: "—",
+      estado: "Llega hoy · 3:00 p.m.", casa: true, tel: "+58 414-•••-5590", mail: "orianafig@gmail.com", cumple: "11/05", idioma: "Español", canal: "WhatsApp", nps: 9,
+      est: [["29/09/2026", "Margarita", 5, "Suite Nupcial 601", 0], ["14/02/2026", "Margarita", 2, "Deluxe 305", 142]],
+      con: [["Banquetes", 21400], ["Spa", 640], ["Restaurante", 380]],
+      pref: ["Suite nupcial con vista al mar", "Prueba de menú el jueves 1/10", "Coordinadora: Daniela R."],
+      notas: [["Boda sábado 03/10 en Gran Salón (210 pax). Bloque de 40 hab. confirmado.", "Eventos", "25/09/2026"]] },
+    { n: "Ana Karina Mora", e: "Gerente de Talento · Banco Occidental", c: "Maracaibo", seg: "Corporativo", sede: "maracaibo", club: "Oro", socio: "CT-003812", pts: 9800, noches: 12, venc: 900, canje: "Cena para 2 · sep 2026",
+      estado: "Última: 22/09/2026", tel: "+58 424-•••-6612", mail: "akmora@bod.com.ve", cumple: "03/04", idioma: "Español", canal: "Correo", nps: 8,
+      est: [["22/09/2026", "Maracaibo", 2, "Deluxe 603", 112], ["08/07/2026", "Maracaibo", 3, "Deluxe 603", 112], ["15/03/2026", "Mérida", 2, "Superior 110", 94]],
+      con: [["Salas de reuniones", 2800], ["Coffee break", 1340], ["Restaurante", 620]],
+      pref: ["Sala Coquivacoa para inducciones", "Desayuno ligero, frutas", "Factura a la empresa"],
+      notas: [["Evalúa hacer la convención de gerentes 2027 en Margarita.", "Ventas corporativas", "22/09/2026"]] },
+    { n: "Thomas Keller", e: "Fotógrafo de naturaleza · Múnich, Alemania", c: "Múnich", seg: "Placer", sede: "canaima", club: "Oro", socio: "CT-007204", pts: 12600, noches: 9, venc: 0, canje: "—",
+      estado: "En casa · Churuata 4", casa: true, tel: "+49 170-•••-8813", mail: "t.keller@photo.de", cumple: "16/08", idioma: "Alemán / Inglés", canal: "Correo", nps: 10,
+      est: [["26/09/2026", "Canaima", 5, "Churuata 4", 290], ["10/02/2025", "Canaima", 4, "Churuata 4", 270]],
+      con: [["Excursiones", 2380], ["Restaurante", 690], ["Bar", 210]],
+      pref: ["Idioma: inglés o alemán", "Salida a Kavak al amanecer", "Guía bilingüe (Pemón)"],
+      notas: [["Publicó reportaje del hotel en revista alemana en 2025: tratar como influenciador.", "Gerencia Canaima", "26/09/2026"]] },
+    { n: "Hernán Quintero", e: "Gerente de planta · Lácteos Los Andes", c: "Santa Bárbara del Zulia", seg: "Corporativo", sede: "catatumbo", club: "Oro", socio: "CT-004450", pts: 10200, noches: 16, venc: 0, canje: "—",
+      estado: "En casa · hab. 108", casa: true, tel: "+58 416-•••-3004", mail: "hquintero@lacteoslosandes.com", cumple: "21/09", idioma: "Español", canal: "WhatsApp", nps: 8,
+      est: [["27/09/2026", "Catatumbo", 4, "Deluxe 108", 104], ["06/09/2026", "Catatumbo", 5, "Deluxe 108", 104], ["16/08/2026", "Catatumbo", 4, "Deluxe 108", 104]],
+      con: [["Restaurante", 980], ["Lavandería", 360], ["Room service", 420]],
+      pref: ["Hab. 108 (planta baja, cerca del estacionamiento)", "Cena temprano 6:30 p.m.", "Tour del relámpago para visitantes"],
+      notas: [["Trae auditores extranjeros en noviembre: ofrecer tour al Catatumbo.", "Recepción Catatumbo", "27/09/2026"]] },
+    { n: "Sofía Marcano", e: "Ingeniera · Petromonagas", c: "Maturín", seg: "Corporativo", sede: "maturin", club: "Plata", socio: "CT-010221", pts: 4700, noches: 8, venc: 0, canje: "—",
+      estado: "Última: 19/09/2026", tel: "+58 414-•••-2277", mail: "smarcano@petromonagas.com", cumple: "30/06", idioma: "Español", canal: "WhatsApp", nps: 9,
+      est: [["19/09/2026", "Maturín", 3, "Superior 305", 96], ["29/08/2026", "Maturín", 5, "Superior 305", 96]],
+      con: [["Restaurante", 540], ["Gimnasio / piscina", 0], ["Lavandería", 220]],
+      pref: ["Piso alto, lejos del ascensor", "Almuerzo para llevar a planta", "Factura a Petromonagas"],
+      notas: [["Con 8 noches califica para Oro en el próximo corte.", "CRM · sugerencia automática", "19/09/2026"]] },
+    { n: "Rafael Montilla", e: "Cardiólogo · Clínica Andina", c: "Barinas", seg: "Placer", sede: "merida", club: "Oro", socio: "CT-005980", pts: 13300, noches: 10, venc: 2500, canje: "Tour al páramo · jul 2026",
+      estado: "Reserva 30/10/2026", tel: "+58 426-•••-7710", mail: "rmontilla@clinicaandina.com", cumple: "02/02", idioma: "Español", canal: "Web", nps: 9,
+      est: [["18/07/2026", "Mérida", 4, "Junior Suite 402", 142], ["26/12/2025", "Mérida", 5, "Junior Suite 402", 160], ["12/04/2025", "Morrocoy", 3, "Cabaña Playa 5", 150]],
+      con: [["Restaurante", 1420], ["Excursiones", 760], ["Lounge bar", 480]],
+      pref: ["Chimenea encendida en la llegada", "Chocolate caliente andino", "Viaja con su perro pequeño (pet friendly)"],
+      notas: [["2.500 puntos vencen en diciembre: recordar canje en su visita de octubre.", "Club Tibisay", "20/09/2026"]] },
+    { n: "Andreína Colmenares", e: "Instructora de kitesurf · Valencia", c: "Valencia", seg: "Placer", sede: "morrocoy", club: "Plata", socio: "CT-013902", pts: 2100, noches: 5, venc: 0, canje: "—",
+      estado: "En casa · Cabaña 6", casa: true, tel: "+58 412-•••-4455", mail: "andreinakite@gmail.com", cumple: "25/12", idioma: "Español", canal: "WhatsApp", nps: 8,
+      est: [["27/09/2026", "Morrocoy", 4, "Cabaña Playa 6", 128], ["03/07/2026", "Morrocoy", 2, "Cabaña Playa 6", 124]],
+      con: [["Pool bar", 410], ["Restaurante", 530], ["Excursiones", 180]],
+      pref: ["Cabaña cerca del muelle", "Guardar equipo de kite en depósito", "Desayuno temprano"],
+      notas: [["Propone alianza para clases de kite a huéspedes en temporada.", "Gerencia Morrocoy", "28/09/2026"]] }
   ];
-  function show(k) {
-    var g = G[k];
-    document.getElementById("guestCard").innerHTML =
-      '<div class="row" style="margin-bottom:14px"><span class="avatar" style="width:52px;height:52px;font-size:17px">' + g.i + '</span><div><h2>' + g.n + '</h2><div class="small muted">' + g.e + '</div></div></div>' +
-      '<span class="badge b-gold">Club Tibisay · ' + g.club + '</span>' +
-      '<h3 class="mt">Preferencias</h3><ul class="small" style="padding-left:18px;margin:6px 0">' + g.pref.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>" +
-      '<h3 class="mt">Últimas estancias</h3><ul class="small" style="padding-left:18px;margin:6px 0">' + g.hist.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>" +
-      '<h3 class="mt">Nota del equipo</h3><p class="small" style="background:var(--gold-soft);padding:8px 10px;border-radius:8px;margin-top:6px">' + g.nota + "</p>" +
-      '<div class="row mt"><a class="btn btn-primary btn-sm" href="#" data-toast="Abriendo chat de WhatsApp (demo)">WhatsApp</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva para ' + g.n + ' (demo)">Reservar</a></div>';
-  }
-  document.querySelectorAll("#guestTable tbody tr").forEach(function (tr) {
-    tr.addEventListener("click", function () { show(+tr.dataset.g); });
+  G.forEach(function (g) {
+    var w = g.n.split(/\s+/).filter(function (x) { return x !== "&"; }); g.i = (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : "")).toUpperCase();
+    g.gasto = g.est.reduce(function (a, e) { return a + e[2] * e[4]; }, 0) + g.con.reduce(function (a, c) { return a + c[1]; }, 0);
   });
+
+  var tb = document.querySelector("#guestTable tbody");
+  tb.innerHTML = G.map(function (g, k) {
+    return '<tr data-sede="' + g.sede + '" data-g="' + k + '" data-seg="' + g.seg + '" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm' + (k % 2 ? " avatar-gold" : "") + '">' + g.i + '</span><div class="strong">' + g.n + '<span class="sub">' + g.e.split(" · ").pop() + "</span></div></div></td>" +
+      "<td>" + g.seg + '</td><td><span class="badge ' + CLUB[g.club] + '">' + (g.club || "Sin afiliar") + '</span></td><td class="num">' + g.est.length + '</td><td class="num">' + $(g.gasto) + "</td>" +
+      "<td>" + (g.casa ? '<span class="badge b-ok">' + g.estado + "</span>" : '<span class="small">' + g.estado + '</span>') + '<span class="sub">' + TIBISAY.sedeNombre(g.sede) + "</span></td></tr>";
+  }).join("");
+
+  var cur = 0, tab = "resumen";
+  function show(k) {
+    cur = k;
+    var g = G[k];
+    [].forEach.call(tb.rows, function (r) { r.style.background = +r.dataset.g === k ? "var(--gold-soft)" : ""; });
+    var total = g.gasto, tabs = [["resumen", "Resumen"], ["estancias", "Estancias"], ["consumos", "Consumos"], ["pref", "Preferencias"], ["notas", "Notas"]];
+    var body = "";
+    if (tab === "resumen") {
+      body = '<dl class="dl"><dt>Teléfono</dt><dd>' + g.tel + "</dd><dt>Correo</dt><dd>" + g.mail + "</dd><dt>Ciudad</dt><dd>" + g.c + "</dd><dt>Cumpleaños</dt><dd>" + g.cumple + "</dd><dt>Idioma</dt><dd>" + g.idioma + "</dd><dt>Canal preferido</dt><dd>" + g.canal + "</dd><dt>Última encuesta NPS</dt><dd>" +
+        '<span class="badge ' + (g.nps >= 9 ? "b-ok" : g.nps >= 7 ? "b-warn" : "b-danger") + '">' + g.nps + " / 10</span></dd></dl>" +
+        '<h3 class="mt">Próxima acción sugerida</h3><div class="note" style="margin-top:6px">' + g.notas[0][0] + "<small>" + g.notas[0][1] + " · " + g.notas[0][2] + "</small></div>";
+    } else if (tab === "estancias") {
+      body = '<ul class="tl">' + g.est.map(function (e) { return "<li><div><b>" + e[0] + " · " + e[1] + "</b><br><span>" + e[3] + " · " + e[2] + " noche" + (e[2] > 1 ? "s" : "") + " · tarifa " + (e[4] ? $(e[4]) : "canje de puntos") + "</span></div><b>" + $(e[2] * e[4]) + "</b></li>"; }).join("") + "</ul>";
+    } else if (tab === "consumos") {
+      var sum = g.con.reduce(function (a, c) { return a + c[1]; }, 0);
+      body = g.con.map(function (c) { var p = Math.round(c[1] / sum * 100); return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") +
+        '<div class="between small mt" style="border-top:1px solid var(--border);padding-top:8px"><span class="muted">Total consumos (no alojamiento)</span><b>' + $(sum) + "</b></div>";
+    } else if (tab === "pref") {
+      body = '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + '</ul><p class="small muted mt">Las preferencias se envían al PMS como <i>traces</i> para recepción y housekeeping.</p>';
+    } else {
+      body = g.notas.map(function (n) { return '<div class="note">' + n[0] + "<small>" + n[1] + " · " + n[2] + "</small></div>"; }).join("") +
+        '<textarea class="input" style="height:64px;padding:8px 12px;margin-top:6px" placeholder="Agregar nota para el equipo…"></textarea><a class="btn btn-ghost btn-sm mt" href="#" data-toast="Nota guardada (demo)">Guardar nota</a>';
+    }
+    document.getElementById("guestCard").innerHTML =
+      '<div class="row" style="margin-bottom:10px"><span class="avatar" style="width:52px;height:52px;font-size:17px">' + g.i + '</span><div style="min-width:0"><h2>' + g.n + '</h2><div class="small muted">' + g.e + "</div></div></div>" +
+      '<div class="row" style="flex-wrap:wrap;gap:6px"><span class="badge ' + CLUB[g.club] + '">' + (g.club ? "Club " + g.club + " · " + pts(g.pts) + " pts" : "Sin afiliar al Club") + '</span><span class="badge b-muted">' + g.seg + "</span></div>" +
+      '<div class="mini-kpis" id="p360Kpis"><div><small>Estancias</small><b>' + g.est.length + "</b></div><div><small>Noches 12 m</small><b>" + g.noches + "</b></div><div><small>Gasto total</small><b>" + $(total) + "</b></div></div>" +
+      '<div class="p360-tabs" id="p360Tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === tab ? ' class="active"' : "") + ">" + t[1] + "</button>"; }).join("") + "</div>" +
+      '<div id="p360Body">' + body + "</div>" +
+      '<div class="row mt"><a class="btn btn-primary btn-sm" href="#" data-toast="Abriendo chat de WhatsApp con ' + g.n + ' (demo)" data-wa>' + App.icon("chat") + "WhatsApp</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva para ' + g.n + ' (demo)">' + App.icon("calendar") + "Reservar</a></div>";
+  }
+  document.getElementById("guestCard").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-t]");
+    if (b) { tab = b.dataset.t; show(cur); }
+  });
+  tb.addEventListener("click", function (e) { var tr = e.target.closest("tr"); if (tr) show(+tr.dataset.g); });
+
+  function filterGuests() {
+    var q = document.getElementById("guestFilter").value.toLowerCase(), s = document.getElementById("segFilter").value, n = 0;
+    [].forEach.call(tb.rows, function (r) {
+      r.hidden = (q && r.textContent.toLowerCase().indexOf(q) < 0) || (s && r.dataset.seg !== s);
+      if (!r.hidden && r.style.display !== "none") n++;
+    });
+    document.getElementById("guestCount").textContent = "Mostrando " + n + " de 18.426 perfiles";
+  }
+  document.getElementById("guestFilter").addEventListener("input", filterGuests);
+  document.getElementById("segFilter").addEventListener("change", filterGuests);
+
+  /* ------------------------------------------------------------ Club */
+  var extra = [
+    ["Jesús Alberto Díaz", "maturin", "Plata", "CT-013390", 1450, 5, 0, "—"],
+    ["Fernanda Ochoa", "canaima", "Oro", "CT-006022", 16400, 15, 2000, "—"],
+    ["Ricardo Leal", "catatumbo", "Plata", "CT-014501", 880, 2, 0, "—"]
+  ];
+  var M = G.filter(function (g) { return g.club; }).map(function (g) { return [g.n, g.sede, g.club, g.socio, g.pts, g.noches, g.venc, g.canje]; }).concat(extra);
+  M.sort(function (a, b) { return b[4] - a[4]; });
+  document.querySelector("#memberTable tbody").innerHTML = M.map(function (m) {
+    var next = m[2] === "Plata" ? ["Oro", 8] : m[2] === "Oro" ? ["Platino", 20] : null;
+    var prog = next ? Math.min(100, Math.round(m[5] / next[1] * 100)) : 100;
+    var txt = next ? (next[1] - m[5] <= 0 ? "Sube a " + next[0] + " en el próximo corte" : "Faltan " + (next[1] - m[5]) + " noches para " + next[0]) : "Nivel máximo · mantiene con 20 noches";
+    return '<tr data-sede="' + m[1] + '" data-tier="' + m[2] + '"><td class="strong">' + m[0] + '<span class="sub">' + TIBISAY.sedeNombre(m[1]) + '</span></td><td class="muted">' + m[3] + '</td><td><span class="badge ' + CLUB[m[2]] + '">' + m[2] + '</span></td><td class="num strong">' + pts(m[4]) + '</td><td class="num">' + m[5] + "</td>" +
+      '<td><div class="pcell"><div class="progress' + (next ? "" : " teal") + '"><span style="width:' + prog + '%"></span></div></div><span class="sub">' + txt + "</span></td>" +
+      '<td class="num">' + (m[6] ? '<span class="num-warn">' + pts(m[6]) + "</span>" : "—") + "</td><td>" + m[7] + "</td></tr>";
+  }).join("");
+  document.querySelectorAll("#tierSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#memberTable tbody tr").forEach(function (r) { r.hidden = !!b.dataset.v && r.dataset.tier !== b.dataset.v; });
+    });
+  });
+
+  /* ------------------------------------------------------------ Cotizaciones */
+  var EST = {
+    borrador: { t: "Borrador", c: "b-muted", d: "Se arma la propuesta; aún no la ve el cliente" },
+    enviada: { t: "Enviada", c: "b-info", d: "El cliente la recibió por WhatsApp" },
+    aprobada: { t: "Aprobada", c: "b-ok", d: "El cliente aceptó; pasa a BEO y anticipo" },
+    perdida: { t: "Perdida", c: "b-danger", d: "Se registra el motivo para aprender" }
+  };
+  var Q = [
+    { id: "EV-2026-0431", ev: "Convención Farmacéutica Andina", tipo: "Convención", cli: "Laboratorios Leti", ct: "José Rafael Briceño", tel: "+58 416-•••-5501", sede: "merida", fecha: "Jue 15/04/2027", pax: 80, esp: "Salón Sierra Nevada", st: "borrador", ej: "Luis P.", hab: [30, 2, 98], menu: ["Coffee break AM/PM + almuerzo buffet", 46], barra: 0, salon: 1800,
+      chat: [["in", "Buenos días, queremos hacer la convención anual en Mérida en abril, unos 80 asistentes, 2 días.", "9:02 a.m."], ["out", "¡Con gusto! El Salón Sierra Nevada tiene capacidad para 120 en escuela. ¿Necesitan habitaciones para los asistentes?", "9:03 a.m. · Asistente"], ["in", "Sí, unas 30 habitaciones por 2 noches.", "9:10 a.m."], ["out", "Perfecto. Luis, nuestro ejecutivo, está armando la propuesta y te la envía hoy mismo 📄", "9:11 a.m. · Asistente"]] },
+    { id: "EV-2026-0433", ev: "Cena de gala Cámara Zuliana", tipo: "Cena de gala", cli: "Cámara de Comercio del Zulia", ct: "Lcda. Nelly Soto", tel: "+58 261-•••-7000", sede: "maracaibo", fecha: "Vie 11/12/2026", pax: 220, esp: "Gran Salón Del Lago", st: "borrador", ej: "Daniela R.", hab: [0, 0, 0], menu: ["Menú gala 4 tiempos", 72], barra: 28, salon: 4200,
+      chat: [["in", "Hola, necesitamos presupuesto para la cena de fin de año de la Cámara, 220 personas, 11 de diciembre.", "4:40 p.m."], ["out", "¡Buenas tardes! El Gran Salón Del Lago está disponible ese viernes. ¿Montaje imperial o mesas redondas?", "4:41 p.m. · Asistente"], ["in", "Redondas de 10, con tarima para orquesta.", "4:52 p.m."]] },
+    { id: "EV-2026-0418", ev: "Boda González–Salazar", tipo: "Boda de destino", cli: "Mariana González", ct: "Mariana González", tel: "+58 414-•••-2231", sede: "margarita", fecha: "Sáb 20/03/2027", pax: 150, esp: "Jardín frente al mar + Gran Salón", st: "enviada", ej: "Daniela R.", env: "25/09/2026", vence: "09/10/2026", visto: true, hab: [40, 2, 128], menu: ["Menú banquete \"Costa Azul\" (3 tiempos)", 68], barra: 32, salon: 3500, montaje: 2400,
+      chat: [["in", "¡Buenas tardes! Queremos casarnos en Margarita en marzo 2027. ¿Tienen disponibilidad?", "3:12 p.m."], ["out", "¡Felicidades! 💍 ¿Cuántos invitados esperan y qué fecha tienen en mente?", "3:12 p.m. · Asistente"], ["in", "Unos 150, sábado 20 de marzo. Ceremonia en la playa y recepción en la noche.", "3:14 p.m."], ["out", "El 20/03 está disponible 🌴 Recomiendo jardín frente al mar + Gran Salón. ¿Desean bloque de habitaciones?", "3:14 p.m. · Asistente"], ["in", "Sí, unas 40 habitaciones por 2 noches.", "3:15 p.m."], ["out", "Soy Daniela, ejecutiva de eventos. Te adjunto la cotización EV-2026-0418 con 3 opciones de menú 📄", "3:21 p.m. · Daniela R."], ["in", "¡Gracias! La reviso con mi novio y te confirmo ✓✓", "7:48 p.m."]] },
+    { id: "EV-2026-0420", ev: "Retiro directivo Banco del Sur", tipo: "Retiro corporativo", cli: "Banco del Sur", ct: "Carlos Villalba", tel: "+58 412-•••-6190", sede: "canaima", fecha: "Vie 22/01/2027", pax: 24, esp: "Churuata principal", st: "enviada", ej: "Luis P.", env: "22/09/2026", vence: "06/10/2026", visto: true, hab: [24, 3, 340], menu: ["Pensión completa + cena temática", 85], barra: 22, salon: 900, excursion: [24, 180],
+      chat: [["in", "Buen día, buscamos un retiro para 24 directivos en Canaima en enero, 3 noches, todo incluido.", "10:05 a.m."], ["out", "¡Excelente destino! Incluimos sobrevuelo al Salto Ángel y excursión a Sapo. Luis te envía la propuesta.", "10:06 a.m. · Asistente"], ["out", "Carlos, adjunto cotización EV-2026-0420 con traslado aéreo opcional ✈️", "2:30 p.m. · Luis P."], ["in", "Recibido, la presento al comité el jueves.", "2:44 p.m."]] },
+    { id: "EV-2026-0425", ev: "Lanzamiento automotriz", tipo: "Lanzamiento de producto", cli: "Toyota Oriente", ct: "Ing. Rubén Salcedo", tel: "+58 291-•••-3300", sede: "maturin", fecha: "Jue 19/11/2026", pax: 120, esp: "Salón Guarapiche + estacionamiento", st: "enviada", ej: "Luis P.", env: "26/09/2026", vence: "03/10/2026", visto: false, hab: [0, 0, 0], menu: ["Cóctel con pasapalos (12 piezas)", 34], barra: 18, salon: 2200, montaje: 1600,
+      chat: [["in", "Queremos lanzar el nuevo modelo en el hotel, exhibición en el estacionamiento y cóctel para 120.", "11:20 a.m."], ["out", "Te envío la cotización EV-2026-0425 con montaje de tarima y sonido 🚗", "5:10 p.m. · Luis P."]] },
+    { id: "EV-2026-0409", ev: "Boda Pérez–Lugo", tipo: "Boda de destino", cli: "Mariana Pérez Lugo", ct: "Mariana Pérez Lugo", tel: "+58 424-•••-1122", sede: "morrocoy", fecha: "Sáb 13/02/2027", pax: 90, esp: "Jardín frente al mar", st: "enviada", ej: "Daniela R.", env: "18/09/2026", vence: "02/10/2026", visto: true, hab: [30, 2, 126], menu: ["Menú marino 3 tiempos", 58], barra: 30, salon: 1500, montaje: 1800,
+      chat: [["in", "Hola Daniela, ¿podemos cambiar el plato fuerte por una opción vegetariana para 15 invitados?", "8:15 p.m."], ["out", "¡Claro! Lo agrego sin costo adicional y te reenvío la versión 2 de la cotización 🌿", "8:32 p.m. · Daniela R."], ["in", "Perfecto, decidimos esta semana 🙏", "8:40 p.m."]] },
+    { id: "EV-2026-0398", ev: "Congreso Ingeniería Petrolera", tipo: "Congreso", cli: "Colegio de Ingenieros del Zulia", ct: "Ing. Andrés Mendoza", tel: "+58 414-•••-3390", sede: "maracaibo", fecha: "Jue 01/10/2026", pax: 300, esp: "Gran Salón Del Lago", st: "aprobada", ej: "Daniela R.", env: "02/08/2026", aprob: "14/08/2026", anticipo: 50, beo: "BEO-0926", hab: [60, 3, 112], menu: ["Coffee break x2 + almuerzo ejecutivo", 38], barra: 0, salon: 5200, av: 2800,
+      chat: [["out", "Ing. Mendoza, confirmamos recepción del anticipo del 50% ✅ El BEO-0926 queda en firme.", "11:02 a.m. · Daniela R."], ["in", "Excelente, gracias. Enviamos lista de rooming el lunes.", "11:30 a.m."]] },
+    { id: "EV-2026-0402", ev: "Aniversario Seguros Caribe", tipo: "Evento corporativo", cli: "Grupo Seguros Caribe", ct: "Lcda. Patricia Ruiz", tel: "+58 212-•••-4000", sede: "margarita", fecha: "Sáb 14/11/2026", pax: 180, esp: "Gran Salón", st: "aprobada", ej: "Daniela R.", env: "20/08/2026", aprob: "15/09/2026", anticipo: 50, beo: "BEO-0952", hab: [32, 3, 138], menu: ["Cena buffet caribeña", 54], barra: 32, salon: 3500, av: 1400,
+      chat: [["in", "Aprobamos la propuesta 🎉 ¿A qué cuenta hacemos el anticipo?", "9:14 a.m."], ["out", "¡Gracias Patricia! Te envío los datos bancarios y la factura proforma.", "9:20 a.m. · Daniela R."]] },
+    { id: "EV-2026-0405", ev: "Capacitación trimestral Leti", tipo: "Reunión corporativa", cli: "Laboratorios Leti", ct: "José Rafael Briceño", tel: "+58 416-•••-5501", sede: "margarita", fecha: "Jue 01/10/2026", pax: 22, esp: "Sala El Yaque", st: "aprobada", ej: "Luis P.", env: "10/09/2026", aprob: "12/09/2026", anticipo: 100, beo: "BEO-0934", hab: [0, 0, 0], menu: ["Coffee break AM/PM + almuerzo", 29], barra: 0, salon: 450,
+      chat: [["in", "Confirmado, pagamos el 100% por transferencia.", "4:10 p.m."]] },
+    { id: "EV-2026-0387", ev: "Boda Rondón–Molina", tipo: "Boda", cli: "Katherine Rondón", ct: "Katherine Rondón", tel: "+58 416-•••-8820", sede: "merida", fecha: "Sáb 05/12/2026", pax: 160, esp: "Salón Sierra Nevada", st: "perdida", ej: "Luis P.", env: "05/08/2026", motivo: "Precio · eligieron una hacienda en Tabay", hab: [20, 1, 98], menu: ["Menú andino 3 tiempos", 48], barra: 26, salon: 2400,
+      chat: [["in", "Muchas gracias por la propuesta, pero nos decidimos por otra opción más económica 😔", "6:05 p.m."], ["out", "¡Entendemos, Katherine! Les deseamos lo mejor. Si cambian de planes, aquí estamos 💐", "6:20 p.m. · Luis P."]] },
+    { id: "EV-2026-0391", ev: "Feria Ganadera Sur del Lago", tipo: "Feria / exposición", cli: "Ganadera Sur del Lago", ct: "Luisa Urdaneta", tel: "+58 426-•••-2045", sede: "catatumbo", fecha: "Vie 20/11/2026", pax: 250, esp: "Salón Catatumbo + áreas externas", st: "perdida", ej: "Rosa U.", env: "28/08/2026", motivo: "Fecha · salón ocupado; se ofreció 27/11", hab: [30, 2, 104], menu: ["Almuerzo criollo buffet", 26], barra: 12, salon: 1800,
+      chat: [["in", "Lamentablemente la fecha alternativa no nos sirve por el calendario de la feria.", "10:40 a.m."], ["out", "Entendido, Luisa. Dejamos pre-reservado noviembre 2027 si les interesa.", "10:52 a.m. · Rosa U."]] },
+    { id: "EV-2026-0436", ev: "Graduación UNIMAR 2026", tipo: "Graduación", cli: "Universidad de Margarita", ct: "Prof. Luisa Rodríguez", tel: "+58 295-•••-2600", sede: "margarita", fecha: "Vie 11/12/2026", pax: 260, esp: "Gran Salón Nueva Esparta", st: "borrador", ej: "Daniela R.", hab: [0, 0, 0], menu: ["Cena buffet de gala", 42], barra: 24, salon: 3500, av: 1600,
+      chat: [["in", "Buenas tardes, somos la comisión de graduación de UNIMAR. ¿Tienen el Gran Salón el 11 de diciembre para 260 personas?", "11:05 a.m."], ["out", "¡Felicitaciones a los graduandos! 🎓 Está disponible. ¿Cena servida o buffet?", "11:06 a.m. · Asistente"], ["in", "Buffet, con DJ hasta las 2 a.m.", "11:20 a.m."]] },
+    { id: "EV-2026-0412", ev: "Congreso Venezolano de Cardiología", tipo: "Congreso", cli: "Sociedad Venezolana de Cardiología", ct: "Dra. Mercedes Lugo", tel: "+58 212-•••-9020", sede: "margarita", fecha: "Jue 22/04/2027", pax: 400, esp: "Gran Salón + 2 salas", st: "perdida", ej: "Daniela R.", env: "01/09/2026", motivo: "Sede · la junta eligió Caracas por logística de vuelos", hab: [120, 3, 132], menu: ["Coffee break x2 + almuerzo", 36], barra: 0, salon: 7800, av: 4200,
+      chat: [["in", "Daniela, la junta decidió hacer el congreso en Caracas este año por los vuelos. Gracias por todo.", "5:30 p.m."], ["out", "Entendido, Dra. Lugo. Les dejo abierta la propuesta para 2028 con la misma tarifa 🙌", "5:42 p.m. · Daniela R."]] },
+    { id: "EV-2026-0428", ev: "Convención de gerentes Banco Occidental", tipo: "Convención", cli: "Banco Occidental de Descuento", ct: "Ana Karina Mora", tel: "+58 424-•••-6612", sede: "maracaibo", fecha: "Vie 26/02/2027", pax: 140, esp: "Sala Coquivacoa + Terraza Vista al Lago", st: "enviada", ej: "Daniela R.", env: "24/09/2026", vence: "08/10/2026", visto: true, hab: [60, 2, 112], menu: ["Almuerzo ejecutivo + cena de clausura", 55], barra: 18, salon: 2600, av: 1800,
+      chat: [["in", "Hola Daniela, necesitamos la propuesta para la convención de gerentes, 140 personas, 2 días.", "9:40 a.m."], ["out", "¡Con gusto, Ana Karina! Te envío EV-2026-0428 con opción de cena en la terraza 🌅", "4:15 p.m. · Daniela R."], ["in", "Recibido ✓✓, la reviso con presidencia.", "4:30 p.m."]] },
+    { id: "EV-2026-0395", ev: "Boda Colina–Rivas", tipo: "Boda de playa", cli: "Andrea Colina", ct: "Andrea Colina", tel: "+58 414-•••-3389", sede: "morrocoy", fecha: "Sáb 24/10/2026", pax: 110, esp: "Jardín frente al mar", st: "aprobada", ej: "Andreína C.", env: "10/08/2026", aprob: "22/08/2026", anticipo: 70, beo: "BEO-0948", hab: [25, 2, 126], menu: ["Menú marino 3 tiempos", 58], barra: 30, salon: 1500, montaje: 2100,
+      chat: [["in", "¡Ya transferimos el 70%! Estamos felices 💍🌊", "8:02 p.m."], ["out", "¡Recibido, Andrea! El BEO-0948 queda confirmado. Nos vemos en la prueba de menú.", "8:15 p.m. · Andreína C."]] },
+    { id: "EV-2026-0426", ev: "Tour fotográfico Salto Ángel", tipo: "Grupo de incentivo", cli: "Photo Expeditions GmbH", ct: "Thomas Keller", tel: "+49 170-•••-8813", sede: "canaima", fecha: "Lun 15/02/2027", pax: 16, esp: "Churuata principal", st: "enviada", ej: "Héctor S.", env: "27/09/2026", vence: "11/10/2026", visto: false, hab: [16, 4, 290], menu: ["Pensión completa", 62], barra: 0, salon: 400, excursion: [16, 210],
+      chat: [["in", "Hello, I would like a quote for a photo group of 16 people, 4 nights in February.", "7:10 a.m."], ["out", "Hi Thomas! Quote EV-2026-0426 attached, including Kavak and Salto Ángel flights 📸", "3:30 p.m. · Héctor S."]] },
+    { id: "EV-2026-0419", ev: "Asamblea anual Ganaderos del Zulia", tipo: "Asamblea", cli: "Asociación de Ganaderos del Zulia", ct: "Hernán Quintero", tel: "+58 416-•••-3004", sede: "catatumbo", fecha: "Sáb 28/11/2026", pax: 180, esp: "Salón Catatumbo", st: "enviada", ej: "Rosa U.", env: "23/09/2026", vence: "07/10/2026", visto: true, hab: [30, 1, 104], menu: ["Almuerzo criollo buffet", 26], barra: 12, salon: 1800, av: 900,
+      chat: [["in", "Rosa, ¿podemos pagar 30% ahora y el resto una semana antes?", "10:20 a.m."], ["out", "Sí, Hernán. Te lo dejo reflejado en la cotización EV-2026-0419 ✅", "10:35 a.m. · Rosa U."]] },
+    { id: "EV-2026-0407", ev: "Cierre de año Petromonagas", tipo: "Cena corporativa", cli: "Petromonagas", ct: "Sofía Marcano", tel: "+58 414-•••-2277", sede: "maturin", fecha: "Vie 04/12/2026", pax: 150, esp: "Salón Guarapiche", st: "aprobada", ej: "Luis P.", env: "01/09/2026", aprob: "18/09/2026", anticipo: 50, beo: "BEO-0955", hab: [0, 0, 0], menu: ["Cena servida 3 tiempos", 46], barra: 22, salon: 2200, av: 1100,
+      chat: [["in", "Aprobado por gerencia. Envíen la proforma para el anticipo.", "2:10 p.m."], ["out", "¡Listo, Sofía! Proforma enviada a tu correo 📄", "2:25 p.m. · Luis P."]] },
+    { id: "EV-2026-0415", ev: "Encuentro regional de ventas", tipo: "Reunión corporativa", cli: "Laboratorios Leti", ct: "José Rafael Briceño", tel: "+58 416-•••-5501", sede: "merida", fecha: "Sáb 03/10/2026", pax: 80, esp: "Salón Sierra Nevada", st: "aprobada", ej: "Luis P.", env: "05/09/2026", aprob: "15/09/2026", anticipo: 50, beo: "BEO-0941", hab: [20, 1, 98], menu: ["Coffee break AM/PM + almuerzo", 29], barra: 0, salon: 1200, av: 600,
+      chat: [["in", "Confirmamos el encuentro del sábado. Enviamos la lista de asistentes el jueves.", "9:00 a.m."], ["out", "¡Perfecto, José Rafael! Todo listo en el Salón Sierra Nevada ✅", "9:10 a.m. · Luis P."]] }
+  ];
+  function items(q) {
+    var it = [[q.menu[0], q.pax, q.menu[1]]];
+    if (q.barra) it.push(["Barra libre nacional 5 h", q.pax, q.barra]);
+    if (q.montaje) it.push(["Montaje y decoración", 1, q.montaje]);
+    it.push(["Alquiler " + q.esp, 1, q.salon]);
+    if (q.av) it.push(["Audiovisuales (pantallas, sonido, técnico)", 1, q.av]);
+    if (q.excursion) it.push(["Sobrevuelo Salto Ángel + excursión Sapo", q.excursion[0], q.excursion[1]]);
+    if (q.hab[0]) it.push(["Bloque habitaciones (" + q.hab[0] + " × " + q.hab[1] + " noches)", q.hab[0] * q.hab[1], q.hab[2]]);
+    return it;
+  }
+  Q.forEach(function (q) { q.total = items(q).reduce(function (a, i) { return a + i[1] * i[2]; }, 0); });
+
+  var cols = ["borrador", "enviada", "aprobada", "perdida"];
+  function renderPipe(p) {
+    var vis = Q.filter(function (q) { return p === "todas" || q.sede === p; });
+    document.getElementById("pipeline").innerHTML = cols.map(function (c) {
+      var list = vis.filter(function (q) { return q.st === c; });
+      var sum = list.reduce(function (a, q) { return a + q.total; }, 0);
+      return '<div class="kcol" data-col="' + c + '"><div class="kcol-h"><span>' + EST[c].t + ' <span class="badge nodot ' + EST[c].c + '">' + list.length + '</span></span><span>' + $(sum) + '</span></div><div class="small muted" style="padding:0 4px 8px;margin-top:-4px">' + EST[c].d + "</div>" +
+        (list.length ? list.map(function (q) {
+          var sub = c === "enviada" ? (q.visto ? "Vista ✓✓ · vence " + q.vence : "Sin abrir · vence " + q.vence) : c === "aprobada" ? "Anticipo " + q.anticipo + "% · " + q.beo : c === "perdida" ? q.motivo.split(" · ")[0] : "En preparación";
+          return '<div class="kcard" data-q="' + q.id + '" style="cursor:pointer"><b>' + q.ev + "</b>" + TIBISAY.sedeNombre(q.sede) + " · " + q.pax + " pax · " + q.fecha.slice(4) +
+            '<div class="between"><span>' + sub + "</span><span class=\"strong\" style=\"color:var(--text)\">" + $(q.total) + "</span></div></div>";
+        }).join("") : '<div class="small muted" style="padding:8px 4px">Sin cotizaciones en esta propiedad</div>') + "</div>";
+    }).join("");
+    var open = vis.filter(function (q) { return q.st === "borrador" || q.st === "enviada"; });
+    document.getElementById("kpiPipe").textContent = $(open.reduce(function (a, q) { return a + q.total; }, 0));
+    document.getElementById("kpiPipeSub").textContent = open.length + " abiertas · " + vis.filter(function (q) { return q.st === "aprobada"; }).length + " aprobadas este trimestre";
+    document.getElementById("tabEvCount").textContent = open.length;
+    var sel = vis.find(function (q) { return q.id === curQ; }) || vis.find(function (q) { return q.st === "enviada"; }) || vis[0];
+    if (sel) showQ(sel.id);
+  }
+
+  var curQ = "EV-2026-0418";
+  function showQ(id) {
+    curQ = id;
+    var q = Q.find(function (x) { return x.id === id; }), e = EST[q.st];
+    document.querySelectorAll("#pipeline .kcard").forEach(function (k) { k.style.borderColor = k.dataset.q === id ? "var(--gold)" : ""; });
+    document.getElementById("chatWho").textContent = "Conversación con " + q.ct + " · " + q.tel;
+    document.getElementById("chat").innerHTML = q.chat.map(function (m) {
+      return '<div class="msg' + (m[0] === "out" ? " out" : "") + '">' + m[1] + "<small>" + m[2] + "</small></div>";
+    }).join("") + (q.st === "borrador" ? '<div class="msg out" style="opacity:.6;border:1px dashed var(--gold)">📄 Cotización ' + q.id + " lista para enviar…<small>borrador</small></div>" : "");
+    var steps = [["Solicitud WhatsApp", true], ["Borrador", true], ["Enviada", q.st !== "borrador"], [q.st === "perdida" ? "Perdida" : "Aprobada", q.st === "aprobada" || q.st === "perdida"]];
+    var acts = {
+      borrador: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Salón bloqueado tentativamente 72 h (demo)">Bloquear salón 72 h</a><a class="btn btn-primary btn-sm" href="#" data-toast="Cotización ' + q.id + ' enviada por WhatsApp a ' + q.ct + ' (demo)">' + App.icon("chat") + "Enviar por WhatsApp</a>",
+      enviada: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Recordatorio enviado por WhatsApp (demo)">Enviar recordatorio</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Marcada como perdida: indique el motivo (demo)">Marcar perdida</a><a class="btn btn-primary btn-sm" href="#" data-toast="Cotización aprobada · se generó el BEO (demo)">' + App.icon("check") + "Marcar aprobada</a>",
+      aprobada: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Abriendo ' + q.beo + ' (demo)">Ver ' + q.beo + '</a><a class="btn btn-primary btn-sm" href="#" data-toast="Registro de pago enviado al ERP (demo)">' + App.icon("dollar") + "Registrar pago</a>",
+      perdida: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Cotización reabierta como borrador (demo)">Reabrir</a>'
+    };
+    var info = q.st === "enviada" ? "Enviada el " + q.env + " · " + (q.visto ? "vista por el cliente ✓✓" : "aún no la abre") + " · vence " + q.vence
+      : q.st === "aprobada" ? "Aprobada el " + q.aprob + " · anticipo " + q.anticipo + "% recibido · " + q.beo + " generado"
+      : q.st === "perdida" ? "Motivo: " + q.motivo : "Borrador creado automáticamente desde la conversación · responsable " + q.ej;
+    document.getElementById("quoteCard").innerHTML =
+      '<div class="card-h"><div><h2>Cotización ' + q.id + "</h2><p>" + q.ev + " · " + q.cli + '</p></div><span class="badge ' + e.c + '">' + e.t + "</span></div>" +
+      '<div class="card-b" style="padding-bottom:10px"><div class="steps" style="margin-bottom:12px">' + steps.map(function (s, k) { return (k ? "<em>→</em>" : "") + '<span class="' + (s[1] ? (k === steps.length - 1 || !steps[k + 1][1] ? "now" : "done") : "") + '">' + s[0] + "</span>"; }).join("") + "</div>" +
+      '<div class="small ' + (q.st === "perdida" ? "num-danger" : "muted") + '" style="margin-bottom:10px">' + info + "</div>" +
+      '<dl class="dl"><dt>Tipo</dt><dd>' + q.tipo + "</dd><dt>Propiedad</dt><dd>" + TIBISAY.sedeNombre(q.sede) + "</dd><dt>Fecha</dt><dd>" + q.fecha + "</dd><dt>Invitados</dt><dd>" + q.pax + "</dd><dt>Espacio</dt><dd>" + q.esp + "</dd><dt>Ejecutivo</dt><dd>" + q.ej + "</dd></dl></div>" +
+      '<div class="table-wrap"><table class="table"><thead><tr><th>Concepto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Total</th></tr></thead><tbody>' +
+      items(q).map(function (i) { return "<tr><td>" + i[0] + '</td><td class="num">' + i[1] + '</td><td class="num">' + $(i[2]) + '</td><td class="num">' + $(i[1] * i[2]) + "</td></tr>"; }).join("") +
+      '</tbody><tfoot><tr><td colspan="3">Total estimado (antes de IVA)</td><td class="num">' + $(q.total) + "</td></tr></tfoot></table></div>" +
+      '<div class="card-f row" style="justify-content:flex-end;flex-wrap:wrap">' + acts[q.st] + "</div>";
+  }
+  document.getElementById("pipeline").addEventListener("click", function (e) {
+    var k = e.target.closest("[data-q]");
+    if (k) { showQ(k.dataset.q); document.getElementById("quoteDetail").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+  });
+
   App.onProp(function (p) {
-    var first = [].find.call(document.querySelectorAll("#guestTable tbody tr"), function (tr) { return p === "todas" || tr.dataset.sede === p; });
+    var first = [].find.call(tb.rows, function (tr) { return p === "todas" || tr.dataset.sede === p; });
     show(first ? +first.dataset.g : 0);
+    renderPipe(p);
+    setTimeout(filterGuests);
+  });
+
+  /* ------------------------------------------------------------ Onboarding */
+  Tour.init({
+    id: "crm",
+    icono: "users",
+    titulo: "Bienvenido al CRM de Tibisay",
+    intro: "Aquí está todo lo que sabemos de cada huésped, el programa de fidelización y las cotizaciones de eventos que llegan por WhatsApp. Te mostramos cómo usarlo en 2 minutos.",
+    fin: { sel: "#tabHuespedes" },
+    pasos: [
+      { sel: "#crmKpis", titulo: "Indicadores del CRM", texto: "Resumen de la base de huéspedes: perfiles activos, % de reservas directas (sin comisión de OTA), miembros del Club y el monto de cotizaciones de eventos abiertas.", antes: "#tabHuespedes" },
+      { sel: "#guestTools", titulo: "Busca y filtra huéspedes", texto: "Escribe un nombre, empresa o ciudad, o filtra por segmento (corporativo, placer, bodas). Los perfiles se unifican desde Opera/Prestige: un mismo huésped aparece una sola vez aunque haya ido a varios hoteles.", antes: "#tabHuespedes" },
+      { sel: "#guestTable", titulo: "Lista de huéspedes", texto: "Cada fila muestra su nivel en el Club, cuántas veces se ha hospedado, cuánto ha gastado en total y si está en casa hoy. Haz clic en una fila para abrir su ficha 360." },
+      { sel: "#guestCard", titulo: "Ficha 360 del huésped", texto: "Todo el huésped en una sola vista. Usa las pestañas para navegar:", lista: ["<b>Resumen:</b> contacto, cumpleaños, NPS y próxima acción", "<b>Estancias:</b> historial en todas las propiedades", "<b>Consumos:</b> restaurante, bar, spa, eventos…", "<b>Preferencias:</b> se envían al PMS para recepción y pisos", "<b>Notas:</b> lo que el equipo debe saber"] },
+      { sel: "#clubTiers", titulo: "Club Tibisay: niveles", texto: "Plata, Oro y Platino. El nivel se calcula automáticamente por noches de los últimos 12 meses y los puntos por consumo en toda la cadena.", antes: "#tabClub" },
+      { sel: "#memberTable", titulo: "Miembros y puntos", texto: "Ve los puntos de cada socio, cuánto le falta para subir de nivel y qué puntos están por vencer. Filtra por nivel con los botones de arriba para lanzar campañas." },
+      { sel: "#pipeline", titulo: "Pipeline de cotizaciones", texto: "Cada solicitud de evento que llega por WhatsApp se convierte en una cotización y avanza por 4 estados:", lista: ["<b>Borrador:</b> el ejecutivo la está armando", "<b>Enviada:</b> el cliente la recibió (✓✓ = la vio)", "<b>Aprobada:</b> pasa a BEO y anticipo", "<b>Perdida:</b> se guarda el motivo"], antes: "#tabEventos" },
+      { sel: "#quoteDetail", titulo: "Detalle y conversación", texto: "Al hacer clic en una tarjeta ves la conversación de WhatsApp a la izquierda y la cotización a la derecha. Los botones cambian según el estado: enviar, recordar, aprobar o registrar el pago." },
+      { sel: "#propSelect", titulo: "Cambia de hotel", texto: "El selector de propiedad filtra todo el módulo por hotel. Elige «Todas las propiedades» para la vista de cadena." },
+      { sel: "[data-tour-start]", titulo: "¿Necesitas repasar?", texto: "Puedes repetir este recorrido cuando quieras con este botón." }
+    ]
   });
 })();
 </script>

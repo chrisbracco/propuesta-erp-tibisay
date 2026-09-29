@@ -17,10 +17,10 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Integración</div>
     <h1>Integración <span class="scope-pill" data-prop-name></span></h1>
-    <p>Monitor de conectores con el PMS y el ERP administrativo de cada propiedad.</p>
+    <p>¿Están conectados nuestros sistemas? Estado de cada conexión con el PMS y el ERP de cada hotel.</p>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-toast="Ejecutando prueba de todos los conectores (demo)" data-icon="refresh">Probar conectores</a>
+    <a class="btn btn-ghost" href="#" id="testAll" data-icon="refresh">Probar todas las conexiones</a>
   </div>
 </div>
 
@@ -32,87 +32,155 @@
   </div>
 </div>
 
-<div class="grid g-4 mt">
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Conectores activos</span><span class="kpi-ico" data-icon="plug"></span></div><div class="kpi-value">15 / 16</div><div class="kpi-sub">1 reintentando</div></div>
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Registros sincronizados hoy</span><span class="kpi-ico" data-icon="refresh"></span></div><div class="kpi-value">14.053</div><div class="kpi-sub"><span class="delta up">99,8%</span>sin errores</div></div>
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Latencia media PMS</span><span class="kpi-ico" data-icon="clock"></span></div><div class="kpi-value">42 s</div><div class="kpi-sub">tiempo real / 5 min</div></div>
-  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Sistemas reemplazados</span><span class="kpi-ico" data-icon="shield"></span></div><div class="kpi-value">0</div><div class="kpi-sub">todo sigue operando</div></div>
+<section class="card mt">
+  <div class="health" id="health"></div>
+</section>
+
+<div class="grid g-3 mt" id="legend">
+  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status ok" style="padding:0;background:none" data-icon="check"></span><div><b>Conectado</b><div class="small muted">Los datos llegan solos. No hay que hacer nada.</div></div></div></div>
+  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status sync" style="padding:0;background:none" data-icon="refresh"></span><div><b>Sincronizando</b><div class="small muted">Está copiando datos en este momento. Espera unos minutos.</div></div></div></div>
+  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status err" style="padding:0;background:none" data-icon="alert"></span><div><b>Error</b><div class="small muted">Los datos no están llegando. Pulsa «Reintentar» o avisa a IT.</div></div></div></div>
 </div>
 
+<h2 class="mt-lg" style="margin-bottom:4px">Sistemas hoteleros (PMS)</h2>
+<p class="small muted" style="margin-bottom:12px">Reservas, huéspedes, habitaciones y cargos a la cuenta.</p>
+<div class="grid g-3" id="gPms"></div>
+
+<h2 class="mt-lg" style="margin-bottom:4px">Sistemas administrativos (ERP)</h2>
+<p class="small muted" style="margin-bottom:12px">Contabilidad, compras, inventario, nómina y facturación fiscal.</p>
+<div class="grid g-3" id="gErp"></div>
+
+<h2 class="mt-lg" style="margin-bottom:4px">Otras conexiones</h2>
+<p class="small muted" style="margin-bottom:12px">Puntos de venta, WhatsApp y relojes biométricos.</p>
+<div class="grid g-3" id="gOtros"></div>
+
+<section class="card mt-lg">
+  <div class="card-h"><div><h2>Estado por hotel</h2><p>Cada hotel y a qué sistema está conectado</p></div></div>
+  <div class="table-wrap"><table class="table matrix">
+    <thead><tr><th>Hotel</th><th>PMS</th><th>ERP</th><th>Puntos de venta</th><th>Biométrico</th><th>Última sincronización</th></tr></thead>
+    <tbody id="matrix"></tbody>
+  </table></div>
+</section>
+
 <section class="card mt">
-  <div class="card-h"><div><h2>Flujo de datos</h2><p>PMS → Plataforma Tibisay → ERP → Tableros</p></div></div>
+  <div class="card-h"><div><h2>Cómo viajan los datos</h2><p>PMS → Plataforma Tibisay → ERP → Tableros</p></div></div>
   <div class="card-b">
     <div class="flow">
       <div class="flow-node"><h3>PMS actual</h3><span class="small muted">Opera · Prestige</span><ul><li>Reservas y perfiles</li><li>Ocupación y tarifas</li><li>Cargos a habitación</li><li>Estado de habitaciones</li></ul></div>
       <div class="flow-arrow">⇄</div>
       <div class="flow-node core"><h3>Plataforma Tibisay</h3><span class="small">Conector único</span><ul><li>CRM &amp; WhatsApp</li><li>Operaciones &amp; eventos</li><li>Gestión Humana</li><li>IMS y auditoría A&amp;B</li></ul></div>
       <div class="flow-arrow">⇄</div>
-      <div class="flow-node"><h3>ERP administrativo</h3><span class="small muted">Profit Plus · Saint · a2</span><ul><li>Asientos contables</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul></div>
+      <div class="flow-node"><h3>ERP administrativo</h3><span class="small muted">Profit Plus · Saint · a2</span><ul><li>Maestro de productos</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul></div>
       <div class="flow-arrow">→</div>
       <div class="flow-node"><h3>Tableros</h3><span class="small muted">Dirección y gerencias</span><ul><li>RevPAR · ADR · ocupación</li><li>F&amp;B y costos</li><li>Personal y nómina</li></ul></div>
     </div>
   </div>
 </section>
-
-<h2 class="mt-lg" style="margin-bottom:12px">Conectores</h2>
-<div class="grid g-3">
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo">OP</span><div style="flex:1"><h3>Oracle Opera PMS</h3><span class="small muted">Reservas, perfiles, folios, housekeeping</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Margarita</span><span class="badge nodot b-muted">Maracaibo</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Tiempo real</b></div><div><small>Registros hoy</small><b>4.694</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 38 s</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Opera (demo)">Ver log</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo">PR</span><div style="flex:1"><h3>Prestige PMS</h3><span class="small muted">Reservas, perfiles, folios, housekeeping</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Canaima</span><span class="badge nodot b-muted">Catatumbo</span><span class="badge nodot b-muted">Morrocoy</span><span class="badge nodot b-muted">Mérida</span><span class="badge nodot b-muted">Maturín</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 5 min</b></div><div><small>Registros hoy</small><b>2.332</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 2 min</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Prestige (demo)">Ver log</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo">POS</span><div style="flex:1"><h3>Puntos de venta A&amp;B</h3><span class="small muted">Comandas, recetas, cierres de caja</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">7 propiedades</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 15 min</b></div><div><small>Registros hoy</small><b>6.872</b></div><div><small>Dirección</small><b>POS → Plataforma</b></div><div><small>Última sync</small><b>hace 6 min</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector POS (demo)">Ver log</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo erp">PP</span><div style="flex:1"><h3>Profit Plus</h3><span class="small muted">Contabilidad, compras, nómina</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Margarita</span><span class="badge nodot b-muted">Maracaibo</span><span class="badge nodot b-muted">Oficina central</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Diario 11 p.m. + OC</b></div><div><small>Asientos hoy</small><b>418</b></div><div><small>Dirección</small><b>Plataforma → ERP</b></div><div><small>Última sync</small><b>ayer 11:02 p.m.</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Profit Plus (demo)">Ver log</a>
-  </div>
-  <div class="card conn" style="border-color:#ecd3a8">
-    <div class="conn-h"><span class="conn-logo erp">SA</span><div style="flex:1"><h3>Saint Enterprise</h3><span class="small muted">Compras, inventario, contabilidad</span></div><span class="badge b-warn">Reintentando</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Morrocoy</span><span class="badge nodot b-muted">Mérida</span><span class="badge nodot b-muted">Maturín</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada hora</b></div><div><small>Registros hoy</small><b>264</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b style="color:var(--warn)">09:12 · Morrocoy</b></div></div>
-    <a class="btn btn-primary btn-sm" href="#" data-toast="Reintento manual en cola (demo)">Reintentar ahora</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo erp">a2</span><div style="flex:1"><h3>a2 Softway</h3><span class="small muted">Compras, inventario, contabilidad</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Canaima</span><span class="badge nodot b-muted">Catatumbo</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada hora</b></div><div><small>Registros hoy</small><b>131</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 22 min</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector a2 (demo)">Ver log</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo" style="background:#e5f3ec;color:#2f7d57">WA</span><div style="flex:1"><h3>WhatsApp Business API</h3><span class="small muted">Concierge, cotizaciones, campañas</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">Cadena</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Tiempo real</b></div><div><small>Mensajes hoy</small><b>742</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 5 s</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log de WhatsApp (demo)">Ver log</a>
-  </div>
-  <div class="card conn">
-    <div class="conn-h"><span class="conn-logo" style="background:var(--info-bg);color:var(--info)">BIO</span><div style="flex:1"><h3>Marcaje biométrico</h3><span class="small muted">Asistencia para turnos y nómina</span></div><span class="badge b-ok">Activo</span></div>
-    <div class="tags"><span class="badge nodot b-muted">7 propiedades</span></div>
-    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 30 min</b></div><div><small>Marcajes hoy</small><b>1.018</b></div><div><small>Dirección</small><b>Equipo → Plataforma</b></div><div><small>Última sync</small><b>hace 12 min</b></div></div>
-    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log biométrico (demo)">Ver log</a>
-  </div>
-  <div class="card conn" style="border-style:dashed;box-shadow:none;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-    <span class="kpi-ico teal" data-icon="plus" style="margin-bottom:10px"></span><h3>Nuevo conector</h3><p class="small muted">Channel manager, pasarela de pago, motor de reservas…</p>
-  </div>
-</div>
 <p class="small muted mt">La asignación PMS/ERP por propiedad es ilustrativa y se confirma en el diagnóstico inicial.</p>
 </main>
 </div>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script>
+(function () {
+  var D = TIBISAY;
+  function n(x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  var C = [
+    { id: "opera", g: "gPms", logo: "OP", name: "Oracle Opera PMS", trae: "Reservas, huéspedes, habitaciones y cuentas", sedes: ["margarita", "maracaibo"], st: "ok", last: "hace 38 s", reg: 4694, freq: "Tiempo real", dir: "Ida y vuelta", err: [], spark: 0 },
+    { id: "prestige", g: "gPms", logo: "PR", name: "Prestige PMS", trae: "Reservas, huéspedes, habitaciones y cuentas", sedes: ["canaima", "catatumbo", "morrocoy", "merida", "maturin"], st: "ok", last: "hace 2 min", reg: 2332, freq: "Cada 5 min", dir: "Ida y vuelta", err: [["06:12", "Mérida · reserva R-48877 sin correo del huésped (se importó igual)"]], spark: 1 },
+    { id: "profit", g: "gErp", logo: "PP", erp: true, name: "Profit Plus", trae: "Contabilidad, compras, productos y nómina", sedes: ["margarita", "maracaibo"], st: "ok", last: "hace 9 min", reg: 418, freq: "Cada 15 min + cierre 11 p.m.", dir: "Ida y vuelta", err: [], spark: 0 },
+    { id: "saint", g: "gErp", logo: "SA", erp: true, name: "Saint Enterprise", trae: "Compras, inventario y contabilidad", sedes: ["morrocoy", "merida", "maturin"], st: "err", last: "09:12 a.m.", reg: 264, freq: "Cada hora", dir: "Ida y vuelta", err: [["10:12", "Morrocoy · el servidor de Saint no responde (tiempo de espera agotado)"], ["10:12", "Morrocoy · 38 movimientos de inventario en cola, no se ha perdido nada"], ["09:58", "Maturín · 1 factura rechazada: RIF del proveedor inválido"]], spark: 3 },
+    { id: "a2", g: "gErp", logo: "a2", erp: true, name: "a2 Softway", trae: "Compras, inventario y contabilidad", sedes: ["canaima", "catatumbo"], st: "sync", last: "ahora · 64%", reg: 131, freq: "Cada hora", dir: "Ida y vuelta", err: [], spark: 0 },
+    { id: "pos", g: "gOtros", logo: "POS", name: "Puntos de venta A&B", trae: "Comandas, ventas por producto y cierres de caja", sedes: ["margarita", "canaima", "catatumbo", "maracaibo", "morrocoy", "merida", "maturin"], st: "ok", last: "hace 6 min", reg: 6872, freq: "Cada 15 min", dir: "Solo llegada", err: [], spark: 0 },
+    { id: "wa", g: "gOtros", logo: "WA", name: "WhatsApp Business", trae: "Conversaciones y cotizaciones de eventos", sedes: ["todas"], st: "ok", last: "hace 5 s", reg: 742, freq: "Tiempo real", dir: "Ida y vuelta", err: [], spark: 0 },
+    { id: "bio", g: "gOtros", logo: "BIO", name: "Relojes biométricos", trae: "Marcaciones de entrada y salida del personal", sedes: ["margarita", "canaima", "catatumbo", "maracaibo", "morrocoy", "merida", "maturin"], st: "ok", last: "hace 3 min", reg: 1018, freq: "Cada 5 min", dir: "Solo llegada", err: [["07:04", "Canaima · reloj de cocina sin conexión 12 min (ya se recuperó)"]], spark: 1 }
+  ];
+  var ST = { ok: ["ok", "check", "Conectado"], err: ["err", "alert", "Error · los datos no están llegando"], sync: ["sync", "refresh", "Sincronizando"] };
+
+  function spark(c) {
+    var s = "";
+    for (var i = 0; i < 24; i++) {
+      var e = c.st === "err" ? i >= 21 : (c.spark && i === 6 + c.spark * 3);
+      var h = e ? 100 : 35 + ((i * 37 + c.reg) % 60);
+      s += '<i class="' + (e ? "e" : "") + '" style="height:' + h + '%" title="' + i + ':00"></i>';
+    }
+    return s;
+  }
+  function card(c) {
+    var s = ST[c.st], sedes = c.sedes[0] === "todas" ? "Toda la cadena" : c.sedes.map(D.sedeNombre.bind(D)).join(" · ");
+    return '<div class="card cx" id="cx-' + c.id + '" data-sedes="' + c.sedes.join(" ") + '"' + (c.st === "err" ? ' style="border-color:#efc4bb"' : "") + ">" +
+      '<div class="cx-status ' + s[0] + '">' + App.icon(s[1]) + "<span>" + s[2] + "</span></div>" +
+      '<div class="cx-body"><div class="conn-h" style="margin-bottom:6px"><span class="conn-logo' + (c.erp ? " erp" : "") + '"' + (c.logo === "WA" ? ' style="background:#e5f3ec;color:#2f7d57"' : c.logo === "BIO" ? ' style="background:var(--info-bg);color:var(--info)"' : "") + ">" + c.logo + '</span><div style="flex:1;min-width:0"><h3>' + c.name + '</h3><span class="small muted">' + c.trae + "</span></div></div>" +
+      '<div class="small" style="color:var(--text-2)">' + App.icon("building").replace('class="ico ', 'style="width:14px;height:14px;vertical-align:-2px" class="ico ') + " " + sedes + "</div>" +
+      '<div class="cx-big"><div><small>Última sincronización</small><b' + (c.st === "err" ? ' style="color:var(--danger)"' : "") + ">" + c.last + "</b></div><div><small>Registros hoy</small><b>" + n(c.reg) + "</b></div></div>" +
+      '<div class="between small muted" style="margin-bottom:4px"><span>Últimas 24 h</span><span>' + c.freq + " · " + c.dir + '</span></div><div class="spark">' + spark(c) + "</div>" +
+      '<div style="margin-top:12px"><b class="small">Errores recientes</b>' +
+      (c.err.length ? c.err.map(function (e) { return '<div class="cx-err"><b>' + e[0] + "</b> · " + e[1] + "</div>"; }).join("") : '<div class="small" style="color:var(--ok);margin-top:4px">' + App.icon("check").replace('class="ico ', 'style="width:14px;height:14px;vertical-align:-2px" class="ico ') + " Sin errores hoy</div>") + "</div></div>" +
+      '<div class="cx-foot"><a class="btn ' + (c.st === "err" ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + (c.st === "err" ? "Reintentar ahora" : "Reintentar") + '</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Historial detallado de ' + c.name + ' (demo)">Ver detalle</a></div></div>';
+  }
+  function draw() {
+    ["gPms", "gErp", "gOtros"].forEach(function (g) {
+      document.getElementById(g).innerHTML = C.filter(function (c) { return c.g === g; }).map(card).join("");
+    });
+    filter(App.prop());
+  }
+
+  function filter(p) {
+    document.querySelectorAll(".cx").forEach(function (el) {
+      var s = el.dataset.sedes.split(" ");
+      el.style.display = p === "todas" || s.indexOf("todas") >= 0 || s.indexOf(p) >= 0 ? "" : "none";
+    });
+    var vis = C.filter(function (c) { return p === "todas" || c.sedes.indexOf("todas") >= 0 || c.sedes.indexOf(p) >= 0; });
+    var k = { ok: 0, sync: 0, err: 0 };
+    vis.forEach(function (c) { k[c.st]++; });
+    var reg = vis.reduce(function (a, c) { return a + c.reg; }, 0), errs = vis.reduce(function (a, c) { return a + c.err.length; }, 0);
+    var bad = vis.filter(function (c) { return c.st === "err"; });
+    var ring = k.err ? ["var(--danger-bg)", "var(--danger)", "!"] : k.sync ? ["var(--info-bg)", "var(--info)", "↻"] : ["var(--ok-bg)", "var(--ok)", "✓"];
+    var msg = k.err ? "Atención: " + bad.map(function (c) { return c.name; }).join(", ") + " tiene un error" : k.sync ? "Todo bien · " + k.sync + " conexión sincronizando en este momento" : "Todo funciona correctamente";
+    var sub = k.err ? "Los datos de " + bad.map(function (c) { return c.sedes.map(D.sedeNombre.bind(D)).join(", "); }).join("; ") + " no se están actualizando desde las " + bad[0].last + ". No se pierde información: queda en cola hasta que se restablezca." : "Todos los hoteles están enviando y recibiendo datos con normalidad.";
+    document.getElementById("health").innerHTML =
+      '<div class="health-ring" style="background:' + ring[0] + ";color:" + ring[1] + '">' + ring[2] + '</div><div style="flex:1;min-width:220px"><h2 style="font-size:18px">' + msg + '</h2><p class="small muted" style="margin:4px 0 0">' + sub + "</p></div>" +
+      '<div class="row" style="gap:22px;flex-wrap:wrap">' +
+      '<div><div class="small muted">Conectados</div><b style="font-size:22px;color:var(--ok)">' + k.ok + "</b></div>" +
+      '<div><div class="small muted">Sincronizando</div><b style="font-size:22px;color:var(--info)">' + k.sync + "</b></div>" +
+      '<div><div class="small muted">Con error</div><b style="font-size:22px;color:var(--danger)">' + k.err + "</b></div>" +
+      '<div><div class="small muted">Registros hoy</div><b style="font-size:22px">' + n(reg) + "</b></div>" +
+      '<div><div class="small muted">Avisos hoy</div><b style="font-size:22px">' + errs + "</b></div></div>";
+
+    var byId = {};
+    C.forEach(function (c) { byId[c.id] = c; });
+    function dot(c) { var s = { ok: ["ok", "Conectado"], sync: ["info", "Sincronizando"], err: ["danger", "Error"] }[c.st]; return '<span class="status-dot ' + s[0] + '"></span> <span class="small">' + c.name.replace("Oracle ", "").replace(" PMS", "").replace(" Enterprise", "").replace(" Softway", "") + " · " + s[1] + "</span>"; }
+    document.getElementById("matrix").innerHTML = D.propiedades.filter(function (h) { return p === "todas" || h.id === p; }).map(function (h) {
+      var pms = byId[h.pms === "Opera" ? "opera" : "prestige"], erp = byId[h.erp === "Profit Plus" ? "profit" : h.erp === "Saint" ? "saint" : "a2"];
+      var worst = erp.st === "err" || pms.st === "err" ? erp.last : erp.st === "sync" ? "ahora" : pms.last;
+      return '<tr><td class="strong">' + h.nombre + "</td><td>" + dot(pms) + "</td><td>" + dot(erp) + "</td><td>" + dot(byId.pos) + "</td><td>" + dot(byId.bio) + "</td><td" + (erp.st === "err" ? ' class="num-danger"' : "") + ">" + worst + "</td></tr>";
+    }).join("");
+  }
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-retry]");
+    if (!b) return;
+    e.preventDefault();
+    var c = C.find(function (x) { return x.id === b.dataset.retry; });
+    var prev = c.st;
+    c.st = "sync"; c.last = "reintentando…";
+    draw();
+    App.toast("Reintentando conexión con " + c.name + "…");
+    setTimeout(function () {
+      if (prev === "err") { c.st = "ok"; c.last = "hace 1 s"; c.reg += 38; c.err = [["10:43", "Morrocoy · conexión restablecida · 38 movimientos en cola sincronizados"]]; App.toast(c.name + " conectado de nuevo · 38 registros pendientes sincronizados"); }
+      else { c.st = "ok"; c.last = "hace 1 s"; App.toast(c.name + " sincronizado correctamente"); }
+      draw();
+    }, 2200);
+  });
+  document.getElementById("testAll").addEventListener("click", function (e) {
+    e.preventDefault();
+    App.toast("Probando las " + C.length + " conexiones… " + C.filter(function (c) { return c.st === "err"; }).length + " con error");
+  });
+
+  draw();
+  App.onProp(function (p) { if (document.getElementById("health")) filter(p); });
+})();
+</script>
 </body>
 </html>

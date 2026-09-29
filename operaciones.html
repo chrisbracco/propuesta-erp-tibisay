@@ -17,11 +17,12 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Operaciones</div>
     <h1>Operaciones · Hotel Tibisay <span data-prop-hotel></span></h1>
-    <p>Front desk, housekeeping, mantenimiento y alimentos &amp; bebidas en tiempo real.</p>
+    <p>Front desk, housekeeping, mantenimiento y alimentos &amp; bebidas del día · martes 29/09/2026.</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" data-toast="Nuevo ticket de mantenimiento (demo)" data-icon="wrench">Reportar falla</a>
-    <a class="btn btn-primary" href="#" data-toast="Check-in exprés iniciado (demo)" data-icon="check">Check-in</a>
+    <a class="btn btn-ghost" href="#" data-toast="Walk-in: buscando habitación disponible (demo)" data-icon="plus">Walk-in</a>
+    <a class="btn btn-primary" href="#" data-toast="Check-in exprés iniciado (demo)" data-icon="key">Check-in</a>
   </div>
 </div>
 
@@ -30,95 +31,82 @@
 <section class="card mt" data-tabs>
   <div class="tabs">
     <button class="tab active" data-tab="fd">Front desk</button>
-    <button class="tab" data-tab="hk">Housekeeping</button>
-    <button class="tab" data-tab="mt">Mantenimiento <span class="badge nodot b-danger">9</span></button>
+    <button class="tab" data-tab="hk">Housekeeping <span class="badge nodot b-warn" id="hkBadge">0</span></button>
+    <button class="tab" data-tab="mt">Mantenimiento <span class="badge nodot b-danger" id="mtBadge">0</span></button>
     <button class="tab" data-tab="ab">A&amp;B y salones</button>
   </div>
 
-  <!-- FRONT DESK -->
+  <!-- ============ FRONT DESK ============ -->
   <div class="tab-panel active" data-panel="fd">
     <div class="toolbar">
-      <div class="seg"><button class="active">Llegadas</button><button>Salidas</button><button>En casa</button></div>
-      <span class="small muted" style="margin-left:auto">Datos desde <b id="pmsName">Opera</b> · actualizado hace 1 min</span>
+      <div class="seg" id="fdSeg"><button class="active" data-v="lleg">Llegadas <span id="cLleg"></span></button><button data-v="sal">Salidas <span id="cSal"></span></button><button data-v="casa">En casa <span id="cCasa"></span></button></div>
+      <span class="small muted" style="margin-left:auto">Reservas del día desde <b id="pmsName">Opera</b> · actualizado hace 1 min</span>
     </div>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Hora</th><th>Reserva</th><th>Huésped</th><th>Hab.</th><th>Tipo</th><th class="num">Noches</th><th class="num">Tarifa</th><th>Canal</th><th>Estado</th><th></th></tr></thead>
-      <tbody id="arrivals"></tbody>
+      <thead id="fdHead"></thead>
+      <tbody id="fdBody"></tbody>
+    </table></div>
+
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado de habitaciones por piso</h2><p>Rack de recepción: estado de la estadía + estado de limpieza</p></div>
+      <div class="legend"><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--warn-bg)"></i>Salida hoy</span><span><i style="background:var(--gold-soft)"></i>Llegada asignada</span><span><i style="background:var(--ok-bg)"></i>Vacía lista</span><span><i style="background:var(--danger-bg)"></i>Vacía sucia</span><span><i style="background:#ece9e3"></i>Fuera de serv.</span></div></div>
+    <div class="card-b" id="rack"></div>
+  </div>
+
+  <!-- ============ HOUSEKEEPING ============ -->
+  <div class="tab-panel" data-panel="hk">
+    <div class="card-b">
+      <div class="semaforo" id="hkSum"></div>
+    </div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Asignación por camarera</h2><p>Turno A 7:00–15:00 · asignación automática por piso según salidas y llegadas</p></div>
+      <div class="legend"><span><i style="background:var(--ok-bg)"></i>Limpia</span><span><i style="background:var(--danger-bg)"></i>Sucia</span><span><i style="background:#e8e4f3"></i>En limpieza</span><span><i style="background:var(--warn-bg)"></i>Por inspeccionar</span></div></div>
+    <div class="card-b"><div class="grid g-3" id="maids"></div></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Cola de inspección</h2><p>La supervisora libera la habitación a recepción al aprobarla</p></div></div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Hab.</th><th>Tipo</th><th>Limpió</th><th>Terminó</th><th>Llegada asignada</th><th>Prioridad</th><th></th></tr></thead>
+      <tbody id="inspBody"></tbody>
     </table></div>
   </div>
 
-  <!-- HOUSEKEEPING -->
-  <div class="tab-panel" data-panel="hk">
-    <div class="grid g-2-1" style="gap:0">
-      <div class="card-b" style="border-right:1px solid var(--border)">
-        <div class="between" style="margin-bottom:12px"><h3>Estado de habitaciones</h3>
-          <div class="legend"><span><i style="background:var(--ok-bg)"></i>Libre limpia</span><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--danger-bg)"></i>Sucia</span><span><i style="background:var(--warn-bg)"></i>Inspección</span><span><i style="background:#ece9e3"></i>Fuera de serv.</span></div></div>
-        <div class="rooms" id="rooms"></div>
+  <!-- ============ MANTENIMIENTO ============ -->
+  <div class="tab-panel" data-panel="mt">
+    <div class="toolbar">
+      <div class="seg" id="mtSeg"><button class="active" data-v="">Todas</button><button data-v="Urgente">Urgente</button><button data-v="Alta">Alta</button><button data-v="Media">Media</button><button data-v="Baja">Baja</button></div>
+      <select class="select select-sm" style="width:auto" id="mtState"><option value="">Todos los estados</option><option>Abierto</option><option>Asignado</option><option>En proceso</option><option>Esperando repuesto</option><option>Resuelto</option></select>
+      <span class="small muted" style="margin-left:auto">SLA: urgente 30 min · alta 2 h · media 8 h · baja 48 h</span>
+    </div>
+    <div class="card-b" style="padding-bottom:0"><div class="semaforo" id="mtSum"></div></div>
+    <div class="table-wrap mt"><table class="table" data-searchable>
+      <thead><tr><th>Ticket</th><th>Ubicación</th><th>Falla</th><th>Categoría</th><th>Prioridad</th><th>Estado</th><th>Técnico</th><th>Abierto</th><th>SLA</th></tr></thead>
+      <tbody id="mtBody"></tbody>
+    </table></div>
+  </div>
+
+  <!-- ============ A&B ============ -->
+  <div class="tab-panel" data-panel="ab">
+    <div class="card-b"><div class="grid g-4" id="abKpis"></div></div>
+    <div class="grid g-2" style="gap:0;border-top:1px solid var(--border)">
+      <div style="border-right:1px solid var(--border)">
+        <div class="card-h"><div><h2>Reservas de restaurante · hoy</h2><p id="restName">—</p></div><a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva de mesa (demo)">+ Mesa</a></div>
+        <div class="table-wrap"><table class="table" data-searchable>
+          <thead><tr><th>Hora</th><th>Nombre</th><th class="num">Pax</th><th>Mesa</th><th>Huésped</th><th>Nota</th></tr></thead>
+          <tbody id="restBody"></tbody>
+        </table></div>
       </div>
       <div>
-        <div class="card-h"><h2>Tareas por camarera</h2></div>
-        <div class="table-wrap"><table class="table">
-          <thead><tr><th>Camarera</th><th>Piso</th><th style="min-width:120px">Avance</th></tr></thead>
-          <tbody>
-            <tr><td class="strong">Yelitza Marcano</td><td>1–2</td><td><div class="pcell"><div class="progress"><span style="width:85%"></span></div><b>11/13</b></div></td></tr>
-            <tr><td class="strong">Rosa González</td><td>3</td><td><div class="pcell"><div class="progress"><span style="width:62%"></span></div><b>8/13</b></div></td></tr>
-            <tr><td class="strong">Carmen Lárez</td><td>4</td><td><div class="pcell"><div class="progress"><span style="width:46%"></span></div><b>6/13</b></div></td></tr>
-            <tr><td class="strong">Oriana Patiño</td><td>5</td><td><div class="pcell"><div class="progress"><span style="width:92%"></span></div><b>12/13</b></div></td></tr>
-            <tr><td class="strong">Maribel Salas</td><td>Áreas comunes</td><td><div class="pcell"><div class="progress teal"><span style="width:70%"></span></div><b>7/10</b></div></td></tr>
-          </tbody>
-        </table></div>
-        <div class="card-b"><div class="small" style="background:var(--warn-bg);color:var(--warn);padding:10px 12px;border-radius:8px"><b>Prioridad:</b> habitación en inspección con llegada VIP a las 2:15 p.m.</div></div>
+        <div class="card-h"><div><h2>Gran Salón y salas · hoy</h2><p>Montajes y eventos del día por espacio</p></div></div>
+        <div class="card-b"><div class="grid" style="gap:10px" id="venues"></div></div>
       </div>
     </div>
-  </div>
-
-  <!-- MANTENIMIENTO -->
-  <div class="tab-panel" data-panel="mt">
-    <div class="card-b">
-      <div class="kanban">
-        <div class="kcol"><div class="kcol-h">Abiertos <span class="badge nodot b-danger">5</span></div>
-          <div class="kcard" data-sede="margarita" style="border-left:3px solid var(--danger)"><b>A/A no enfría · hab. 410</b>Margarita · habitación bloqueada<div class="between"><span class="badge b-danger">Urgente</span><span>hace 25 min</span></div></div>
-          <div class="kcard" data-sede="merida"><b>Filtración en ducha · hab. 207</b>Mérida<div class="between"><span class="badge b-warn">Media</span><span>hace 1 h</span></div></div>
-          <div class="kcard" data-sede="maturin"><b>Luminaria estacionamiento</b>Maturín<div class="between"><span class="badge b-info">Baja</span><span>hace 3 h</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">En proceso <span class="badge nodot b-muted">4</span></div>
-          <div class="kcard" data-sede="morrocoy"><b>Bomba de piscina</b>Morrocoy · áreas comunes<div class="between"><span>Téc. José A.</span><span>2 h 10 min</span></div></div>
-          <div class="kcard" data-sede="margarita"><b>Proyector Sala Guaraguao</b>Margarita · eventos<div class="between"><span>Téc. Pedro C.</span><span>40 min</span></div></div>
-          <div class="kcard" data-sede="canaima"><b>Planta eléctrica · servicio 500 h</b>Canaima · preventivo<div class="between"><span>Téc. Ramón T.</span><span>1 h 05 min</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">Esperando repuesto <span class="badge nodot b-warn">2</span></div>
-          <div class="kcard" data-sede="maracaibo"><b>Compresor cuarto frío</b>Maracaibo · cocina<div class="between"><span>OC-2026-1182</span><span>3 días</span></div></div>
-          <div class="kcard" data-sede="catatumbo"><b>Motor portón eléctrico</b>Catatumbo<div class="between"><span>OC-2026-1176</span><span>5 días</span></div></div>
-        </div>
-        <div class="kcol"><div class="kcol-h">Cerrados hoy <span class="badge nodot b-ok">11</span></div>
-          <div class="kcard" data-sede="maturin"><b>Cerradura electrónica · hab. 118</b>Maturín<div class="between"><span class="badge b-ok">Resuelto</span><span>35 min</span></div></div>
-          <div class="kcard" data-sede="catatumbo"><b>TV sin señal · hab. 322</b>Catatumbo<div class="between"><span class="badge b-ok">Resuelto</span><span>20 min</span></div></div>
-          <div class="kcard" data-sede="margarita"><b>Wi-Fi débil · piso 3</b>Margarita · AP reemplazado<div class="between"><span class="badge b-ok">Resuelto</span><span>50 min</span></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- A&B -->
-  <div class="tab-panel" data-panel="ab">
-    <div class="card-b">
-      <div class="grid g-4">
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Restaurante</span><span class="kpi-ico" data-icon="utensils"></span></div><div class="kpi-value">68</div><div class="kpi-sub">cubiertos almuerzo · ticket $ 24</div></div>
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Lounge bar</span><span class="kpi-ico" data-icon="star"></span></div><div class="kpi-value">42</div><div class="kpi-sub">comandas abiertas · happy hour 6–8 p.m.</div></div>
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Room service</span><span class="kpi-ico" data-icon="bed"></span></div><div class="kpi-value">19</div><div class="kpi-sub">órdenes · tiempo medio 22 min</div></div>
-        <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Food cost del mes</span><span class="kpi-ico" data-icon="percent"></span></div><div class="kpi-value">31,4%</div><div class="kpi-sub">meta 32%</div></div>
-      </div>
-    </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Agenda de salones · semana 40</h2><p>Gran Salón, salas de reuniones, terraza y jardín</p></div></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Agenda de salones · semana 40</h2><p>Gran Salón, salas de reuniones, terraza y jardín · BEO vinculado desde CRM</p></div></div>
     <div class="table-wrap"><table class="table" data-searchable>
       <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
       <tbody>
         <tr data-sede="margarita"><td>Mié 30/09</td><td>Sala Guaraguao</td><td class="strong">Desayuno de trabajo Digitel</td><td>Escuela</td><td class="num">35</td><td>BEO-0931</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="maracaibo"><td>Jue 01/10</td><td>Gran Salón</td><td class="strong">Congreso Ingeniería Petrolera</td><td>Auditorio</td><td class="num">300</td><td>BEO-0926</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="maracaibo"><td>Jue 01/10</td><td>Gran Salón Del Lago</td><td class="strong">Congreso Ingeniería Petrolera</td><td>Auditorio</td><td class="num">300</td><td>BEO-0926</td><td><span class="badge b-ok">Confirmado</span></td></tr>
         <tr data-sede="margarita"><td>Jue 01/10</td><td>Sala El Yaque</td><td class="strong">Capacitación Laboratorios Leti</td><td>Herradura</td><td class="num">22</td><td>BEO-0934</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="margarita"><td>Vie 02/10</td><td>Terraza</td><td class="strong">Cóctel bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
-        <tr data-sede="margarita"><td>Sáb 03/10</td><td>Gran Salón</td><td class="strong">Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="merida"><td>Sáb 03/10</td><td>Salón Sierra Nevada</td><td class="strong">Convención Farmacéutica Andina</td><td>Escuela</td><td class="num">80</td><td>BEO-0941</td><td><span class="badge b-info">Tentativo</span></td></tr>
+        <tr data-sede="margarita"><td>Vie 02/10</td><td>Terraza Pampatar</td><td class="strong">Cóctel bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
+        <tr data-sede="margarita"><td>Sáb 03/10</td><td>Gran Salón Nueva Esparta</td><td class="strong">Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="merida"><td>Sáb 03/10</td><td>Salón Sierra Nevada</td><td class="strong">Encuentro regional de ventas</td><td>Escuela</td><td class="num">80</td><td>BEO-0941</td><td><span class="badge b-info">Tentativo</span></td></tr>
         <tr data-sede="canaima"><td>Dom 04/10</td><td>Churuata principal</td><td class="strong">Cena Banco del Sur</td><td>Imperial</td><td class="num">24</td><td>BEO-0944</td><td><span class="badge b-ok">Confirmado</span></td></tr>
         <tr data-sede="morrocoy"><td>Dom 04/10</td><td>Jardín frente al mar</td><td class="strong">Brunch Club Tibisay</td><td>Buffet</td><td class="num">80</td><td>BEO-0940</td><td><span class="badge b-info">Tentativo</span></td></tr>
       </tbody>
@@ -135,47 +123,223 @@
   var D = TIBISAY;
   // Generador determinístico para que cada propiedad tenga sus propios datos
   function rng(seed) { var s = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) % 2147483647; return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
-  var nombres = ["Valentina Rojas", "Grupo Seguros Caribe", "Robert & Linda Hayes", "Carlos Villalba", "María Fernanda Ochoa", "Andrés Mendoza", "Daniela Chacón", "Miguel Ángel Parra", "Stefania Russo", "Jesús Alberto Díaz", "Grupo Banco del Sur", "Ana Karina Mora"];
-  var tipos = ["Superior", "Deluxe", "Junior Suite", "Suite Vista", "Superior"];
-  var canales = ["Web directa", "WhatsApp", "Corporativo", "OTA", "Web directa"];
-  var estados = [["Registrada", "b-ok"], ["Confirmada", "b-info"], ["Hab. en inspección", "b-warn"], ["Pendiente pago", "b-danger"], ["Confirmada", "b-info"]];
+  function pick(r, a) { return a[Math.floor(r() * a.length)]; }
+  function hhmm(m) { return Math.floor(m / 60) + ":" + ("0" + (m % 60)).slice(-2); }
+  function $(n) { return "$ " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
 
-  App.onProp(function (p) {
-    var prop = D.propiedades.find(function (x) { return x.id === p; }) || D.propiedades[0];
-    var r = rng(prop.id);
+  var nombres = ["Valentina Rojas", "Grupo Seguros Caribe (4)", "Robert & Linda Hayes", "Carlos Villalba", "María Fernanda Ochoa", "Andrés Mendoza", "Daniela Chacón", "Miguel Ángel Parra", "Stefania Russo", "Jesús Alberto Díaz", "Banco del Sur (3)", "Ana Karina Mora", "Thomas Keller", "Gabriel Salazar", "Oriana Figueroa", "Rafael Montilla", "Patricia Ruiz", "Luis Eduardo Torres", "Sofía Marcano", "Hernán Quintero"];
+  var tipos = ["Superior", "Superior", "Deluxe", "Deluxe", "Junior Suite", "Suite"];
+  var canales = ["Web directa", "WhatsApp", "Corporativo", "Booking.com", "Expedia", "Agencia"];
+  var camareras = ["Yelitza Marcano", "Rosa González", "Carmen Lárez", "Oriana Patiño", "Maribel Salas", "Doris Figuera", "Nelly Brito", "Ana Rosa Millán"];
+  var tecnicos = ["José A. Rivas", "Pedro Castillo", "Ramón Tovar", "Wilmer Ochoa"];
+
+  var AB = {
+    margarita: { rest: "Restaurante La Caracola", bar: "Lounge bar El Faro", venues: [["Gran Salón Nueva Esparta", 350], ["Sala Guaraguao", 40], ["Sala El Yaque", 30], ["Terraza Pampatar", 150]] },
+    canaima: { rest: "Restaurante Tepuy", bar: "Bar La Laguna", venues: [["Churuata principal", 60], ["Mirador Ucaima", 30]] },
+    catatumbo: { rest: "Restaurante El Relámpago", bar: "Lounge bar Sur del Lago", venues: [["Salón Catatumbo", 250], ["Sala Santa Bárbara", 40]] },
+    maracaibo: { rest: "Restaurante Del Lago", bar: "Lounge bar Coquivacoa", venues: [["Gran Salón Del Lago", 400], ["Sala Coquivacoa", 60], ["Sala Zulia", 35], ["Terraza Vista al Lago", 120]] },
+    morrocoy: { rest: "Restaurante Cayo Sombrero", bar: "Pool bar Tucacas", venues: [["Jardín frente al mar", 200], ["Salón Morrocoy", 120]] },
+    merida: { rest: "Restaurante Sierra Nevada", bar: "Lounge bar Pico Bolívar", venues: [["Salón Sierra Nevada", 150], ["Sala Chama", 40]] },
+    maturin: { rest: "Restaurante Guarapiche", bar: "Lounge bar Monagas", venues: [["Salón Guarapiche", 180], ["Sala Orinoco", 40]] }
+  };
+  var eventos = [["Desayuno de trabajo", "Escuela", "7:30–10:00"], ["Capacitación corporativa", "Herradura", "8:30–17:00"], ["Almuerzo ejecutivo", "Imperial", "12:30–14:30"], ["Montaje boda (sábado)", "Banquete redondo", "14:00–20:00"], ["Cóctel de networking", "Cóctel", "18:30–21:30"], ["Reunión de directorio", "Imperial", "9:00–12:00"], ["Cena aniversario", "Banquete redondo", "19:30–23:30"]];
+
+  var fdMode = "lleg", data;
+
+  function build(prop) {
+    var r = rng(prop.id), occ = prop.occ / 100, rooms = [];
+    var floors = Math.ceil(prop.hab / 24), per = Math.ceil(prop.hab / floors), n = 0;
+    for (var f = 1; f <= floors; f++) for (var k = 1; k <= per && n < prop.hab; k++, n++) {
+      var x = r(), room = { n: f * 100 + k, f: f, tipo: tipos[Math.min(tipos.length - 1, Math.floor((k / per) * tipos.length))] }, y = r();
+      if (x < 0.015) { room.fd = "fuera"; room.hk = "fuera"; }
+      else if (x < occ * 0.74) { room.fd = "ocupada"; room.hk = y < 0.5 ? "limpia" : y < 0.72 ? "proceso" : "sucia"; }
+      else if (x < occ) { room.fd = "salida"; room.hk = y < 0.35 ? "sucia" : y < 0.55 ? "proceso" : y < 0.75 ? "insp" : "ocupada"; }
+      else if (x < occ + 0.1) { room.fd = "llegada"; room.hk = y < 0.6 ? "limpia" : y < 0.85 ? "insp" : "sucia"; }
+      else { room.fd = "vacia"; room.hk = y < 0.78 ? "limpia" : "sucia"; }
+      room.g = nombres[Math.floor(r() * nombres.length)];
+      room.tarifa = Math.round(prop.adr * (0.8 + r() * 0.6) * (room.tipo === "Suite" ? 1.6 : room.tipo === "Junior Suite" ? 1.3 : 1));
+      room.canal = pick(r, canales);
+      room.noches = 1 + Math.floor(r() * 6);
+      room.res = "R-" + (48210 + Math.floor(r() * 900));
+      room.saldo = r() < 0.3 ? Math.round(r() * 180 + 20) : 0;
+      room.hora = 13 * 60 + Math.floor(r() * 16) * 30;
+      rooms.push(room);
+    }
+    return { r: r, rooms: rooms, floors: floors };
+  }
+
+  function roomCls(rm) {
+    return rm.fd === "fuera" ? "r-fuera" : rm.fd === "ocupada" ? "r-ocupada" : rm.fd === "salida" ? "r-insp" : rm.fd === "llegada" ? "r-lleg" : rm.hk === "limpia" ? "r-libre" : "r-sucia";
+  }
+  var HK = { limpia: ["Limpia", "r-libre"], sucia: ["Sucia", "r-sucia"], proceso: ["En limpieza", "r-proceso"], insp: ["Inspección", "r-insp"], ocupada: ["Aún ocupada", "r-ocupada"], fuera: ["Fuera serv.", "r-fuera"] };
+  var FD = { ocupada: "Ocupada", salida: "Salida hoy", llegada: "Llegada", vacia: "Vacía", fuera: "Fuera de servicio" };
+  var FDS = { ocupada: "Ocupada", salida: "Sale hoy", llegada: "Llega", vacia: "Vacía", fuera: "F/S" };
+  var HKS = { limpia: "Limpia", sucia: "Sucia", proceso: "Limpiando", insp: "Insp.", ocupada: "Sin salir", fuera: "—" };
+
+  function renderFD() {
+    var rs = data.rooms, rows = "", head = "";
+    if (fdMode === "lleg") {
+      head = "<tr><th>Hora est.</th><th>Reserva</th><th>Huésped</th><th>Hab.</th><th>Tipo</th><th class=\"num\">Noches</th><th class=\"num\">Tarifa</th><th>Canal</th><th>Hab. lista</th><th></th></tr>";
+      rs.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; }).slice(0, 12).forEach(function (x, i) {
+        var lista = x.hk === "limpia", done = i < 3;
+        rows += "<tr><td>" + hhmm(x.hora) + '</td><td class="muted">' + x.res + '</td><td class="strong">' + x.g + "</td><td>" + x.n + "</td><td>" + x.tipo + '</td><td class="num">' + x.noches + '</td><td class="num">' + $(x.tarifa) + "</td><td>" + x.canal + "</td><td>" +
+          (done ? '<span class="badge b-ok">Registrado</span>' : lista ? '<span class="badge b-ok">Lista</span>' : '<span class="badge ' + (x.hk === "insp" ? "b-warn" : "b-danger") + '">' + HK[x.hk][0] + "</span>") + "</td><td>" +
+          (done ? '<span class="small muted">Check-in ' + hhmm(x.hora - 40) + "</span>" : '<a class="btn ' + (lista ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-toast="' + (lista ? "Check-in de " + x.g + " · hab. " + x.n + " · llave emitida (demo)" : "Hab. " + x.n + " aún no está lista: aviso enviado a housekeeping (demo)") + '">' + (lista ? "Check-in" : "Avisar a HK") + "</a>") + "</td></tr>";
+      });
+    } else if (fdMode === "sal") {
+      head = "<tr><th>Hab.</th><th>Huésped</th><th>Reserva</th><th class=\"num\">Noches</th><th>Folio</th><th class=\"num\">Saldo</th><th>Estado</th><th></th></tr>";
+      rs.filter(function (x) { return x.fd === "salida"; }).slice(0, 12).forEach(function (x) {
+        var out = x.hk !== "ocupada";
+        rows += "<tr><td class=\"strong\">" + x.n + '</td><td class="strong">' + x.g + '</td><td class="muted">' + x.res + '</td><td class="num">' + x.noches + "</td><td>" + (x.canal === "Corporativo" ? "Crédito empresa" : "Particular") + '</td><td class="num">' + (x.saldo ? '<span class="num-warn">' + $(x.saldo) + "</span>" : "$ 0") + "</td><td>" +
+          (out ? '<span class="badge b-ok">Check-out hecho</span>' : x.saldo ? '<span class="badge b-warn">Saldo pendiente</span>' : '<span class="badge b-info">Por salir · 12:00</span>') + "</td><td>" +
+          (out ? "" : '<a class="btn btn-primary btn-sm" href="#" data-toast="Check-out hab. ' + x.n + ": folio cerrado, factura fiscal enviada al ERP y habitación marcada sucia (demo)\">Check-out</a>") + "</td></tr>";
+      });
+    } else {
+      head = "<tr><th>Hab.</th><th>Huésped</th><th>Tipo</th><th class=\"num\">Noches</th><th>Canal</th><th class=\"num\">Tarifa</th><th>Limpieza hoy</th></tr>";
+      rs.filter(function (x) { return x.fd === "ocupada"; }).slice(0, 14).forEach(function (x) {
+        rows += '<tr><td class="strong">' + x.n + '</td><td class="strong">' + x.g + "</td><td>" + x.tipo + '</td><td class="num">' + x.noches + "</td><td>" + x.canal + '</td><td class="num">' + $(x.tarifa) + '</td><td><span class="room ' + HK[x.hk][1] + '" style="display:inline-block;padding:2px 8px">' + HK[x.hk][0] + "</span></td></tr>";
+      });
+    }
+    document.getElementById("fdHead").innerHTML = head;
+    document.getElementById("fdBody").innerHTML = rows;
+  }
+
+  function render(prop) {
+    data = build(prop);
+    var rs = data.rooms, r = data.r;
+    var c = function (fn) { return rs.filter(fn).length; };
+    var ocup = c(function (x) { return x.fd === "ocupada" || x.fd === "salida"; });
+    var lleg = c(function (x) { return x.fd === "llegada"; }), sal = c(function (x) { return x.fd === "salida"; }), fuera = c(function (x) { return x.fd === "fuera"; });
+    var listas = c(function (x) { return x.fd === "vacia" && x.hk === "limpia"; });
     document.getElementById("pmsName").textContent = prop.pms;
+    document.getElementById("cLleg").textContent = "(" + lleg + ")";
+    document.getElementById("cSal").textContent = "(" + sal + ")";
+    document.getElementById("cCasa").textContent = "(" + ocup + ")";
 
-    var enCasa = Math.round(prop.hab * prop.occ / 100);
-    var lleg = Math.round(prop.hab * 0.25), sal = Math.round(prop.hab * 0.2);
     document.getElementById("kpis").innerHTML = [
-      ["En casa", enCasa, "Ocupación " + prop.occ + "%", "bed", true],
-      ["Llegadas hoy", lleg, Math.round(lleg * 0.35) + " ya registradas", "calendar"],
-      ["Salidas hoy", sal, Math.round(sal * 0.2) + " con late check-out", "logout"],
-      ["Hab. fuera de servicio", Math.max(1, Math.round(prop.hab * 0.02)), "1 con más de 48 h", "wrench"]
+      ["En casa", ocup + " hab.", "Ocupación " + Math.round(ocup / prop.hab * 100) + "% · " + prop.hab + " hab.", "bed", true],
+      ["Llegadas hoy", lleg, Math.min(3, lleg) + " ya registradas · " + c(function (x) { return x.fd === "llegada" && x.hk !== "limpia"; }) + " hab. sin liberar", "key"],
+      ["Salidas hoy", sal, c(function (x) { return x.fd === "salida" && x.hk !== "ocupada"; }) + " con check-out hecho", "logout"],
+      ["Disponibles para venta", listas, fuera + " fuera de servicio", "check"]
     ].map(function (k) {
       return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>";
     }).join("");
 
-    var rows = "", min = 600, usadas = {};
-    for (var i = 0; i < 8; i++) {
-      var hab;
-      do { hab = (Math.floor(r() * 4) + 1) * 100 + Math.floor(r() * 20) + 1; } while (usadas[hab]);
-      usadas[hab] = true;
-      min += 30 + Math.floor(r() * 3) * 30;
-      var t = Math.floor(r() * tipos.length), e = estados[Math.floor(r() * estados.length)];
-      var tarifa = Math.round(prop.adr * (0.8 + r() * 0.6));
-      rows += "<tr><td>" + Math.floor(min / 60) + ":" + (min % 60 ? "30" : "00") + '</td><td class="muted">R-' + (48210 + Math.floor(r() * 900)) + '</td><td class="strong">' + nombres[(i + prop.hab) % nombres.length] + "</td><td>" + hab + "</td><td>" + tipos[t] + '</td><td class="num">' + (1 + Math.floor(r() * 6)) + '</td><td class="num">$ ' + tarifa + "</td><td>" + canales[Math.floor(r() * canales.length)] + '</td><td><span class="badge ' + e[1] + '">' + e[0] + '</span></td><td><a class="btn btn-ghost btn-sm" href="#" data-toast="Check-in de la reserva (demo)">Check-in</a></td></tr>';
-    }
-    document.getElementById("arrivals").innerHTML = rows;
+    renderFD();
 
-    var html = "", floors = Math.ceil(prop.hab / 24), per = Math.min(24, Math.ceil(prop.hab / floors));
-    var st = [["libre", "Libre"], ["ocupada", "Ocupada"], ["sucia", "Sucia"], ["insp", "Inspección"], ["fuera", "Fuera"]];
-    var n = 0;
-    for (var f = 1; f <= floors; f++) for (var k = 1; k <= per && n < prop.hab; k++, n++) {
-      var x = r(), s = x < prop.occ / 100 ? st[1] : x < prop.occ / 100 + 0.1 ? st[2] : x < prop.occ / 100 + 0.16 ? st[3] : x > 0.985 ? st[4] : st[0];
-      html += '<div class="room r-' + s[0] + '" title="Hab. ' + (f * 100 + k) + " · " + s[1] + '"><b>' + (f * 100 + k) + "</b>" + s[1] + "</div>";
+    // Rack por piso
+    var rack = "";
+    for (var f = 1; f <= data.floors; f++) {
+      var fl = rs.filter(function (x) { return x.f === f; });
+      var occF = fl.filter(function (x) { return x.fd === "ocupada" || x.fd === "salida"; }).length;
+      rack += '<div class="floor"><div class="floor-l">Piso ' + f + "<small>" + occF + "/" + fl.length + ' ocup.</small></div><div class="rooms">' + fl.map(function (x) {
+        return '<div class="room ' + roomCls(x) + '" title="Hab. ' + x.n + " · " + x.tipo + " · " + FD[x.fd] + " · limpieza: " + HK[x.hk][0] + '"><b>' + x.n + "</b>" + FDS[x.fd] + '<span class="hk">' + HKS[x.hk] + "</span></div>";
+      }).join("") + "</div></div>";
     }
-    document.getElementById("rooms").innerHTML = html;
+    document.getElementById("rack").innerHTML = rack;
+
+    // Housekeeping
+    var hkc = { limpia: 0, sucia: 0, proceso: 0, insp: 0 };
+    rs.forEach(function (x) { if (hkc[x.hk] != null) hkc[x.hk]++; });
+    document.getElementById("hkBadge").textContent = hkc.sucia + hkc.insp;
+    document.getElementById("hkSum").innerHTML = [
+      ["ok", "Limpias", hkc.limpia, "listas o servidas hoy"], ["danger", "Sucias", hkc.sucia, "pendientes por limpiar"],
+      ["muted", "En limpieza", hkc.proceso, "camarera trabajando ahora"], ["warn", "Por inspeccionar", hkc.insp, "esperando a la supervisora"]
+    ].map(function (s) { return '<div class="sem-card ' + s[0] + '"><span class="sem ' + s[0] + '">' + s[1] + '</span><div class="kpi-value" style="margin-top:6px">' + s[2] + '</div><div class="kpi-sub">' + s[3] + "</div></div>"; }).join("");
+
+    var trabajo = rs.filter(function (x) { return x.fd !== "fuera" && !(x.fd === "vacia" && x.hk === "limpia") && !(x.fd === "llegada" && x.hk === "limpia" && r() < 0.5); });
+    var nM = Math.max(2, Math.min(camareras.length, Math.round(trabajo.length / 13)));
+    var bloques = [];
+    for (var m = 0; m < nM; m++) bloques.push([]);
+    trabajo.forEach(function (x, i) { bloques[Math.min(nM - 1, Math.floor(i / Math.ceil(trabajo.length / nM)))].push(x); });
+    document.getElementById("maids").innerHTML = bloques.map(function (b, i) {
+      var done = b.filter(function (x) { return x.hk === "limpia"; }).length, pisos = {};
+      b.forEach(function (x) { pisos[x.f] = 1; });
+      var pct = b.length ? Math.round(done / b.length * 100) : 0;
+      return '<div class="maid"><div class="maid-h"><span class="avatar avatar-sm avatar-gold">' + camareras[i].split(" ").map(function (w) { return w[0]; }).join("") + '</span><div style="flex:1"><b>' + camareras[i] + '</b><div class="small muted">Piso ' + Object.keys(pisos).join(", ") + " · " + b.length + ' hab.</div></div><b class="small">' + done + "/" + b.length + "</b></div>" +
+        '<div class="progress" style="margin-bottom:10px"><span style="width:' + pct + '%"></span></div><div class="maid-rooms">' +
+        b.map(function (x) { return '<span class="' + HK[x.hk][1] + '" title="' + x.n + " · " + FD[x.fd] + " · " + HK[x.hk][0] + '">' + x.n + (x.fd === "salida" ? " S" : x.fd === "llegada" ? " L" : "") + "</span>"; }).join("") + "</div></div>";
+    }).join("") + '<div class="small muted" style="grid-column:1/-1">S = salida (limpieza profunda) · L = llegada asignada (prioridad) · sin letra = servicio de estadía</div>';
+
+    document.getElementById("inspBody").innerHTML = rs.filter(function (x) { return x.hk === "insp"; }).slice(0, 8).map(function (x, i) {
+      var vip = x.fd === "llegada";
+      return '<tr><td class="strong">' + x.n + "</td><td>" + x.tipo + "</td><td>" + camareras[i % nM] + "</td><td>" + hhmm(8 * 60 + 5 + i * 11) + "</td><td>" + (vip ? x.g + " · " + hhmm(x.hora) : '<span class="muted">—</span>') + "</td><td>" + (vip ? '<span class="badge b-danger">Alta</span>' : '<span class="badge b-muted">Normal</span>') +
+        '</td><td><a class="btn btn-primary btn-sm" href="#" data-toast="Hab. ' + x.n + ' aprobada y liberada a recepción (demo)">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-toast="Hab. ' + x.n + ' devuelta a la camarera con observaciones (demo)">Rechazar</a></td></tr>';
+    }).join("") || '<tr><td colspan="7" class="muted">Sin habitaciones por inspeccionar</td></tr>';
+
+    // Mantenimiento
+    var fallas = [
+      ["A/A no enfría", "Climatización", "Urgente", true], ["Filtración en ducha", "Plomería", "Alta", true], ["Cerradura electrónica sin batería", "Cerrajería", "Alta", true],
+      ["TV sin señal", "Electrónica", "Media", true], ["Luminaria quemada en pasillo", "Electricidad", "Baja", false], ["Bomba de piscina con ruido", "Piscina", "Alta", false],
+      ["Proyector sin imagen en sala", "Audiovisual", "Urgente", false], ["Compresor cuarto frío", "Refrigeración", "Urgente", false], ["Grifería lavamanos gotea", "Plomería", "Baja", true],
+      ["Planta eléctrica · servicio 500 h", "Preventivo", "Media", false], ["Minibar no enfría", "Refrigeración", "Media", true], ["Ascensor 2 con vibración", "Ascensores", "Alta", false]
+    ];
+    var estadosMt = ["Abierto", "Asignado", "En proceso", "Esperando repuesto", "Resuelto"];
+    var SLA = { Urgente: 30, Alta: 120, Media: 480, Baja: 2880 };
+    var PR = { Urgente: "b-danger", Alta: "b-warn", Media: "b-info", Baja: "b-muted" };
+    var ST = { "Abierto": "b-danger", "Asignado": "b-info", "En proceso": "b-gold", "Esperando repuesto": "b-warn", "Resuelto": "b-ok" };
+    var areas = { Piscina: "Piscina", Audiovisual: AB[prop.id].venues[1] ? AB[prop.id].venues[1][0] : AB[prop.id].venues[0][0], Refrigeración: "Cocina principal", Preventivo: "Cuarto de máquinas", Ascensores: "Ascensor 2", Electricidad: "Pasillo piso " + (1 + Math.floor(r() * data.floors)) };
+    var tickets = fallas.map(function (fl, i) {
+      var st = pick(r, estadosMt), min = Math.floor(r() * (fl[2] === "Baja" ? 2400 : 300)) + 8;
+      var hab = rs[Math.floor(r() * rs.length)].n;
+      if (fl[1] === "Refrigeración" && st === "Abierto") st = "Esperando repuesto";
+      return { id: "MT-" + (6120 + i * 3 + Math.floor(r() * 3)), loc: fl[3] ? "Hab. " + hab + (fl[2] === "Urgente" ? " · bloqueada" : "") : areas[fl[1]] || "Áreas comunes", f: fl[0], cat: fl[1], p: fl[2], st: st, tec: st === "Abierto" ? "—" : pick(r, tecnicos), min: min, oc: st === "Esperando repuesto" ? "OC-2026-" + (1170 + Math.floor(r() * 20)) : "" };
+    });
+    tickets.sort(function (a, b) { return ["Urgente", "Alta", "Media", "Baja"].indexOf(a.p) - ["Urgente", "Alta", "Media", "Baja"].indexOf(b.p); });
+    var abiertos = tickets.filter(function (t) { return t.st !== "Resuelto"; });
+    document.getElementById("mtBadge").textContent = abiertos.length;
+    var vencidos = abiertos.filter(function (t) { return t.st !== "Esperando repuesto" && t.min > SLA[t.p]; }).length;
+    document.getElementById("mtSum").innerHTML = [
+      ["danger", "Urgentes abiertos", abiertos.filter(function (t) { return t.p === "Urgente"; }).length, "atención inmediata"],
+      ["warn", "Fuera de SLA", vencidos, "superan el tiempo objetivo"],
+      ["muted", "Esperando repuesto", tickets.filter(function (t) { return t.st === "Esperando repuesto"; }).length, "vinculados a una OC"],
+      ["ok", "Resueltos hoy", tickets.filter(function (t) { return t.st === "Resuelto"; }).length + 6, "tiempo medio 42 min"]
+    ].map(function (s) { return '<div class="sem-card ' + s[0] + '"><span class="sem ' + s[0] + '">' + s[1] + '</span><div class="kpi-value" style="margin-top:6px">' + s[2] + '</div><div class="kpi-sub">' + s[3] + "</div></div>"; }).join("");
+    document.getElementById("mtBody").innerHTML = tickets.map(function (t) {
+      var fuera = t.st !== "Resuelto" && t.st !== "Esperando repuesto" && t.min > SLA[t.p];
+      var ab = t.min < 60 ? "hace " + t.min + " min" : t.min < 1440 ? "hace " + Math.floor(t.min / 60) + " h " + (t.min % 60) + " min" : "hace " + Math.floor(t.min / 1440) + " días";
+      return '<tr data-p="' + t.p + '" data-st="' + t.st + '"><td class="strong">' + t.id + "</td><td>" + t.loc + '</td><td class="strong">' + t.f + (t.oc ? '<span class="sub">' + t.oc + " en tránsito</span>" : "") + "</td><td>" + t.cat + '</td><td><span class="badge ' + PR[t.p] + '">' + t.p + '</span></td><td><span class="badge nodot ' + ST[t.st] + '">' + t.st + "</span></td><td>" + t.tec + "</td><td>" + ab + "</td><td>" +
+        (t.st === "Resuelto" ? '<span class="sem ok">Cumplido</span>' : t.st === "Esperando repuesto" ? '<span class="sem muted">Pausado</span>' : fuera ? '<span class="sem danger">Vencido</span>' : '<span class="sem ok">En tiempo</span>') + "</td></tr>";
+    }).join("");
+    filterMt();
+
+    // A&B
+    var ab = AB[prop.id], cub = Math.round(prop.fb * 0.32), bar = Math.round(prop.fb * 0.14);
+    var tot = ab.venues.reduce(function (a, v) { return a + v[1]; }, 0);
+    document.getElementById("abKpis").innerHTML = [
+      [ab.rest, cub, "cubiertos almuerzo · ticket " + $(22 + r() * 8), "utensils"],
+      [ab.bar, bar, "comandas abiertas · happy hour 6–8 p.m.", "star"],
+      ["Room service", Math.round(prop.fb * 0.06), "órdenes · tiempo medio " + (18 + Math.floor(r() * 8)) + " min", "bed"],
+      ["Food cost del mes", (29 + r() * 4).toFixed(1).replace(".", ",") + "%", "meta 32% · beverage cost 21%", "percent", true]
+    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
+    document.getElementById("restName").textContent = ab.rest + " · almuerzo y cena";
+    var notas = ["Aniversario · postre de cortesía", "Alergia a mariscos", "Mesa en terraza", "Silla para bebé", "Cliente Club Platino", "—", "—", "Vegetariano", "Cumpleaños"];
+    var rr = "";
+    for (var i = 0; i < 9; i++) {
+      var h = i < 4 ? 12 * 60 + i * 30 : 19 * 60 + (i - 4) * 30, rm = rs[Math.floor(r() * rs.length)];
+      var hues = r() < 0.65;
+      rr += "<tr><td>" + hhmm(h) + '</td><td class="strong">' + (hues ? rm.g : pick(r, ["Fam. Rodríguez", "Sr. Castillo", "Grupo Digitel", "Sra. Hernández", "Fam. Suárez"])) + '</td><td class="num">' + (2 + Math.floor(r() * 5)) + "</td><td>" + (i < 4 ? "S" : "T") + (1 + Math.floor(r() * 18)) + "</td><td>" + (hues ? '<span class="badge b-info">Hab. ' + rm.n + "</span>" : '<span class="badge b-muted">Externo</span>') + '</td><td class="small">' + notas[i] + "</td></tr>";
+    }
+    document.getElementById("restBody").innerHTML = rr;
+    document.getElementById("venues").innerHTML = ab.venues.map(function (v, i) {
+      var n = i === 0 ? 2 : Math.floor(r() * 3), used = {}, sl = [];
+      for (var k = 0; k < n; k++) { var e = pick(r, eventos); if (!used[e[0]]) { used[e[0]] = 1; sl.push(e); } }
+      return '<div class="venue"><div class="venue-h"><div><b>' + v[0] + '</b><div class="small muted">Capacidad ' + v[1] + ' pax</div></div>' + (sl.length ? '<span class="badge b-gold">' + sl.length + " evento" + (sl.length > 1 ? "s" : "") + "</span>" : '<span class="badge b-ok">Disponible</span>') + "</div>" +
+        (sl.length ? '<ul class="slots">' + sl.map(function (e) { var pax = Math.round(v[1] * (0.4 + r() * 0.5)); return "<li><span>" + e[2] + "</span><b>" + e[0] + '</b><span class="small muted">' + e[1] + " · " + pax + " pax</span></li>"; }).join("") + "</ul>" : '<div class="small muted">Sin reservas hoy · se puede ofrecer para walk-in corporativo</div>') + "</div>";
+    }).join("");
+  }
+
+  function filterMt() {
+    var p = (document.querySelector("#mtSeg button.active") || {}).dataset, s = document.getElementById("mtState").value;
+    var pv = p ? p.v : "";
+    document.querySelectorAll("#mtBody tr").forEach(function (tr) { tr.hidden = (pv && tr.dataset.p !== pv) || (s && tr.dataset.st !== s); });
+  }
+  document.querySelectorAll("#mtSeg button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(filterMt); }); });
+  document.getElementById("mtState").addEventListener("change", filterMt);
+  document.querySelectorAll("#fdSeg button").forEach(function (b) { b.addEventListener("click", function () { fdMode = b.dataset.v; renderFD(); }); });
+
+  App.onProp(function (p) {
+    render(D.propiedades.find(function (x) { return x.id === p; }) || D.propiedades[0]);
   });
 })();
 </script>

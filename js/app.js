@@ -86,7 +86,7 @@
     { href: "rrhh.html", label: "Gestión Humana", icon: "briefcase" },
     { href: "inventarios.html", label: "IMS · Inventarios", icon: "box", count: 3 },
     { href: "integracion.html", label: "Integración", icon: "plug" },
-    { href: "servicios.html", label: "Servicios", icon: "server" }
+    { href: "it.html", label: "Panel de IT", icon: "server" }
   ];
 
   function buildShell() {
