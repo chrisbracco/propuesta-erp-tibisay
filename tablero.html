@@ -39,7 +39,10 @@
   </section>
 </div>
 
-<div class="grid g-2-1 mt">
+<details class="acc mt">
+  <summary><span class="grow">Alimentos &amp; bebidas y mezcla de ingresos <span class="muted">· detalle por propiedad</span></span></summary>
+  <div class="acc-b">
+<div class="grid g-2-1">
   <section class="card">
     <div class="card-h"><div><h2>Ingresos F&amp;B por propiedad</h2><p>Miles de USD · restaurantes, bares, room service y banquetes</p></div>
       <div class="legend"><span><i></i>Sep 2026</span><span><i class="alt"></i>Sep 2025</span></div></div>
@@ -51,6 +54,8 @@
       <ul class="donut-list" id="donutList"></ul></div></div>
   </section>
 </div>
+  </div>
+</details>
 
 <section class="card mt">
   <div class="card-h"><div><h2>Comparativo multisitio</h2><p>Las 7 propiedades · mes en curso</p></div>
@@ -104,8 +109,8 @@
     App.lineChart(document.getElementById("chartRev"), {
       labels: D.meses, fmt: function (v) { return "$" + v; },
       series: [
-        { data: serie, color: "#c99d6b", area: true },
-        { data: serie.map(function (v) { return Math.round(v * 0.88); }), color: "#1c2e2e", dash: true }
+        { data: serie, color: "#c9a24b", area: true },
+        { data: serie.map(function (v) { return Math.round(v * 0.88); }), color: "#141414", dash: true }
       ]
     });
 
@@ -116,7 +121,7 @@
 
     var rooms = Math.round(rev * 30 / 1000), ev = Math.round(fb * 0.33), otros = Math.round((rooms + fb) * 0.035);
     var tot = rooms + fb + ev + otros;
-    var parts = [["Habitaciones", rooms, "#c99d6b"], ["Alimentos & bebidas", fb, "#1c2e2e"], ["Eventos", ev, "#8f6b3a"], ["Otros", otros, "#e7e2d9"]];
+    var parts = [["Habitaciones", rooms, "#c9a24b"], ["Alimentos & bebidas", fb, "#141414"], ["Eventos", ev, "#8f6b3a"], ["Otros", otros, "#e7e2d9"]];
     App.donut(document.getElementById("donut"), parts.map(function (x) { return { v: x[1], color: x[2] }; }), ["$ " + (tot / 1000).toFixed(2).replace(".", ",") + " M", "ingresos del mes"]);
     document.getElementById("donutList").innerHTML = parts.map(function (x) {
       return '<li><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:' + x[2] + '"></i>' + x[0] + "</span><b>" + Math.round(x[1] / tot * 100) + "%</b></li>";

@@ -17,66 +17,53 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Integración</div>
     <h1>Integración <span class="scope-pill" data-prop-name></span></h1>
-    <p>¿Están conectados nuestros sistemas? Estado de cada conexión con el PMS y el ERP de cada hotel.</p>
+    <p>¿Están funcionando nuestras conexiones? Estado del PMS, el ERP y los demás sistemas de cada hotel.</p>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" id="testAll" data-icon="refresh">Probar todas las conexiones</a>
+    <a class="btn btn-primary" href="#" id="testAll" data-icon="refresh">Probar todas las conexiones</a>
   </div>
 </div>
 
-<div class="banner">
-  <span class="kpi-ico" data-icon="plug"></span>
-  <div style="flex:1">
-    <h2>Integramos, no reemplazamos</h2>
-    <p style="margin:4px 0 0">Opera/Prestige siguen siendo el PMS y Profit Plus/Saint/a2 siguen llevando la contabilidad y la facturación fiscal. La plataforma se conecta a ellos y agrega CRM, operación, RR. HH., inventario e indicadores encima. Sin migraciones ni pérdida de históricos.</p>
-  </div>
-</div>
-
-<section class="card mt">
+<section class="card">
   <div class="health" id="health"></div>
+  <div class="card-f row" style="flex-wrap:wrap;gap:16px"><span><span class="status-dot ok"></span> Conectado: los datos llegan solos</span><span><span class="status-dot info"></span> Sincronizando: espera unos minutos</span><span><span class="status-dot danger"></span> Error: pulsa «Reintentar» o avisa a IT · nada se pierde, queda en cola</span></div>
 </section>
 
-<div class="grid g-3 mt" id="legend">
-  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status ok" style="padding:0;background:none" data-icon="check"></span><div><b>Conectado</b><div class="small muted">Los datos llegan solos. No hay que hacer nada.</div></div></div></div>
-  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status sync" style="padding:0;background:none" data-icon="refresh"></span><div><b>Sincronizando</b><div class="small muted">Está copiando datos en este momento. Espera unos minutos.</div></div></div></div>
-  <div class="card" style="padding:12px 16px"><div class="row"><span class="cx-status err" style="padding:0;background:none" data-icon="alert"></span><div><b>Error</b><div class="small muted">Los datos no están llegando. Pulsa «Reintentar» o avisa a IT.</div></div></div></div>
+<div id="attnWrap">
+  <div class="section-title"><h2>Requieren atención</h2><span class="small muted" id="attnSub"></span></div>
+  <div class="grid g-3" id="attn"></div>
 </div>
 
-<h2 class="mt-lg" style="margin-bottom:4px">Sistemas hoteleros (PMS)</h2>
-<p class="small muted" style="margin-bottom:12px">Reservas, huéspedes, habitaciones y cargos a la cuenta.</p>
-<div class="grid g-3" id="gPms"></div>
-
-<h2 class="mt-lg" style="margin-bottom:4px">Sistemas administrativos (ERP)</h2>
-<p class="small muted" style="margin-bottom:12px">Contabilidad, compras, inventario, nómina y facturación fiscal.</p>
-<div class="grid g-3" id="gErp"></div>
-
-<h2 class="mt-lg" style="margin-bottom:4px">Otras conexiones</h2>
-<p class="small muted" style="margin-bottom:12px">Puntos de venta, WhatsApp y relojes biométricos.</p>
-<div class="grid g-3" id="gOtros"></div>
-
-<section class="card mt-lg">
-  <div class="card-h"><div><h2>Estado por hotel</h2><p>Cada hotel y a qué sistema está conectado</p></div></div>
-  <div class="table-wrap"><table class="table matrix">
-    <thead><tr><th>Hotel</th><th>PMS</th><th>ERP</th><th>Puntos de venta</th><th>Biométrico</th><th>Última sincronización</th></tr></thead>
-    <tbody id="matrix"></tbody>
-  </table></div>
-</section>
-
-<section class="card mt">
-  <div class="card-h"><div><h2>Cómo viajan los datos</h2><p>PMS → Plataforma Tibisay → ERP → Tableros</p></div></div>
-  <div class="card-b">
-    <div class="flow">
-      <div class="flow-node"><h3>PMS actual</h3><span class="small muted">Opera · Prestige</span><ul><li>Reservas y perfiles</li><li>Ocupación y tarifas</li><li>Cargos a habitación</li><li>Estado de habitaciones</li></ul></div>
-      <div class="flow-arrow">⇄</div>
-      <div class="flow-node core"><h3>Plataforma Tibisay</h3><span class="small">Conector único</span><ul><li>CRM &amp; WhatsApp</li><li>Operaciones &amp; eventos</li><li>Gestión Humana</li><li>IMS y auditoría A&amp;B</li></ul></div>
-      <div class="flow-arrow">⇄</div>
-      <div class="flow-node"><h3>ERP administrativo</h3><span class="small muted">Profit Plus · Saint · a2</span><ul><li>Maestro de productos</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><h3>Tableros</h3><span class="small muted">Dirección y gerencias</span><ul><li>RevPAR · ADR · ocupación</li><li>F&amp;B y costos</li><li>Personal y nómina</li></ul></div>
+<section class="card mt-lg" data-tabs>
+  <div class="tabs">
+    <button class="tab active" data-tab="conn">Todas las conexiones</button>
+    <button class="tab" data-tab="hotel">Por hotel</button>
+    <button class="tab" data-tab="como">Cómo funciona</button>
+  </div>
+  <div class="tab-panel active" data-panel="conn"><div id="connList"></div></div>
+  <div class="tab-panel" data-panel="hotel">
+    <div class="table-wrap"><table class="table matrix">
+      <thead><tr><th>Hotel</th><th>PMS</th><th>ERP</th><th>Puntos de venta</th><th>Biométrico</th><th>Última sincronización</th></tr></thead>
+      <tbody id="matrix"></tbody>
+    </table></div>
+    <div class="card-f">La asignación PMS/ERP por propiedad es ilustrativa y se confirma en el diagnóstico inicial.</div>
+  </div>
+  <div class="tab-panel" data-panel="como">
+    <div class="card-b">
+      <h2>Integramos, no reemplazamos</h2>
+      <p class="small muted" style="margin:4px 0 16px">Opera/Prestige siguen siendo el PMS y Profit Plus/Saint/a2 siguen llevando la contabilidad y la facturación fiscal. La plataforma se conecta a ellos y agrega CRM, operación, RR. HH., inventario e indicadores encima. Sin migraciones ni pérdida de históricos.</p>
+      <div class="flow">
+        <div class="flow-node"><h3>PMS actual</h3><span class="small muted">Opera · Prestige</span><ul><li>Reservas y perfiles</li><li>Ocupación y tarifas</li><li>Cargos a habitación</li><li>Estado de habitaciones</li></ul></div>
+        <div class="flow-arrow">⇄</div>
+        <div class="flow-node core"><h3>Plataforma Tibisay</h3><span class="small">Conector único</span><ul><li>CRM &amp; WhatsApp</li><li>Operaciones &amp; eventos</li><li>Gestión Humana</li><li>IMS y auditoría A&amp;B</li></ul></div>
+        <div class="flow-arrow">⇄</div>
+        <div class="flow-node"><h3>ERP administrativo</h3><span class="small muted">Profit Plus · Saint · a2</span><ul><li>Maestro de productos</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node"><h3>Tableros</h3><span class="small muted">Dirección y gerencias</span><ul><li>RevPAR · ADR · ocupación</li><li>F&amp;B y costos</li><li>Personal y nómina</li></ul></div>
+      </div>
     </div>
   </div>
 </section>
-<p class="small muted mt">La asignación PMS/ERP por propiedad es ilustrativa y se confirma en el diagnóstico inicial.</p>
 </main>
 </div>
 
@@ -119,18 +106,29 @@
       (c.err.length ? c.err.map(function (e) { return '<div class="cx-err"><b>' + e[0] + "</b> · " + e[1] + "</div>"; }).join("") : '<div class="small" style="color:var(--ok);margin-top:4px">' + App.icon("check").replace('class="ico ', 'style="width:14px;height:14px;vertical-align:-2px" class="ico ') + " Sin errores hoy</div>") + "</div></div>" +
       '<div class="cx-foot"><a class="btn ' + (c.st === "err" ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + (c.st === "err" ? "Reintentar ahora" : "Reintentar") + '</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Historial detallado de ' + c.name + ' (demo)">Ver detalle</a></div></div>';
   }
+  var GRP = { gPms: "Sistemas hoteleros (PMS) · reservas, huéspedes, habitaciones y cargos", gErp: "Sistemas administrativos (ERP) · contabilidad, compras, inventario, nómina y facturación", gOtros: "Otras conexiones · puntos de venta, WhatsApp y relojes biométricos" };
+  function row(c) {
+    var s = ST[c.st], sedes = c.sedes[0] === "todas" ? "Toda la cadena" : c.sedes.map(D.sedeNombre.bind(D)).join(" · ");
+    var dot = { ok: "ok", sync: "info", err: "danger" }[c.st];
+    return '<details class="acc flat cx-line" data-sedes="' + c.sedes.join(" ") + '"><summary><div class="cx-row" style="flex:1"><span class="conn-logo' + (c.erp ? " erp" : "") + '">' + c.logo + '</span><div style="min-width:0"><b>' + c.name + '</b><div class="small muted">' + sedes + '</div></div><div class="small muted cx-hide">' + c.freq + '</div><div class="small cx-hide">' + c.last + '</div><span class="row small" style="gap:6px;white-space:nowrap"><span class="status-dot ' + dot + '"></span>' + s[2].split(" · ")[0] + "</span></div></summary>" +
+      '<div class="acc-b"><div class="small muted" style="margin-bottom:10px">' + c.trae + " · " + c.dir + " · " + n(c.reg) + ' registros hoy</div><div class="between small muted" style="margin-bottom:4px"><span>Últimas 24 h</span><span>' + c.freq + '</span></div><div class="spark">' + spark(c) + "</div>" +
+      (c.err.length ? c.err.map(function (e) { return '<div class="cx-err"><b>' + e[0] + "</b> · " + e[1] + "</div>"; }).join("") : '<div class="small" style="color:var(--ok);margin-top:8px">Sin errores hoy</div>') +
+      '<div class="row mt"><a class="btn btn-ghost btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + 'Reintentar</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Historial detallado de ' + c.name + ' (demo)">Ver detalle</a></div></div></details>';
+  }
   function draw() {
-    ["gPms", "gErp", "gOtros"].forEach(function (g) {
-      document.getElementById(g).innerHTML = C.filter(function (c) { return c.g === g; }).map(card).join("");
-    });
-    filter(App.prop());
+    var p = App.prop(), vis = C.filter(function (c) { return p === "todas" || c.sedes.indexOf("todas") >= 0 || c.sedes.indexOf(p) >= 0; });
+    var bad = vis.filter(function (c) { return c.st !== "ok"; });
+    document.getElementById("attnWrap").hidden = !bad.length;
+    document.getElementById("attn").innerHTML = bad.map(card).join("");
+    document.getElementById("attnSub").textContent = bad.length + " de " + vis.length + " conexiones";
+    document.getElementById("connList").innerHTML = Object.keys(GRP).map(function (g) {
+      var l = vis.filter(function (c) { return c.g === g; });
+      return l.length ? '<div class="card-h" style="background:var(--cream)"><div><h3>' + GRP[g].split(" · ")[0] + "</h3><p>" + GRP[g].split(" · ")[1] + "</p></div></div>" + l.map(row).join("") : "";
+    }).join("");
+    filter(p);
   }
 
   function filter(p) {
-    document.querySelectorAll(".cx").forEach(function (el) {
-      var s = el.dataset.sedes.split(" ");
-      el.style.display = p === "todas" || s.indexOf("todas") >= 0 || s.indexOf(p) >= 0 ? "" : "none";
-    });
     var vis = C.filter(function (c) { return p === "todas" || c.sedes.indexOf("todas") >= 0 || c.sedes.indexOf(p) >= 0; });
     var k = { ok: 0, sync: 0, err: 0 };
     vis.forEach(function (c) { k[c.st]++; });
@@ -178,8 +176,7 @@
     App.toast("Probando las " + C.length + " conexiones… " + C.filter(function (c) { return c.st === "err"; }).length + " con error");
   });
 
-  draw();
-  App.onProp(function (p) { if (document.getElementById("health")) filter(p); });
+  App.onProp(function () { draw(); });
 })();
 </script>
 </body>

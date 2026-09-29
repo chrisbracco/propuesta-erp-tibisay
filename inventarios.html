@@ -17,32 +17,35 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / IMS · Inventarios</div>
     <h1>IMS · Inventarios y compras <span class="scope-pill" data-prop-name></span></h1>
-    <p>Maestro de productos, transferencias, compras, recepción, conteos, ajustes y auditoría A&amp;B por producto.</p>
+    <p>¿Qué hay que comprar, recibir o ajustar hoy? Busca un producto y actúa desde ahí.</p>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-modal="trModal" data-icon="truck">Solicitar transferencia</a>
-    <a class="btn btn-ghost" href="#" data-toast="Conteo cíclico creado para el almacén seleccionado (demo)" data-icon="archive">Nuevo conteo</a>
-    <a class="btn btn-primary" href="#" data-toast="Nueva orden de compra en borrador (demo)" data-icon="cart">Nueva OC</a>
+    <a class="btn btn-ghost" href="#" data-hash="transferir" data-wz-open="tr" data-icon="truck">Transferir</a>
+    <a class="btn btn-ghost" href="#" data-hash="merma" data-wz-open="aj" data-icon="archive">Registrar merma</a>
+    <a class="btn btn-primary" href="#" data-hash="nueva-oc" data-wz-open="oc" data-icon="cart">Nueva OC</a>
   </div>
 </div>
 
-<div class="grid g-4" id="kpis"></div>
+<section class="card hero" id="imsHero"></section>
 
-<section class="card mt" data-tabs>
+<div class="mt">
+    <div class="bigsearch" id="imsSearch"><span data-icon="search"></span><input class="input" type="search" id="mFilter" placeholder="Buscar en el maestro: SKU o producto (p. ej. «ron», «AB-1602»)…" autocomplete="off"></div>
+    <p class="small muted" style="margin:8px 2px 0">Catálogo sincronizado con el ERP (<span id="erpName">Profit Plus · Saint · a2</span>) hace 14 min. Clic en un producto para pedir, transferir o ajustar.</p>
+</div>
+
+<div class="grid g-2-1 mt" style="align-items:start">
+<section class="card" data-tabs>
   <div class="tabs">
-    <button class="tab active" data-tab="maestro">Maestro de productos</button>
-    <button class="tab" data-tab="tr">Transferencias <span class="badge nodot b-warn" id="bTr">0</span></button>
-    <button class="tab" data-tab="oc">Órdenes de compra <span class="badge nodot b-warn" id="bOc">0</span></button>
-    <button class="tab" data-tab="rec">Recepción de mercancía</button>
-    <button class="tab" data-tab="aj">Conteos y ajustes <span class="badge nodot b-warn" id="bAj">0</span></button>
+    <button class="tab active" data-tab="productos">Productos</button>
+    <button class="tab" data-tab="compras">1 · Comprar y recibir <span class="badge nodot b-warn" id="bOc">0</span></button>
+    <button class="tab" data-tab="transferencias">2 · Transferir <span class="badge nodot b-warn" id="bTr">0</span></button>
+    <button class="tab" data-tab="ajustes">3 · Contar y ajustar <span class="badge nodot b-warn" id="bAj">0</span></button>
     <button class="tab" data-tab="aud">Auditoría A&amp;B <span class="badge nodot b-danger" id="bAud">0</span></button>
   </div>
 
-  <!-- ============ MAESTRO ============ -->
-  <div class="tab-panel active" data-panel="maestro">
-    <div class="source-note"><span data-icon="plug"></span><div><b>Catálogo alimentado por la integración con el ERP</b> (<span id="erpName">Profit Plus · Saint · a2</span>). SKU, descripción, unidad y costo promedio vienen del ERP y no se editan aquí; existencias se actualizan con cada movimiento. Última sincronización: hace 14 min.</div></div>
-    <div class="toolbar" style="border-bottom:0">
-      <div class="search"><span data-icon="search"></span><input class="input" type="search" id="mFilter" placeholder="SKU o producto…"></div>
+  <!-- ============ PRODUCTOS (maestro) ============ -->
+  <div class="tab-panel active" data-panel="productos">
+    <div class="toolbar">
       <select class="select select-sm" style="width:auto" id="mCat"><option value="">Todas las categorías</option></select>
       <label class="small row" style="gap:6px"><input type="checkbox" id="mLow" style="accent-color:var(--gold)"> Solo bajo mínimo</label>
       <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Sincronización con el ERP en cola (demo)" data-icon="refresh">Sincronizar ahora</a>
@@ -50,72 +53,78 @@
     <div class="table-wrap"><table class="table" data-searchable id="mTable">
       <thead id="mHead"></thead><tbody id="mBody"></tbody>
     </table></div>
-    <div class="pager"><span id="mCount">—</span><span>Existencia expresada en la unidad de medida del ERP</span></div>
+    <div class="pager"><span id="mCount">—</span><span>SKU, descripción, UM y costo vienen del ERP y no se editan aquí</span></div>
+  </div>
+
+  <!-- ============ COMPRAR Y RECIBIR ============ -->
+  <div class="tab-panel" data-panel="compras">
+    <div class="toolbar">
+      <div class="steps"><span class="done">Borrador</span><em>→</em><span class="done">Por aprobar</span><em>→</em><span class="done">Aprobada</span><em>→</em><span class="now">Recepción</span><em>→</em><span>Cerrada · ERP</span></div>
+      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-hash="recibir" data-wz-open="rec" data-icon="truck">Recibir mercancía</a>
+    </div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>OC</th><th>Propiedad</th><th class="num">Monto</th><th style="min-width:130px">Recibido</th><th>Estado</th><th></th></tr></thead>
+      <tbody id="ocBody"></tbody>
+    </table></div>
+    <details class="acc flat">
+      <summary><span class="grow">Últimas notas de entrada <span class="muted">· cada recepción genera la nota en el ERP y actualiza el costo promedio</span></span></summary>
+      <div class="table-wrap"><table class="table" data-searchable>
+        <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>ERP</th></tr></thead>
+        <tbody id="neBody"></tbody>
+      </table></div>
+    </details>
+    <div class="card-f">Aprobación: hasta $ 1.000 gerente de área · hasta $ 5.000 gerente general · más de $ 5.000 dirección de compras.</div>
   </div>
 
   <!-- ============ TRANSFERENCIAS ============ -->
-  <div class="tab-panel" data-panel="tr">
-    <div class="card-b" style="padding-bottom:0">
-      <div class="steps"><span class="done">1 · Solicitar</span><em>→</em><span class="done">2 · Aprobar (gerente origen)</span><em>→</em><span class="done">3 · Despachar</span><em>→</em><span class="now">4 · Recibir (destino)</span></div>
-      <p class="small muted" style="margin:8px 0 0">El inventario sale del origen al despachar y entra al destino al confirmar la recepción. Las diferencias en la recepción se registran como ajuste.</p>
+  <div class="tab-panel" data-panel="transferencias">
+    <div class="toolbar">
+      <div class="steps"><span class="done">Solicitar</span><em>→</em><span class="done">Aprobar (origen)</span><em>→</em><span class="done">Despachar</span><em>→</em><span class="now">Recibir (destino)</span></div>
+      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-wz-open="tr" data-icon="plus">Solicitar transferencia</a>
     </div>
-    <div class="table-wrap mt"><table class="table" data-searchable>
-      <thead><tr><th>Transferencia</th><th>Solicitada</th><th>Origen</th><th>Destino</th><th>Productos</th><th class="num">Costo</th><th>Transporte</th><th>Estado</th><th></th></tr></thead>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Transferencia</th><th>Ruta</th><th>Productos</th><th class="num">Costo</th><th>Estado</th><th></th></tr></thead>
       <tbody id="trBody"></tbody>
     </table></div>
+    <div class="card-f">El inventario sale del origen al despachar y entra al destino al recibir. Las diferencias en la recepción se registran como ajuste.</div>
   </div>
 
-  <!-- ============ OC ============ -->
-  <div class="tab-panel" data-panel="oc">
-    <div class="card-b" style="padding-bottom:0">
-      <div class="steps"><span class="done">Borrador</span><em>→</em><span class="done">Por aprobar</span><em>→</em><span class="done">Aprobada · enviada al proveedor</span><em>→</em><span class="now">Recepción parcial / total</span><em>→</em><span>Cerrada · asiento en ERP</span></div>
-      <p class="small muted" style="margin:8px 0 0">Niveles de aprobación: hasta $ 1.000 gerente de área · hasta $ 5.000 gerente general · más de $ 5.000 dirección de compras.</p>
+  <!-- ============ CONTAR Y AJUSTAR ============ -->
+  <div class="tab-panel" data-panel="ajustes">
+    <div class="toolbar">
+      <div class="seg" id="ajSeg"><button class="active" data-v="">Todos</button><button data-v="Pendiente">Pendientes</button><button data-v="Aprobado">Aprobados</button><button data-v="Rechazado">Rechazados</button></div>
+      <div class="row" style="margin-left:auto"><a class="btn btn-ghost btn-sm" href="#" data-hash="conteo" data-wz-open="ct" data-icon="archive">Nuevo conteo</a><a class="btn btn-ghost btn-sm" href="#" data-wz-open="aj" data-icon="plus">Merma / ajuste</a></div>
     </div>
-    <div class="table-wrap mt"><table class="table" data-searchable>
-      <thead><tr><th>OC</th><th>Fecha</th><th>Proveedor</th><th>Propiedad</th><th class="num">Líneas</th><th class="num">Monto</th><th>Aprueba</th><th style="min-width:130px">Recibido</th><th>Estado</th><th></th></tr></thead>
-      <tbody id="ocBody"></tbody>
-    </table></div>
-  </div>
-
-  <!-- ============ RECEPCIÓN ============ -->
-  <div class="tab-panel" data-panel="rec">
-    <div class="card-h"><div><h2>Recepción contra orden de compra</h2><p>Selecciona la OC, registra lo que llegó y el sistema calcula lo pendiente</p></div>
-      <select class="select select-sm" style="width:auto" id="recSel"></select></div>
-    <div class="card-b" id="recHead" style="padding-bottom:0"></div>
-    <div class="table-wrap mt"><table class="table">
-      <thead><tr><th>SKU</th><th>Producto</th><th>UM</th><th class="num">Pedido</th><th class="num">Recibido antes</th><th class="num">Recibe ahora</th><th class="num">Pendiente</th><th>Lote / vence</th><th class="num">Costo</th></tr></thead>
-      <tbody id="recBody"></tbody>
-    </table></div>
-    <div class="card-f row" style="justify-content:space-between;flex-wrap:wrap">
-      <span id="recTot">—</span>
-      <div class="row"><a class="btn btn-ghost btn-sm" href="#" id="recPar">Registrar recepción parcial</a><a class="btn btn-primary btn-sm" href="#" id="recFull">Recepción total y cerrar OC</a></div>
-    </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Últimas notas de entrada</h2><p>Cada recepción genera la nota de entrada en el ERP y actualiza el costo promedio</p></div></div>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Proveedor</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>ERP</th></tr></thead>
-      <tbody id="neBody"></tbody>
-    </table></div>
-  </div>
-
-  <!-- ============ CONTEOS Y AJUSTES ============ -->
-  <div class="tab-panel" data-panel="aj">
-    <div class="card-h"><div><h2>Conteos de inventario</h2><p>Cíclicos semanales por almacén (A&amp;B y licores) y general mensual</p></div></div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Conteo</th><th>Tipo</th><th>Almacén</th><th>Fecha</th><th>Responsable</th><th style="min-width:130px">Avance</th><th class="num">Ítems con diferencia</th><th class="num">Diferencia valorizada</th><th>Estado</th></tr></thead>
-      <tbody id="cBody"></tbody>
-    </table></div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Ajustes de inventario</h2><p>Todo ajuste requiere motivo y aprobación: hasta $ 100 jefe de almacén · hasta $ 500 gerente general · más de $ 500 contraloría</p></div>
-      <div class="seg" id="ajSeg"><button class="active" data-v="">Todos</button><button data-v="Pendiente">Pendientes</button><button data-v="Aprobado">Aprobados</button><button data-v="Rechazado">Rechazados</button></div></div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Ajuste</th><th>Fecha</th><th>Producto</th><th>Almacén</th><th class="num">Cantidad</th><th class="num">Valor</th><th>Motivo</th><th>Solicita</th><th>Aprueba</th><th>Estado</th><th></th></tr></thead>
+      <thead><tr><th>Ajuste</th><th>Producto</th><th class="num">Cantidad</th><th class="num">Valor</th><th>Motivo</th><th>Estado</th><th></th></tr></thead>
       <tbody id="ajBody"></tbody>
     </table></div>
+    <details class="acc flat">
+      <summary><span class="grow">Conteos de inventario <span class="muted">· cíclicos semanales (A&amp;B y licores) y general mensual</span></span></summary>
+      <div class="table-wrap"><table class="table" data-searchable>
+        <thead><tr><th>Conteo</th><th>Almacén</th><th>Responsable</th><th style="min-width:130px">Avance</th><th class="num">Diferencia</th><th>Estado</th></tr></thead>
+        <tbody id="cBody"></tbody>
+      </table></div>
+    </details>
+    <div class="card-f">Todo ajuste requiere motivo y aprobación: hasta $ 100 jefe de almacén · hasta $ 500 gerente general · más de $ 500 contraloría.</div>
   </div>
 
   <!-- ============ AUDITORÍA A&B ============ -->
   <div class="tab-panel" data-panel="aud">
-    <div class="card-b">
-      <div class="flow">
+    <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="audKpis"></div></div>
+    <div class="toolbar" style="border-bottom:0">
+      <div class="seg" id="audSeg"><button class="active" data-v="alerta">Solo con alerta</button><button data-v="">Todos los productos</button></div>
+      <select class="select select-sm" style="width:auto" id="audCat"><option value="">Todas las categorías</option></select>
+      <span class="small muted" style="margin-left:auto">Periodo: 01/09 – 28/09/2026 · corte nocturno automático</span>
+    </div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th style="min-width:190px">Producto</th><th class="num">Consumo teórico</th><th class="num">Salida ERP</th><th class="num">Varianza</th><th class="num">Valorización</th><th>Alerta</th></tr></thead>
+      <tbody id="audBody"></tbody>
+      <tfoot id="audFoot"></tfoot>
+    </table></div>
+    <details class="acc flat">
+      <summary><span class="grow">Cómo se calcula la diferencia</span></summary>
+      <div class="acc-b"><div class="flow">
         <div class="flow-node"><h3>1 · Consumo PMS / POS</h3><ul><li>Platos y tragos vendidos por producto</li><li>Cargos a habitación y banquetes</li></ul></div>
         <div class="flow-arrow">→</div>
         <div class="flow-node"><h3>2 · Receta estándar</h3><ul><li>Venta → gramos / ml / unidades teóricas</li></ul></div>
@@ -123,40 +132,14 @@
         <div class="flow-node"><h3>3 · Compra / salida ERP</h3><ul><li>Lo que realmente salió del almacén</li></ul></div>
         <div class="flow-arrow">→</div>
         <div class="flow-node core"><h3>4 · Diferencia por producto</h3><ul><li>Valorizada a costo promedio</li><li>Alerta &gt; 3% · crítica &gt; 6%</li></ul></div>
-      </div>
-      <div class="grid g-4 mt" id="audKpis"></div>
-    </div>
-    <div class="toolbar" style="border-top:1px solid var(--border)">
-      <div class="seg" id="audSeg"><button class="active" data-v="">Todos los productos</button><button data-v="alerta">Solo con alerta</button></div>
-      <select class="select select-sm" style="width:auto" id="audCat"><option value="">Todas las categorías</option></select>
-      <span class="small muted" style="margin-left:auto">Periodo: 01/09 – 28/09/2026 · corte nocturno automático</span>
-    </div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th style="min-width:190px">Producto</th><th style="min-width:170px">Propiedad · punto de venta</th><th class="num">Vendido PMS/POS</th><th class="num">Consumo teórico</th><th class="num">Salida ERP</th><th class="num">Diferencia</th><th class="num">Varianza</th><th class="num">Costo prom.</th><th class="num">Valorización</th><th>Alerta</th></tr></thead>
-      <tbody id="audBody"></tbody>
-      <tfoot id="audFoot"></tfoot>
-    </table></div>
+      </div></div>
+    </details>
   </div>
 </section>
-
-<!-- Modal: solicitar transferencia -->
-<div class="modal-back" id="trModal">
-  <div class="modal">
-    <div class="card-h"><div><h2>Solicitar transferencia entre hoteles</h2><p>La aprueba el gerente del hotel de origen</p></div><button class="icon-btn" data-close aria-label="Cerrar">✕</button></div>
-    <div class="card-b">
-      <div class="grid g-2" style="gap:0 12px">
-        <div class="field"><label>Origen</label><select class="select" id="fOri"></select></div>
-        <div class="field"><label>Destino</label><select class="select" id="fDes"></select></div>
-      </div>
-      <div class="field"><label>Producto (del maestro)</label><select class="select" id="fProd"></select></div>
-      <div class="grid g-2" style="gap:0 12px">
-        <div class="field"><label>Cantidad</label><input class="input" type="number" value="12" min="1"></div>
-        <div class="field"><label>Fecha requerida</label><input class="input" type="date" value="2026-10-03"></div>
-      </div>
-      <div class="field"><label>Justificación</label><input class="input" value="Cubrir evento del fin de semana"></div>
-    </div>
-    <div class="card-f row" style="justify-content:flex-end"><button class="btn btn-ghost btn-sm" data-close>Cancelar</button><button class="btn btn-primary btn-sm" data-close data-toast="Transferencia TR-0352 solicitada · pendiente de aprobación del hotel de origen (demo)">Enviar solicitud</button></div>
-  </div>
+  <section class="card" style="position:sticky;top:80px">
+    <div class="card-h"><div><h2>Pendiente de tu acción</h2><p>Aprobar, despachar y recibir con un clic</p></div><span class="badge b-warn" id="inboxCount">0</span></div>
+    <ul class="list inbox" id="inbox"></ul>
+  </section>
 </div>
 </main>
 </div>
@@ -170,6 +153,7 @@
   function money(n, dec) { var neg = n < 0; n = Math.abs(n); var s = dec ? n.toFixed(2) : String(Math.round(n)); var p = s.split("."); return (neg ? "− " : "") + "$ " + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (p[1] ? "," + p[1] : ""); }
   function num(n, d) { var s = (d ? n.toFixed(d) : String(Math.round(n))).split("."); return s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (s[1] ? "," + s[1] : ""); }
   function nom(id) { return D.sedeNombre(id); }
+  function curSede() { var p = App.prop(); return p === "todas" ? "margarita" : p; }
 
   /* ------------------------------------------------------------ Maestro (desde ERP) */
   // sku, producto, categoría, UM, costo prom., existencia base (hotel de 100 hab.), almacén, receta [unidad POS, factor por unidad POS]
@@ -210,40 +194,7 @@
   });
   ["mCat", "audCat"].forEach(function (id) { document.getElementById(id).insertAdjacentHTML("beforeend", CATS.map(function (c) { return "<option>" + c + "</option>"; }).join("")); });
 
-  function renderMaestro(p) {
-    var sedes = p === "todas" ? PROPS : PROPS.filter(function (h) { return h.id === p; });
-    var cols = p === "todas" ? PROPS.map(function (h) { return h.nombre; }) : ["Almacén"];
-    document.getElementById("erpName").textContent = p === "todas" ? "Profit Plus · Saint · a2" : sedes[0].erp;
-    document.getElementById("mHead").innerHTML = "<tr><th>SKU</th><th style=\"min-width:190px\">Producto</th><th>Categoría</th><th>UM</th><th class=\"num\">Costo prom.</th>" +
-      (p === "todas" ? cols.map(function (c) { return '<th class="num">' + c + "</th>"; }).join("") : "<th>Almacén</th><th class=\"num\">Existencia</th><th class=\"num\">Mínimo</th>") +
-      '<th class="num">Valor</th><th>Estado</th></tr>';
-    var low = 0;
-    document.getElementById("mBody").innerHTML = P.map(function (pr, i) {
-      var tot = 0, mn = 0, cells = "";
-      var algunoBajo = false;
-      sedes.forEach(function (h) {
-        var s = STOCK[h.id][i];
-        tot += s.ex; mn += s.min;
-        if (s.ex < s.min) algunoBajo = true;
-        if (p === "todas") cells += '<td class="num' + (s.ex < s.min ? " num-danger" : "") + '">' + num(s.ex) + "</td>";
-      });
-      if (p !== "todas") cells = "<td>" + nom(p) + " · " + pr[6] + '</td><td class="num strong">' + num(tot) + '</td><td class="num">' + num(mn) + "</td>";
-      var bajo = algunoBajo, crit = tot < mn * 0.6 || (p === "todas" && sedes.some(function (h) { var s = STOCK[h.id][i]; return s.ex < s.min * 0.6; }));
-      if (bajo) low++;
-      return '<tr data-cat="' + pr[2] + '" data-low="' + (bajo ? 1 : 0) + '"><td class="muted">' + pr[0] + '</td><td class="strong">' + pr[1] + "</td><td>" + pr[2] + "</td><td>" + pr[3] + '</td><td class="num">' + money(pr[4], 2) + "</td>" + cells + '<td class="num">' + money(tot * pr[4]) + "</td><td>" +
-        (crit ? '<span class="badge b-danger">Crítico</span>' : bajo ? '<span class="badge b-warn">Bajo mínimo</span>' : '<span class="badge b-ok">OK</span>') + "</td></tr>";
-    }).join("");
-    filterMaestro();
-    return low;
-  }
-  function filterMaestro() {
-    var q = document.getElementById("mFilter").value.toLowerCase(), c = document.getElementById("mCat").value, l = document.getElementById("mLow").checked, n = 0;
-    document.querySelectorAll("#mBody tr").forEach(function (tr) { tr.hidden = (q && tr.textContent.toLowerCase().indexOf(q) < 0) || (c && tr.dataset.cat !== c) || (l && tr.dataset.low !== "1"); if (!tr.hidden) n++; });
-    document.getElementById("mCount").textContent = "Mostrando " + n + " de 1.284 SKU activos en el ERP";
-  }
-  ["mFilter", "mCat", "mLow"].forEach(function (id) { document.getElementById(id).addEventListener(id === "mFilter" ? "input" : "change", filterMaestro); });
-
-  /* ------------------------------------------------------------ Transferencias */
+  /* ------------------------------------------------------------ Movimientos (datos) */
   var TR = [
     ["TR-0351", "29/09", "maracaibo", "catatumbo", "24 bot. Ron añejo reserva, 12 bot. Whisky 12 años", 831, "Terrestre · 01/10", "Solicitada", "Luis F."],
     ["TR-0350", "28/09", "morrocoy", "margarita", "40 jgo. toallas premium", 560, "Terrestre + ferry · 02/10", "Aprobada", "Andreína C."],
@@ -254,20 +205,6 @@
     ["TR-0336", "20/09", "margarita", "morrocoy", "10 kg camarón jumbo", 165, "—", "Rechazada", "Gabriela M."]
   ];
   var TRST = { "Solicitada": "b-warn", "Aprobada": "b-info", "Despachada": "b-gold", "Recibida": "b-ok", "Recibida con diferencia": "b-warn", "Rechazada": "b-danger" };
-  function renderTr(p) {
-    var list = TR.filter(function (t) { return p === "todas" || t[2] === p || t[3] === p; }), pend = 0;
-    document.getElementById("trBody").innerHTML = list.map(function (t) {
-      var act = "";
-      if (t[7] === "Solicitada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-toast="' + t[0] + ' aprobada por el gerente de ' + nom(t[2]) + ' (demo)">Aprobar</a>'; }
-      else if (t[7] === "Aprobada") { pend++; act = '<a class="btn btn-ghost btn-sm" href="#" data-toast="' + t[0] + ' despachada · salida del almacén de ' + nom(t[2]) + ' (demo)">Despachar</a>'; }
-      else if (t[7] === "Despachada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-toast="' + t[0] + ' recibida en ' + nom(t[3]) + ' · existencias actualizadas (demo)">Recibir</a>'; }
-      else if (t[7] === "Recibida con diferencia") act = '<a class="small" href="#" data-toast="Faltaron 2 kg · ajuste AJ-0917 generado (demo)">Ver ajuste</a>';
-      return '<tr><td class="strong">' + t[0] + '<span class="sub">por ' + t[8] + "</span></td><td>" + t[1] + "</td><td>" + nom(t[2]) + "</td><td>" + nom(t[3]) + '</td><td class="small">' + t[4] + '</td><td class="num">' + money(t[5]) + "</td><td>" + t[6] + '</td><td><span class="badge ' + TRST[t[7]] + '">' + t[7] + "</span></td><td>" + act + "</td></tr>";
-    }).join("") || '<tr><td colspan="9" class="muted">Sin transferencias para esta propiedad</td></tr>';
-    document.getElementById("bTr").textContent = pend;
-  }
-
-  /* ------------------------------------------------------------ Órdenes de compra */
   var OC = [
     { id: "OC-2026-1194", f: "29/09", prov: "Pesquera Nueva Esparta", sede: "margarita", ap: "Gerente A&B", st: "Borrador", rec: 0, lines: [["AB-2310", 40], ["AB-2322", 20]] },
     { id: "OC-2026-1190", f: "29/09", prov: "Distribuidora Zulia Food", sede: "maracaibo", ap: "Gerente general", st: "Por aprobar", rec: 0, lines: [["AB-1602", 80], ["AB-1610", 120], ["AB-1450", 30], ["AB-1460", 200]] },
@@ -285,52 +222,6 @@
   OC.forEach(function (o) { o.monto = o.lines.reduce(function (a, l) { return a + l[1] * BYSKU[l[0]][4]; }, 0) + (o.extra ? o.extra[1] : 0); });
   var OCST = { "Borrador": "b-muted", "Por aprobar": "b-warn", "Aprobada": "b-info", "Recepción parcial": "b-gold", "Recibida": "b-ok" };
   function erpOf(sede) { var h = PROPS.find(function (x) { return x.id === sede; }); return h ? h.erp : "Profit Plus"; }
-  function renderOc(p) {
-    var list = OC.filter(function (o) { return p === "todas" || o.sede === p || o.sede === "todas"; }), pend = 0;
-    document.getElementById("ocBody").innerHTML = list.map(function (o) {
-      var act = "";
-      if (o.st === "Borrador") act = '<a class="btn btn-ghost btn-sm" href="#" data-toast="' + o.id + ' enviada a aprobación (demo)">Enviar a aprobar</a>';
-      if (o.st === "Por aprobar") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-toast="' + o.id + ' aprobada y enviada al proveedor por correo (demo)">Aprobar</a>'; }
-      if (o.st === "Aprobada" || o.st === "Recepción parcial") act = '<a class="btn btn-ghost btn-sm" href="#" data-rec="' + o.id + '">Recibir</a>';
-      var pct = Math.round(o.rec * 100);
-      return '<tr><td class="strong">' + o.id + "</td><td>" + o.f + "</td><td>" + o.prov + "</td><td>" + (o.sede === "todas" ? "Cadena (consolidada)" : nom(o.sede)) + '</td><td class="num">' + (o.lines.length + (o.extra ? 1 : 0)) + '</td><td class="num">' + money(o.monto) + "</td><td>" + o.ap + '</td><td><div class="pcell"><div class="progress' + (pct === 100 ? " teal" : "") + '"><span style="width:' + pct + '%"></span></div><b>' + pct + '%</b></div></td><td><span class="badge ' + OCST[o.st] + '">' + o.st + "</span></td><td>" + act + "</td></tr>";
-    }).join("");
-    document.getElementById("bOc").textContent = pend;
-    var rs = document.getElementById("recSel"), open = list.filter(function (o) { return o.st === "Aprobada" || o.st === "Recepción parcial"; });
-    rs.innerHTML = open.map(function (o) { return '<option value="' + o.id + '">' + o.id + " · " + o.prov + "</option>"; }).join("") || "<option>Sin OC por recibir</option>";
-    renderRec(rs.value);
-    var ne = list.filter(function (o) { return o.rec > 0; });
-    document.getElementById("neBody").innerHTML = ne.map(function (o, i) {
-      return '<tr><td class="strong">NE-' + (4410 - i * 3) + "</td><td>" + ["29/09", "28/09", "26/09", "25/09", "24/09"][i % 5] + "</td><td>" + o.id + "</td><td>" + o.prov + "</td><td>" + (o.sede === "todas" ? "Margarita · Lencería" : nom(o.sede) + " · " + BYSKU[o.lines[0][0]][6]) + "</td><td>" + (o.rec < 1 ? '<span class="badge b-gold">Parcial</span>' : '<span class="badge b-ok">Total</span>') + '</td><td class="num">' + money(o.monto * (o.rec < 1 ? o.rec : 1)) + '</td><td><span class="badge b-ok">' + erpOf(o.sede === "todas" ? "margarita" : o.sede) + " ✓</span></td></tr>";
-    }).join("") || '<tr><td colspan="8" class="muted">Sin recepciones recientes</td></tr>';
-  }
-  function renderRec(id) {
-    var o = OC.find(function (x) { return x.id === id; });
-    if (!o) { document.getElementById("recHead").innerHTML = '<p class="muted">No hay órdenes aprobadas pendientes de recibir en esta propiedad.</p>'; document.getElementById("recBody").innerHTML = ""; document.getElementById("recTot").textContent = ""; return; }
-    var r = rng(o.id), tot = 0;
-    document.getElementById("recHead").innerHTML = '<dl class="dl" style="grid-template-columns:auto 1fr auto 1fr"><dt>Proveedor</dt><dd style="text-align:left">' + o.prov + '</dd><dt>Almacén destino</dt><dd style="text-align:left">' + (o.sede === "todas" ? "Margarita · Lencería (distribuye)" : nom(o.sede) + " · " + BYSKU[o.lines[0][0]][6]) + '</dd><dt>Estado</dt><dd style="text-align:left"><span class="badge ' + OCST[o.st] + '">' + o.st + '</span></dd><dt>Guía / factura</dt><dd style="text-align:left">FAC-00' + (18230 + Math.floor(r() * 900)) + "</dd></dl>";
-    document.getElementById("recBody").innerHTML = o.lines.map(function (l) {
-      var p = BYSKU[l[0]], antes = Math.round(l[1] * o.rec), ahora = l[1] - antes - (r() < 0.35 ? Math.round(l[1] * 0.1) : 0), pend = l[1] - antes - ahora;
-      tot += ahora * p[4];
-      var perec = /Proteínas|Pescados|Lácteos/.test(p[2]);
-      return '<tr><td class="muted" style="white-space:nowrap">' + p[0] + '</td><td class="strong">' + p[1] + "</td><td>" + p[3] + '</td><td class="num">' + num(l[1]) + '</td><td class="num">' + num(antes) + '</td><td class="num"><input class="input input-sm" type="number" value="' + ahora + '" style="width:90px;text-align:right"></td><td class="num' + (pend ? " num-warn" : "") + '">' + num(pend) + '</td><td class="small">' + (perec ? "L-" + (2600 + Math.floor(r() * 99)) + " · " + (4 + Math.floor(r() * 10)) + "/10/2026" : "L-" + (2600 + Math.floor(r() * 99))) + '</td><td class="num">' + money(p[4], 2) + "</td></tr>";
-    }).join("") + (o.extra ? '<tr><td class="muted">MT-9001</td><td class="strong">' + o.extra[0] + '</td><td>und</td><td class="num">1</td><td class="num">0</td><td class="num"><input class="input input-sm" type="number" value="1" style="width:90px;text-align:right"></td><td class="num">0</td><td class="small">Serial CP-44821</td><td class="num">' + money(o.extra[1], 2) + "</td></tr>" : "");
-    if (o.extra) tot += o.extra[1];
-    document.getElementById("recTot").innerHTML = "Valor a recibir ahora: <b>" + money(tot) + "</b> · se genera nota de entrada en " + erpOf(o.sede === "todas" ? "margarita" : o.sede);
-    document.getElementById("recPar").dataset.toast = "Recepción parcial registrada para " + o.id + " · NE-4412 enviada al ERP (demo)";
-    document.getElementById("recFull").dataset.toast = o.id + " recibida al 100% y cerrada · costo promedio actualizado (demo)";
-  }
-  document.getElementById("recSel").addEventListener("change", function (e) { renderRec(e.target.value); });
-  document.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-rec]");
-    if (!b) return;
-    e.preventDefault();
-    document.getElementById("recSel").value = b.dataset.rec;
-    renderRec(b.dataset.rec);
-    document.querySelector('.tab[data-tab="rec"]').click();
-  });
-
-  /* ------------------------------------------------------------ Conteos y ajustes */
   var CONT = [
     ["CI-0288", "Cíclico licores", "margarita", "Bar", "29/09", "Yusmary C.", 0.7, 3, -612, "En curso"],
     ["CI-0287", "Cíclico A&B", "maracaibo", "Cocina", "28/09", "Richard H.", 1, 5, -188, "Por aprobar"],
@@ -354,19 +245,119 @@
     ["AJ-0913", "19/09", "AB-3302", "maturin", "Almacén general", -48, "Consumo interno (eventos)", "Maryuri R.", "Jefe de almacén", "Aprobado"]
   ];
   var AJST = { "Pendiente": "b-warn", "Aprobado": "b-ok", "Rechazado": "b-danger" };
+
+  /* ------------------------------------------------------------ Maestro como buscador de entrada */
+  var openSku = -1;
+  function stockOf(p, i) {
+    var sedes = p === "todas" ? PROPS : PROPS.filter(function (h) { return h.id === p; }), ex = 0, mn = 0, bajo = 0, crit = false;
+    sedes.forEach(function (h) { var s = STOCK[h.id][i]; ex += s.ex; mn += s.min; if (s.ex < s.min) bajo++; if (s.ex < s.min * 0.6) crit = true; });
+    return { ex: ex, mn: mn, bajo: bajo, crit: crit, sedes: sedes };
+  }
+  function renderMaestro(p) {
+    var low = 0;
+    document.getElementById("erpName").textContent = p === "todas" ? "Profit Plus · Saint · a2" : PROPS.find(function (h) { return h.id === p; }).erp;
+    document.getElementById("mHead").innerHTML = '<tr><th style="min-width:220px">Producto</th><th class="num">Existencia</th><th class="num">Mínimo</th><th class="num">Costo prom.</th><th>Estado</th></tr>';
+    document.getElementById("mBody").innerHTML = P.map(function (pr, i) {
+      var st = stockOf(p, i);
+      if (st.bajo) low++;
+      var badge = st.crit ? '<span class="badge b-danger">Crítico</span>' : st.bajo ? '<span class="badge b-warn">Bajo mínimo' + (p === "todas" ? " · " + st.bajo + " sedes" : "") + "</span>" : '<span class="badge b-ok">OK</span>';
+      var row = '<tr class="prow' + (openSku === i ? " prow-open" : "") + '" data-i="' + i + '" data-cat="' + pr[2] + '" data-low="' + (st.bajo ? 1 : 0) + '" style="cursor:pointer"><td class="strong">' + pr[1] + '<span class="sub">' + pr[0] + " · " + pr[2] + " · " + pr[6] + '</span></td><td class="num strong">' + num(st.ex) + " " + pr[3] + '</td><td class="num">' + num(st.mn) + '</td><td class="num">' + money(pr[4], 2) + "</td><td>" + badge + "</td></tr>";
+      if (openSku === i) {
+        row += '<tr class="prow-detail" data-for="' + i + '"><td colspan="5"><div class="between" style="flex-wrap:wrap;align-items:flex-start">' +
+          '<div class="small" style="flex:1;min-width:240px">' + (p === "todas" ? '<b>Existencia por hotel</b><div class="tags" style="margin-top:6px">' + st.sedes.map(function (h) { var s = STOCK[h.id][i]; return '<span class="badge nodot ' + (s.ex < s.min ? "b-warn" : "b-muted") + '">' + h.nombre + " " + num(s.ex) + "</span>"; }).join("") + "</div>" :
+            "Valor en almacén: <b>" + money(st.ex * pr[4]) + "</b> · " + (pr[7] ? "receta POS: 1 " + pr[7][0].split(" ")[0].replace(/s$/, "") + " = " + num(pr[7][1], 3) + " " + pr[3] : "sin receta POS")) + "</div>" +
+          '<div class="prow-actions"><a class="btn btn-primary btn-sm" href="#" data-wz-open="oc" data-sku="' + pr[0] + '">' + App.icon("cart") + "Pedir</a>" +
+          '<a class="btn btn-ghost btn-sm" href="#" data-wz-open="tr" data-sku="' + pr[0] + '">' + App.icon("truck") + "Transferir</a>" +
+          '<a class="btn btn-ghost btn-sm" href="#" data-wz-open="aj" data-sku="' + pr[0] + '">Merma / ajuste</a>' +
+          (pr[7] ? '<a class="btn btn-ghost btn-sm" href="#" data-go-aud="' + pr[1] + '">Ver auditoría</a>' : "") + "</div></div></td></tr>";
+      }
+      return row;
+    }).join("");
+    filterMaestro();
+    return low;
+  }
+  function filterMaestro() {
+    var q = document.getElementById("mFilter").value.toLowerCase(), c = document.getElementById("mCat").value, l = document.getElementById("mLow").checked, n = 0;
+    document.querySelectorAll("#mBody tr.prow").forEach(function (tr) {
+      tr.hidden = (q && tr.textContent.toLowerCase().indexOf(q) < 0) || (c && tr.dataset.cat !== c) || (l && tr.dataset.low !== "1");
+      var d = tr.nextElementSibling;
+      if (d && d.classList.contains("prow-detail")) d.hidden = tr.hidden;
+      if (!tr.hidden) n++;
+    });
+    document.getElementById("mCount").textContent = "Mostrando " + n + " de 1.284 SKU activos en el ERP";
+    var body = document.getElementById("mBody");
+    body._moreOpen = !!q || body._moreOpen;
+    App.more(body, 10);
+  }
+  document.getElementById("mBody").addEventListener("click", function (e) {
+    if (e.target.closest("a,button")) return;
+    var tr = e.target.closest("tr.prow");
+    if (!tr) return;
+    openSku = openSku === +tr.dataset.i ? -1 : +tr.dataset.i;
+    renderMaestro(App.prop());
+  });
+  document.getElementById("mFilter").addEventListener("input", function () {
+    var t = document.querySelector('.tab[data-tab="productos"]');
+    if (!t.classList.contains("active")) t.click();
+    filterMaestro();
+  });
+  ["mCat", "mLow"].forEach(function (id) { document.getElementById(id).addEventListener("change", filterMaestro); });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-go-aud]");
+    if (!a) return;
+    e.preventDefault();
+    document.querySelector('.tab[data-tab="aud"]').click();
+    document.getElementById("globalSearch").value = a.dataset.goAud.split(" ")[0];
+    document.getElementById("globalSearch").dispatchEvent(new Event("input"));
+  });
+
+  /* ------------------------------------------------------------ Comprar y recibir */
+  function renderOc(p) {
+    var list = OC.filter(function (o) { return p === "todas" || o.sede === p || o.sede === "todas"; }), pend = 0;
+    document.getElementById("ocBody").innerHTML = list.map(function (o) {
+      var act = "";
+      if (o.st === "Borrador") act = '<a class="btn btn-ghost btn-sm" href="#" data-act="oc:enviar:' + o.id + '">Enviar a aprobar</a>';
+      if (o.st === "Por aprobar") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-act="oc:aprobar:' + o.id + '">Aprobar</a>'; }
+      if (o.st === "Aprobada" || o.st === "Recepción parcial") act = '<a class="btn btn-ghost btn-sm" href="#" data-wz-open="rec" data-oc="' + o.id + '">Recibir</a>';
+      var pct = Math.round(o.rec * 100);
+      return '<tr><td class="strong">' + o.id + '<span class="sub">' + o.f + " · " + o.prov + " · " + (o.lines.length + (o.extra ? 1 : 0)) + " líneas · aprueba " + o.ap + "</span></td><td>" + (o.sede === "todas" ? "Cadena (consolidada)" : nom(o.sede)) + '</td><td class="num">' + money(o.monto) + '</td><td><div class="pcell"><div class="progress' + (pct === 100 ? " teal" : "") + '"><span style="width:' + pct + '%"></span></div><b>' + pct + '%</b></div></td><td><span class="badge ' + OCST[o.st] + '">' + o.st + '</span></td><td class="right">' + act + "</td></tr>";
+    }).join("");
+    document.getElementById("bOc").textContent = pend;
+    var ne = list.filter(function (o) { return o.rec > 0; });
+    document.getElementById("neBody").innerHTML = ne.map(function (o, i) {
+      return '<tr><td class="strong">NE-' + (4410 - i * 3) + "</td><td>" + ["29/09", "28/09", "26/09", "25/09", "24/09"][i % 5] + "</td><td>" + o.id + '<span class="sub">' + o.prov + "</span></td><td>" + (o.sede === "todas" ? "Margarita · Lencería" : nom(o.sede) + " · " + BYSKU[o.lines[0][0]][6]) + "</td><td>" + (o.rec < 1 ? '<span class="badge b-gold">Parcial</span>' : '<span class="badge b-ok">Total</span>') + '</td><td class="num">' + money(o.monto * (o.rec < 1 ? o.rec : 1)) + '</td><td><span class="badge b-ok">' + erpOf(o.sede === "todas" ? "margarita" : o.sede) + " ✓</span></td></tr>";
+    }).join("") || '<tr><td colspan="7" class="muted">Sin recepciones recientes</td></tr>';
+    App.more(document.getElementById("ocBody"), 8);
+  }
+
+  /* ------------------------------------------------------------ Transferencias */
+  function renderTr(p) {
+    var list = TR.filter(function (t) { return p === "todas" || t[2] === p || t[3] === p; }), pend = 0;
+    document.getElementById("trBody").innerHTML = list.map(function (t) {
+      var act = "";
+      if (t[7] === "Solicitada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-act="tr:aprobar:' + t[0] + '">Aprobar</a>'; }
+      else if (t[7] === "Aprobada") { pend++; act = '<a class="btn btn-ghost btn-sm" href="#" data-act="tr:despachar:' + t[0] + '">Despachar</a>'; }
+      else if (t[7] === "Despachada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-act="tr:recibir:' + t[0] + '">Recibir</a>'; }
+      else if (t[7] === "Recibida con diferencia") act = '<a class="small" href="#" data-toast="Faltaron 2 kg · ajuste AJ-0917 generado (demo)">Ver ajuste</a>';
+      return '<tr><td class="strong">' + t[0] + '<span class="sub">' + t[1] + " · por " + t[8] + "</span></td><td>" + nom(t[2]) + " → " + nom(t[3]) + '<span class="sub">' + t[6] + '</span></td><td class="small">' + t[4] + '</td><td class="num">' + money(t[5]) + '</td><td><span class="badge ' + TRST[t[7]] + '">' + t[7] + '</span></td><td class="right">' + act + "</td></tr>";
+    }).join("") || '<tr><td colspan="6" class="muted">Sin transferencias para esta propiedad</td></tr>';
+    document.getElementById("bTr").textContent = pend;
+  }
+
+  /* ------------------------------------------------------------ Conteos y ajustes */
   function renderAj(p) {
     var cs = CONT.filter(function (c) { return p === "todas" || c[2] === p; });
     document.getElementById("cBody").innerHTML = cs.map(function (c) {
       var pct = Math.round(c[6] * 100);
-      return '<tr><td class="strong">' + c[0] + "</td><td>" + c[1] + "</td><td>" + nom(c[2]) + " · " + c[3] + "</td><td>" + c[4] + "</td><td>" + c[5] + '</td><td><div class="pcell"><div class="progress"><span style="width:' + pct + '%"></span></div><b>' + pct + '%</b></div></td><td class="num">' + c[7] + '</td><td class="num' + (c[8] < -300 ? " num-danger" : "") + '">' + (c[8] ? money(c[8]) : "$ 0") + '</td><td><span class="badge ' + CST[c[9]] + '">' + c[9] + "</span></td></tr>";
-    }).join("") || '<tr><td colspan="9" class="muted">Sin conteos</td></tr>';
+      return '<tr><td class="strong">' + c[0] + '<span class="sub">' + c[1] + " · " + c[4] + "</span></td><td>" + nom(c[2]) + " · " + c[3] + "</td><td>" + c[5] + '</td><td><div class="pcell"><div class="progress"><span style="width:' + pct + '%"></span></div><b>' + pct + '%</b></div></td><td class="num' + (c[8] < -300 ? " num-danger" : "") + '">' + (c[8] ? money(c[8]) : "$ 0") + '<span class="sub">' + c[7] + ' ítems</span></td><td><span class="badge ' + CST[c[9]] + '">' + c[9] + "</span></td></tr>";
+    }).join("") || '<tr><td colspan="6" class="muted">Sin conteos</td></tr>';
     var as = AJ.filter(function (a) { return p === "todas" || a[3] === p; }), pend = 0;
     document.getElementById("ajBody").innerHTML = as.map(function (a) {
       var pr = BYSKU[a[2]], val = a[5] * pr[4];
       if (a[9] === "Pendiente") pend++;
-      return '<tr data-st="' + a[9] + '"><td class="strong">' + a[0] + "</td><td>" + a[1] + "</td><td>" + pr[1] + '<span class="sub">' + pr[0] + "</span></td><td>" + nom(a[3]) + " · " + a[4] + '</td><td class="num ' + (a[5] < 0 ? "num-danger" : "num-ok") + '">' + (a[5] > 0 ? "+" : "") + num(a[5], a[5] % 1 ? 1 : 0) + " " + pr[3] + '</td><td class="num">' + money(val) + "</td><td>" + a[6] + "</td><td>" + a[7] + "</td><td>" + a[8] + '</td><td><span class="badge ' + AJST[a[9]] + '">' + a[9] + "</span></td><td>" +
-        (a[9] === "Pendiente" ? '<a class="btn btn-primary btn-sm" href="#" data-toast="' + a[0] + ' aprobado · movimiento enviado al ERP (demo)">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-toast="' + a[0] + ' rechazado · se solicita reconteo (demo)">Rechazar</a>' : "") + "</td></tr>";
-    }).join("") || '<tr><td colspan="11" class="muted">Sin ajustes</td></tr>';
+      return '<tr data-st="' + a[9] + '"><td class="strong">' + a[0] + '<span class="sub">' + a[1] + " · " + nom(a[3]) + " · " + a[4] + "</span></td><td>" + pr[1] + '<span class="sub">' + pr[0] + '</span></td><td class="num ' + (a[5] < 0 ? "num-danger" : "num-ok") + '">' + (a[5] > 0 ? "+" : "") + num(a[5], a[5] % 1 ? 1 : 0) + " " + pr[3] + '</td><td class="num">' + money(val) + "</td><td>" + a[6] + '<span class="sub">solicita ' + a[7] + " · aprueba " + a[8] + '</span></td><td><span class="badge ' + AJST[a[9]] + '">' + a[9] + '</span></td><td class="right" style="white-space:nowrap">' +
+        (a[9] === "Pendiente" ? '<a class="btn btn-primary btn-sm" href="#" data-act="aj:aprobar:' + a[0] + '">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-act="aj:rechazar:' + a[0] + '">Rechazar</a>' : "") + "</td></tr>";
+    }).join("") || '<tr><td colspan="7" class="muted">Sin ajustes</td></tr>';
     document.getElementById("bAj").textContent = pend;
     filterAj();
   }
@@ -400,17 +391,17 @@
     var fuga = list.reduce(function (a, x) { return a + Math.max(0, x.val); }, 0), compra = list.reduce(function (a, x) { return a + x.erp * x.p[4]; }, 0);
     document.getElementById("bAud").textContent = alertas.length;
     document.getElementById("audKpis").innerHTML = [
-      ["Productos auditados", list.length, "con receta estándar vinculada", "box"],
-      ["Con alerta (> 3%)", alertas.length, crit.length + " críticos (> 6%)", "alert"],
-      ["Diferencia valorizada", money(fuga), "a costo promedio del ERP", "dollar", true],
-      ["Varianza global", (fuga / compra * 100).toFixed(1).replace(".", ",") + "%", "meta ≤ 2,0% del consumo", "percent"]
-    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
+      ["Diferencia valorizada", money(fuga), "a costo promedio del ERP", "danger"],
+      ["Con alerta (> 3%)", alertas.length, crit.length + " críticos (> 6%)", "warn"],
+      ["Varianza global", (fuga / compra * 100).toFixed(1).replace(".", ",") + "%", "meta ≤ 2,0% del consumo"],
+      ["Productos auditados", list.length, "con receta estándar vinculada"]
+    ].map(function (k) { return '<div class="stat"><small>' + k[0] + '</small><b class="' + (k[3] || "") + '">' + k[1] + "</b><span>" + k[2] + "</span></div>"; }).join("");
     document.getElementById("audBody").innerHTML = list.map(function (a) {
       var pr = a.p, d = dec(pr), al = a.v > 0.06 ? ["b-danger", "Crítica"] : a.v > 0.03 ? ["b-warn", "Alerta"] : ["b-ok", "En rango"];
       var tip = a.v > 0.03 ? ' <a class="small" href="#" data-toast="' + pr[1] + " · " + nom(a.sede) + ": " + num(a.dif, d) + " " + pr[3] + " salieron del almacén sin venta asociada. Revisar turnos y comandas anuladas (demo)\">Investigar</a>" : "";
-      return '<tr data-cat="' + pr[2] + '" data-al="' + (a.v > 0.03 ? "alerta" : "") + '"><td class="strong">' + pr[1] + '<span class="sub">' + pr[0] + " · " + pr[2] + "</span></td><td>" + nom(a.sede) + " · " + OUTLET[pr[2]] + '</td><td class="num">' + num(a.vend) + '<span class="sub">' + pr[7][0] + '</span></td><td class="num">' + num(a.teo, d) + " " + pr[3] + '</td><td class="num">' + num(a.erp, d) + " " + pr[3] + '</td><td class="num ' + (a.v > 0.03 ? "num-danger" : "") + '">' + (a.dif > 0 ? "+" : "") + num(a.dif, d) + '</td><td class="num ' + (a.v > 0.06 ? "num-danger" : a.v > 0.03 ? "num-warn" : "") + '">' + (a.v > 0 ? "+" : "") + (a.v * 100).toFixed(1).replace(".", ",") + '%</td><td class="num">' + money(pr[4], 2) + '</td><td class="num strong">' + money(a.val) + '</td><td><span class="badge ' + al[0] + '">' + al[1] + "</span>" + tip + "</td></tr>";
+      return '<tr data-cat="' + pr[2] + '" data-al="' + (a.v > 0.03 ? "alerta" : "") + '"><td class="strong">' + pr[1] + '<span class="sub">' + nom(a.sede) + " · " + OUTLET[pr[2]] + " · vendido " + num(a.vend) + " " + pr[7][0] + '</span></td><td class="num">' + num(a.teo, d) + " " + pr[3] + '</td><td class="num">' + num(a.erp, d) + " " + pr[3] + '<span class="sub">' + (a.dif > 0 ? "+" : "") + num(a.dif, d) + '</span></td><td class="num ' + (a.v > 0.06 ? "num-danger" : a.v > 0.03 ? "num-warn" : "") + '">' + (a.v > 0 ? "+" : "") + (a.v * 100).toFixed(1).replace(".", ",") + '%</td><td class="num strong">' + money(a.val) + '<span class="sub">' + money(pr[4], 2) + " c/u</span></td><td><span class=\"badge " + al[0] + '">' + al[1] + "</span>" + tip + "</td></tr>";
     }).join("");
-    document.getElementById("audFoot").innerHTML = '<tr><td colspan="8">Total diferencia valorizada del periodo</td><td class="num">' + money(list.reduce(function (a, x) { return a + x.val; }, 0)) + "</td><td></td></tr>";
+    document.getElementById("audFoot").innerHTML = '<tr><td colspan="4">Total diferencia valorizada del periodo</td><td class="num">' + money(list.reduce(function (a, x) { return a + x.val; }, 0)) + "</td><td></td></tr>";
     filterAud();
     return fuga;
   }
@@ -421,34 +412,214 @@
   document.querySelectorAll("#audSeg button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(filterAud); }); });
   document.getElementById("audCat").addEventListener("change", filterAud);
 
-  /* ------------------------------------------------------------ Modal */
-  var opts = PROPS.map(function (h) { return '<option value="' + h.id + '">' + h.nombre + "</option>"; }).join("");
-  document.getElementById("fOri").innerHTML = opts;
-  document.getElementById("fDes").innerHTML = opts;
-  document.getElementById("fDes").value = "margarita";
-  document.getElementById("fOri").value = "morrocoy";
-  document.getElementById("fProd").innerHTML = P.map(function (p) { return "<option>" + p[0] + " · " + p[1] + " (" + p[3] + ")</option>"; }).join("");
+  /* ------------------------------------------------------------ Bandeja «Pendiente de tu acción» */
+  function renderInbox(p) {
+    var it = [];
+    TR.filter(function (t) { return p === "todas" || t[2] === p || t[3] === p; }).forEach(function (t) {
+      var a = { Solicitada: ["aprobar", "Aprobar", "Aprobar transferencia", "btn-primary"], Aprobada: ["despachar", "Despachar", "Despachar transferencia", "btn-ghost"], Despachada: ["recibir", "Recibir", "Recibir transferencia", "btn-primary"] }[t[7]];
+      if (a) it.push('<li><span class="alert-ico b-warn">' + App.icon("truck") + '</span><div class="grow"><b>' + a[2] + " " + t[0] + "</b><small>" + nom(t[2]) + " → " + nom(t[3]) + " · " + money(t[5]) + '</small></div><a class="btn ' + a[3] + ' btn-sm" href="#" data-act="tr:' + a[0] + ":" + t[0] + '">' + a[1] + "</a></li>");
+    });
+    OC.filter(function (o) { return p === "todas" || o.sede === p || o.sede === "todas"; }).forEach(function (o) {
+      if (o.st === "Por aprobar") it.push('<li><span class="alert-ico b-warn">' + App.icon("cart") + '</span><div class="grow"><b>Aprobar ' + o.id + "</b><small>" + o.prov + " · " + money(o.monto) + " · " + o.ap + '</small></div><a class="btn btn-primary btn-sm" href="#" data-act="oc:aprobar:' + o.id + '">Aprobar</a></li>');
+      if (o.st === "Aprobada" || o.st === "Recepción parcial") it.push('<li><span class="alert-ico b-info">' + App.icon("archive") + '</span><div class="grow"><b>Recibir ' + o.id + "</b><small>" + o.prov + " · " + Math.round(o.rec * 100) + '% recibido</small></div><a class="btn btn-ghost btn-sm" href="#" data-wz-open="rec" data-oc="' + o.id + '">Recibir</a></li>');
+    });
+    AJ.filter(function (a) { return (p === "todas" || a[3] === p) && a[9] === "Pendiente"; }).forEach(function (a) {
+      var pr = BYSKU[a[2]];
+      it.push('<li><span class="alert-ico b-danger">' + App.icon("alert") + '</span><div class="grow"><b>Ajuste ' + a[0] + " · " + pr[1] + "</b><small>" + num(a[5], a[5] % 1 ? 1 : 0) + " " + pr[3] + " · " + money(a[5] * pr[4]) + " · " + a[6] + '</small></div><a class="btn btn-ghost btn-sm" href="#" data-act="aj:aprobar:' + a[0] + '">Aprobar</a></li>');
+    });
+    var ul = document.getElementById("inbox");
+    ul.innerHTML = it.join("") || '<li><span class="alert-ico b-ok">' + App.icon("check") + '</span><div class="grow"><b>Todo al día</b><small>Sin pendientes en esta propiedad</small></div></li>';
+    document.getElementById("inboxCount").textContent = it.length;
+    App.more(ul, 4);
+    return it.length;
+  }
+
+  /* ------------------------------------------------------------ Acciones de un clic (aprobar, despachar, recibir) */
   document.addEventListener("click", function (e) {
-    var o = e.target.closest("[data-modal]");
-    if (o) { e.preventDefault(); document.getElementById(o.dataset.modal).classList.add("open"); }
-    if (e.target.closest("[data-close]") || e.target.classList.contains("modal-back")) document.querySelectorAll(".modal-back").forEach(function (m) { m.classList.remove("open"); });
+    var b = e.target.closest("[data-act]");
+    if (!b) return;
+    e.preventDefault();
+    var x = b.dataset.act.split(":"), msg = "";
+    if (x[0] === "tr") {
+      var t = TR.find(function (r) { return r[0] === x[2]; });
+      t[7] = { aprobar: "Aprobada", despachar: "Despachada", recibir: "Recibida" }[x[1]];
+      msg = { aprobar: t[0] + " aprobada por el gerente de " + nom(t[2]), despachar: t[0] + " despachada · salida del almacén de " + nom(t[2]), recibir: t[0] + " recibida en " + nom(t[3]) + " · existencias actualizadas" }[x[1]];
+    } else if (x[0] === "oc") {
+      var o = OC.find(function (r) { return r.id === x[2]; });
+      o.st = x[1] === "aprobar" ? "Aprobada" : "Por aprobar";
+      msg = x[1] === "aprobar" ? o.id + " aprobada y enviada a " + o.prov + " por correo" : o.id + " enviada a aprobación (" + o.ap + ")";
+    } else if (x[0] === "aj") {
+      var a = AJ.find(function (r) { return r[0] === x[2]; });
+      a[9] = x[1] === "aprobar" ? "Aprobado" : "Rechazado";
+      msg = x[1] === "aprobar" ? a[0] + " aprobado · movimiento enviado al ERP" : a[0] + " rechazado · se solicita reconteo";
+    }
+    renderAll(App.prop());
+    App.toast(msg + " (demo)");
+  });
+
+  /* ------------------------------------------------------------ Asistentes: comprar → recibir → transferir → ajustar */
+  var PROV = { Licores: "Licores del Caribe", Vinos: "Licores del Caribe", Cervezas: "Cervecería Regional", Bebidas: "Cervecería Regional", Proteínas: "Distribuidora Zulia Food", "Pescados y mariscos": "Pesquera Nueva Esparta", Lácteos: "Distribuidora Zulia Food", Abarrotes: "Café Andino Premium", Lencería: "Textiles Hoteleros C.A.", Amenities: "Químicos Oriente", Limpieza: "Químicos Oriente", Mantenimiento: "Frío Industrial Andino" };
+  function propOpts(sel) { return PROPS.map(function (h) { return '<option value="' + h.id + '"' + (h.id === sel ? " selected" : "") + ">" + h.nombre + "</option>"; }).join(""); }
+  function prodOpts(sku) { return P.map(function (p) { return '<option value="' + p[0] + '"' + (p[0] === sku ? " selected" : "") + ">" + p[1] + " · " + p[0] + " (" + p[3] + ")</option>"; }).join(""); }
+  function aprobador(m, niveles) { return m <= niveles[0][0] ? niveles[0][1] : m <= niveles[1][0] ? niveles[1][1] : niveles[2][1]; }
+  var WZ = {};
+
+  WZ.oc = function (o) {
+    var sede = curSede(), idx = [];
+    if (o.sku) idx = [P.findIndex(function (p) { return p[0] === o.sku; })];
+    else P.forEach(function (p, i) { var s = STOCK[sede][i]; if (s.ex < s.min && idx.length < 6) idx.push(i); });
+    if (!idx.length) idx = [0, 1, 2];
+    var st = { sede: sede, lines: idx.map(function (i) { var s = STOCK[sede][i]; return { i: i, q: Math.max(1, Math.round(s.min * 1.5 - s.ex)), on: true }; }) };
+    function step1(st) {
+          return '<div class="table-wrap" style="border:1px solid var(--border);border-radius:8px"><table class="table"><thead><tr><th></th><th>Producto</th><th class="num">Existencia / mín.</th><th class="num">Pedir</th><th class="num">Subtotal</th></tr></thead><tbody>' +
+            st.lines.map(function (l, k) { var p = P[l.i], s = STOCK[st.sede][l.i]; return '<tr><td><input type="checkbox" data-k="' + k + '"' + (l.on ? " checked" : "") + ' style="accent-color:var(--gold)"></td><td class="strong">' + p[1] + '<span class="sub">' + p[0] + " · " + money(p[4], 2) + " / " + p[3] + '</span></td><td class="num' + (s.ex < s.min ? " num-warn" : "") + '">' + num(s.ex) + " / " + num(s.min) + '</td><td class="num"><input class="input input-sm" type="number" min="1" data-q="' + k + '" value="' + l.q + '" style="width:84px;text-align:right"></td><td class="num">' + money(l.q * p[4]) + "</td></tr>"; }).join("") +
+            '</tbody></table></div><div class="row mt"><select class="select select-sm" id="wzAdd" style="flex:1"><option value="">+ Agregar otro producto del maestro…</option>' + prodOpts() + "</select></div>";
+    }
+    function read1(el, st) { st.lines.forEach(function (l, k) { var q = el.querySelector('[data-q="' + k + '"]'); if (q) { l.q = Math.max(1, +q.value || 1); l.on = el.querySelector('[data-k="' + k + '"]').checked; } }); }
+    function after1(el, st) {
+      el.querySelector("#wzAdd").onchange = function () {
+        var sku = this.value, i = P.findIndex(function (p) { return p[0] === sku; });
+        if (i < 0) return;
+        read1(el, st);
+        if (!st.lines.some(function (l) { return l.i === i; })) st.lines.push({ i: i, q: Math.max(1, STOCK[st.sede][i].min), on: true });
+        el.innerHTML = step1(st);
+        after1(el, st);
+      };
+    }
+    App.wizard({
+      title: "Nueva orden de compra", sub: "Sugerida con los productos bajo mínimo de " + nom(sede), wide: true, state: st,
+      steps: [
+        { t: "Productos", html: step1, after: after1, read: read1 },
+        { t: "Proveedor y entrega", html: function (st) {
+          var sel = st.lines.filter(function (l) { return l.on; }), prov = st.prov || PROV[P[(sel[0] || st.lines[0]).i][2]] || "Distribuidora Zulia Food";
+          var provs = Object.keys(PROV).map(function (k) { return PROV[k]; }).filter(function (x, i, a) { return a.indexOf(x) === i; });
+          return '<div class="field"><label>Proveedor (sugerido por categoría)</label><select class="select" id="wzProv">' + provs.map(function (x) { return "<option" + (x === prov ? " selected" : "") + ">" + x + "</option>"; }).join("") + "</select></div>" +
+            '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Hotel</label><select class="select" id="wzSede">' + propOpts(st.sede) + '</select></div><div class="field"><label>Entrega</label><input class="input" type="date" id="wzFecha" value="' + (st.fecha || "2026-10-02") + '"></div></div>' +
+            '<div class="field" style="margin:0"><label>Nota para el proveedor</label><input class="input" id="wzNota" value="' + (st.nota || "Entregar en muelle de carga antes de las 10 a.m.") + '"></div>';
+        }, read: function (el, st) { st.prov = el.querySelector("#wzProv").value; st.sede = el.querySelector("#wzSede").value; st.fecha = el.querySelector("#wzFecha").value; st.nota = el.querySelector("#wzNota").value; } },
+        { t: "Revisar y enviar", html: function (st) {
+          var sel = st.lines.filter(function (l) { return l.on; }), tot = sel.reduce(function (a, l) { return a + l.q * P[l.i][4]; }, 0);
+          st.tot = tot; st.ap = aprobador(tot, [[1000, "Gerente de área"], [5000, "Gerente general"], [0, "Dirección de compras"]]);
+          return '<dl class="dl"><dt>Proveedor</dt><dd>' + st.prov + "</dd><dt>Hotel</dt><dd>" + nom(st.sede) + "</dd><dt>Entrega</dt><dd>" + st.fecha.split("-").reverse().join("/") + "</dd><dt>Líneas</dt><dd>" + sel.length + '</dd><dt>Total</dt><dd><b style="font-size:16px">' + money(tot) + "</b></dd><dt>La aprueba</dt><dd>" + st.ap + "</dd></dl>" +
+            '<div class="note mt">Al aprobarse se envía al proveedor por correo y queda lista para recibir en «Comprar y recibir».</div>';
+        } }
+      ],
+      done: { label: "Enviar a aprobación", toast: function (st) { return "OC enviada a aprobación de " + st.ap + " (demo)"; }, fn: function (st) {
+        var sel = st.lines.filter(function (l) { return l.on; });
+        OC.unshift({ id: "OC-2026-1" + (195 + OC.length - 10), f: "29/09", prov: st.prov, sede: st.sede, ap: st.ap, st: "Por aprobar", rec: 0, lines: sel.map(function (l) { return [P[l.i][0], l.q]; }), monto: st.tot });
+        renderAll(App.prop());
+        document.querySelector('.tab[data-tab="compras"]').click();
+      } }
+    });
+  };
+
+  WZ.rec = function (o) {
+    var p = App.prop(), open = OC.filter(function (x) { return (x.st === "Aprobada" || x.st === "Recepción parcial") && (p === "todas" || x.sede === p || x.sede === "todas"); });
+    if (!open.length) { App.toast("No hay órdenes aprobadas pendientes de recibir en esta propiedad"); return; }
+    var st = { id: o.oc && open.some(function (x) { return x.id === o.oc; }) ? o.oc : open[0].id };
+    function lines(oc) {
+      var r = rng(oc.id);
+      return oc.lines.map(function (l) { var pr = BYSKU[l[0]], antes = Math.round(l[1] * oc.rec), ahora = l[1] - antes - (r() < 0.35 ? Math.round(l[1] * 0.1) : 0); return { pr: pr, ped: l[1], antes: antes, ahora: ahora, lote: "L-" + (2600 + Math.floor(r() * 99)) + (/Proteínas|Pescados|Lácteos/.test(pr[2]) ? " · vence " + (4 + Math.floor(r() * 10)) + "/10" : "") }; });
+    }
+    App.wizard({
+      title: "Recibir mercancía", sub: "Contra orden de compra · genera la nota de entrada en el ERP", wide: true, state: st,
+      steps: [
+        { t: "Orden", html: function (st) {
+          return '<ul class="list" style="border:1px solid var(--border);border-radius:8px">' + open.map(function (x) { return '<li><input type="radio" name="wzOc" value="' + x.id + '"' + (x.id === st.id ? " checked" : "") + ' style="accent-color:var(--gold);margin-top:4px"><div class="grow"><b>' + x.id + " · " + x.prov + "</b><small>" + (x.sede === "todas" ? "Cadena" : nom(x.sede)) + " · " + money(x.monto) + " · " + Math.round(x.rec * 100) + '% recibido</small></div><span class="badge ' + OCST[x.st] + '">' + x.st + "</span></li>"; }).join("") + "</ul>";
+        }, read: function (el, st) { var r = el.querySelector('input[name="wzOc"]:checked'); if (r && r.value !== st.id) { st.id = r.value; st.L = null; } } },
+        { t: "Contar lo recibido", html: function (st) {
+          var oc = OC.find(function (x) { return x.id === st.id; });
+          st.L = st.L || lines(oc);
+          return '<p class="small muted" style="margin-top:0">Factura FAC-00' + (18230 + st.id.charCodeAt(9) * 7) + " · escribe lo que llegó; el sistema calcula lo pendiente.</p>" +
+            '<div class="table-wrap" style="border:1px solid var(--border);border-radius:8px"><table class="table"><thead><tr><th>Producto</th><th class="num">Pendiente</th><th class="num">Llegó</th><th>Lote</th></tr></thead><tbody>' +
+            st.L.map(function (l, k) { return '<tr><td class="strong">' + l.pr[1] + '<span class="sub">' + l.pr[0] + " · pedido " + num(l.ped) + " " + l.pr[3] + '</span></td><td class="num">' + num(l.ped - l.antes) + '</td><td class="num"><input class="input input-sm" type="number" min="0" data-r="' + k + '" value="' + l.ahora + '" style="width:84px;text-align:right"></td><td class="small">' + l.lote + "</td></tr>"; }).join("") + "</tbody></table></div>";
+        }, read: function (el, st) { st.L.forEach(function (l, k) { var i = el.querySelector('[data-r="' + k + '"]'); if (i) l.ahora = Math.max(0, +i.value || 0); }); } },
+        { t: "Confirmar", html: function (st) {
+          var oc = OC.find(function (x) { return x.id === st.id; }), val = 0, pend = 0, tot = 0, rec = 0;
+          st.L.forEach(function (l) { val += l.ahora * l.pr[4]; pend += Math.max(0, l.ped - l.antes - l.ahora); tot += l.ped; rec += Math.min(l.ped, l.antes + l.ahora); });
+          st.ratio = tot ? rec / tot : 1; st.val = val;
+          return '<dl class="dl"><dt>Orden</dt><dd>' + oc.id + "</dd><dt>Valor recibido ahora</dt><dd><b>" + money(val) + "</b></dd><dt>Unidades pendientes</dt><dd" + (pend ? ' class="num-warn"' : "") + ">" + num(pend) + "</dd><dt>Avance de la OC</dt><dd>" + Math.round(st.ratio * 100) + "%</dd><dt>Nota de entrada</dt><dd>NE-4412 → " + erpOf(oc.sede === "todas" ? "margarita" : oc.sede) + "</dd></dl>" +
+            '<div class="note mt">' + (pend ? "Lo pendiente queda abierto en la OC para una próxima entrega. Si no llegará, se cierra con ajuste." : "La OC se cierra al 100% y se actualiza el costo promedio en el ERP.") + "</div>";
+        } }
+      ],
+      done: { label: "Registrar recepción", toast: function (st) { return "Recepción registrada en " + st.id + " · NE-4412 enviada al ERP (demo)"; }, fn: function (st) {
+        var oc = OC.find(function (x) { return x.id === st.id; });
+        oc.rec = Math.min(1, st.ratio); oc.st = oc.rec >= 1 ? "Recibida" : "Recepción parcial";
+        renderAll(App.prop());
+      } }
+    });
+  };
+
+  WZ.tr = function (o) {
+    var des = curSede(), st = { ori: des === "morrocoy" ? "margarita" : "morrocoy", des: des, sku: o.sku || "AB-1102", q: 12 };
+    App.wizard({
+      title: "Solicitar transferencia entre hoteles", sub: "La aprueba el gerente del hotel de origen", state: st,
+      steps: [
+        { t: "Ruta", html: function (st) { return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Desde (origen)</label><select class="select" id="wzOri">' + propOpts(st.ori) + '</select></div><div class="field"><label>Hacia (destino)</label><select class="select" id="wzDes">' + propOpts(st.des) + "</select></div></div>" + '<p class="small muted" style="margin:0">Sugerencia: Morrocoy tiene excedente de vinos y lencería esta semana.</p>'; },
+          read: function (el, st) { st.ori = el.querySelector("#wzOri").value; st.des = el.querySelector("#wzDes").value; } },
+        { t: "Producto", html: function (st) {
+          return '<div class="field"><label>Producto (del maestro)</label><select class="select" id="wzProd">' + prodOpts(st.sku) + '</select></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Cantidad</label><input class="input" type="number" id="wzQ" value="' + st.q + '" min="1"></div><div class="field"><label>Fecha requerida</label><input class="input" type="date" value="2026-10-03"></div></div><div class="field" style="margin:0"><label>Justificación</label><input class="input" value="Cubrir evento del fin de semana"></div>';
+        }, read: function (el, st) { st.sku = el.querySelector("#wzProd").value; st.q = Math.max(1, +el.querySelector("#wzQ").value || 1); } }
+      ],
+      done: { label: "Enviar solicitud", toast: function (st) { return "Transferencia solicitada · pendiente de aprobación de " + nom(st.ori) + " (demo)"; }, fn: function (st) {
+        var pr = BYSKU[st.sku];
+        TR.unshift(["TR-0" + (352 + TR.length - 7), "29/09", st.ori, st.des, st.q + " " + pr[3] + ". " + pr[1], Math.round(st.q * pr[4]), "Terrestre · por definir", "Solicitada", App.session().usuario.split(" ")[0]]);
+        renderAll(App.prop());
+        document.querySelector('.tab[data-tab="transferencias"]').click();
+      } }
+    });
+  };
+
+  WZ.aj = function (o) {
+    var sku = o.sku || "AB-2310", st = { sku: sku, sede: curSede(), alm: BYSKU[sku][6], q: -2, mot: "Merma (porcionado)" };
+    var MOT = ["Merma (porcionado)", "Rotura", "Vencimiento", "Diferencia de conteo", "Consumo interno (eventos)", "Baja por desgaste", "Sobrante de conteo"];
+    App.wizard({
+      title: "Registrar merma o ajuste", sub: "Todo ajuste requiere motivo y aprobación", state: st,
+      steps: [
+        { t: "Producto", html: function (st) { return '<div class="field"><label>Producto</label><select class="select" id="wzProd">' + prodOpts(st.sku) + '</select></div><div class="grid g-2" style="gap:0 12px"><div class="field" style="margin:0"><label>Hotel</label><select class="select" id="wzSede">' + propOpts(st.sede) + '</select></div><div class="field" style="margin:0"><label>Almacén</label><select class="select" id="wzAlm">' + ALM.map(function (a) { return "<option" + (a === st.alm ? " selected" : "") + ">" + a + "</option>"; }).join("") + "</select></div></div>"; },
+          read: function (el, st) { st.sku = el.querySelector("#wzProd").value; st.sede = el.querySelector("#wzSede").value; st.alm = el.querySelector("#wzAlm").value; } },
+        { t: "Cantidad y motivo", html: function (st) { var pr = BYSKU[st.sku]; return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Cantidad (' + pr[3] + ') · negativo = salida</label><input class="input" type="number" step="0.5" id="wzQ" value="' + st.q + '"></div><div class="field"><label>Motivo</label><select class="select" id="wzMot">' + MOT.map(function (m) { return "<option" + (m === st.mot ? " selected" : "") + ">" + m + "</option>"; }).join("") + '</select></div></div><div class="field" style="margin:0"><label>Observación</label><input class="input" placeholder="Opcional: turno, evento, foto…"></div>'; },
+          read: function (el, st) { st.q = +el.querySelector("#wzQ").value || -1; st.mot = el.querySelector("#wzMot").value; } },
+        { t: "Aprobación", html: function (st) {
+          var pr = BYSKU[st.sku], v = Math.abs(st.q * pr[4]);
+          st.ap = aprobador(v, [[100, "Jefe de almacén"], [500, "Gerente general"], [0, "Contraloría"]]);
+          return '<dl class="dl"><dt>Producto</dt><dd>' + pr[1] + "</dd><dt>Dónde</dt><dd>" + nom(st.sede) + " · " + st.alm + '</dd><dt>Cantidad</dt><dd class="' + (st.q < 0 ? "num-danger" : "num-ok") + '">' + (st.q > 0 ? "+" : "") + num(st.q, st.q % 1 ? 1 : 0) + " " + pr[3] + "</dd><dt>Valor</dt><dd>" + money(st.q * pr[4]) + "</dd><dt>Motivo</dt><dd>" + st.mot + "</dd><dt>La aprueba</dt><dd><b>" + st.ap + "</b></dd></dl>";
+        } }
+      ],
+      done: { label: "Enviar a aprobación", toast: function (st) { return "Ajuste registrado · pendiente de " + st.ap + " (demo)"; }, fn: function (st) {
+        AJ.unshift(["AJ-0" + (922 + AJ.length - 9), "29/09", st.sku, st.sede, st.alm, st.q, st.mot, App.session().usuario.split(" ")[0], st.ap, "Pendiente"]);
+        renderAll(App.prop());
+        document.querySelector('.tab[data-tab="ajustes"]').click();
+      } }
+    });
+  };
+
+  WZ.ct = function () {
+    App.wizard({ title: "Nuevo conteo de inventario", sub: "Se asigna al responsable del almacén", steps: [{ t: "Conteo", html: function () {
+      return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo</label><select class="select"><option>Cíclico A&amp;B</option><option>Cíclico licores</option><option>Cíclico lencería</option><option>General mensual</option></select></div><div class="field"><label>Almacén</label><select class="select">' + ALM.map(function (a) { return "<option>" + nom(curSede()) + " · " + a + "</option>"; }).join("") + '</select></div><div class="field"><label>Fecha</label><input class="input" type="date" value="2026-09-30"></div><div class="field"><label>Responsable</label><input class="input" value="Yusmary C."></div></div><p class="small muted" style="margin:0">Conteo a ciegas: el responsable no ve la existencia teórica hasta cerrar.</p>';
+    } }], done: { label: "Programar conteo", toast: "Conteo CI-0290 programado · se notificó al responsable (demo)" } });
+  };
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-wz-open]");
+    if (!b) return;
+    e.preventDefault();
+    WZ[b.dataset.wzOpen]({ sku: b.dataset.sku, oc: b.dataset.oc });
   });
 
   /* ------------------------------------------------------------ Render */
-  App.onProp(function (p) {
+  function renderAll(p) {
     var sedes = p === "todas" ? PROPS : PROPS.filter(function (h) { return h.id === p; });
-    var valor = 0, skus = 0;
-    sedes.forEach(function (h) { STOCK[h.id].forEach(function (s, i) { valor += s.ex * P[i][4]; if (s.ex) skus++; }); });
+    var valor = 0;
+    sedes.forEach(function (h) { STOCK[h.id].forEach(function (s, i) { valor += s.ex * P[i][4]; }); });
     var low = renderMaestro(p);
     renderTr(p); renderOc(p); renderAj(p);
-    var fuga = renderAud(p);
-    document.getElementById("kpis").innerHTML = [
-      ["Valor en inventario", money(valor * 4.5), (p === "todas" ? "7 hoteles · " : "") + sedes.length * 6 + " almacenes", "archive"],
-      ["SKU activos (ERP)", p === "todas" ? "1.284" : num(640 + sedes[0].hab * 2), "maestro sincronizado hace 14 min", "database"],
-      ["Bajo mínimo", low, "en la muestra del maestro · sugerir OC", "alert"],
-      ["Diferencia A&B (mes)", money(fuga), "consumo PMS vs. salida ERP", "shield", true]
-    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
-  });
+    var fuga = renderAud(p), pend = renderInbox(p);
+    document.getElementById("imsHero").innerHTML = App.hero(
+      { label: "Pendientes de tu acción", value: pend, sub: "aprobaciones, despachos, recepciones y ajustes" },
+      [["Bajo mínimo", low, "en la muestra del maestro · pedir", low ? "warn" : ""], ["Diferencia A&amp;B (mes)", money(fuga), "consumo PMS vs. salida ERP", "danger"], ["Valor en inventario", money(valor * 4.5), (p === "todas" ? "7 hoteles · " : "") + sedes.length * 6 + " almacenes"], ["SKU activos (ERP)", p === "todas" ? "1.284" : num(640 + sedes[0].hab * 2), "sincronizado hace 14 min"]]);
+  }
+  App.onProp(renderAll);
 })();
 </script>
 </body>

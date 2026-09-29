@@ -15,66 +15,48 @@
 <main class="content">
 <div class="page-head">
   <div>
-    <div class="crumbs">Inicio</div>
+    <div class="crumbs">Inicio · vista <b id="roleName">Gerencia</b></div>
     <h1>Buenos días, <span data-user-name>equipo</span> <span class="scope-pill" data-prop-name></span></h1>
-    <p>Martes 29 de septiembre de 2026 · Resumen operativo al corte de las 06:00 a.m.</p>
+    <p>Martes 29 de septiembre de 2026 · lo que necesitas atender hoy, al corte de las 06:00 a.m.</p>
   </div>
-  <div class="actions">
-    <a class="btn btn-ghost" href="tablero.html" data-icon="chart">Ver tablero</a>
-    <a class="btn btn-primary" href="#" data-toast="Nueva reserva (demo)" data-icon="plus">Nueva reserva</a>
-  </div>
+  <div class="actions" id="roleCta"></div>
 </div>
 
-<div class="grid g-4" id="kpis"></div>
+<section class="card hero" id="hero"></section>
 
 <div class="grid g-2-1 mt">
   <section class="card">
-    <div class="card-h"><div><h2>Ocupación últimos 12 meses</h2><p>Propiedad seleccionada vs. año anterior</p></div>
-      <div class="legend"><span><i></i>2025–26</span><span><i class="alt line"></i>Año anterior</span></div></div>
-    <div class="card-b" id="chartOcc"></div>
+    <div class="card-h"><div><h2>Requiere tu acción</h2><p id="inboxSub">Primero lo de tu área; lo demás, plegado</p></div><span class="badge b-danger" id="inboxCount">0</span></div>
+    <ul class="list inbox" id="inbox"></ul>
   </section>
   <section class="card">
-    <div class="card-h"><h2>Alertas de hoy</h2><span class="badge b-danger">4</span></div>
-    <ul class="list">
-      <li data-sede="catatumbo"><span class="alert-ico b-warn" data-icon="alert"></span><div class="grow"><b>Food cost Catatumbo 36%</b><small>4 pts sobre la meta · proteínas</small></div><a class="small" href="inventarios.html">Ver</a></li>
-      <li data-sede="margarita"><span class="alert-ico b-danger" data-icon="wrench"></span><div class="grow"><b>A/A hab. 410 sin enfriar</b><small>Margarita · ticket urgente hace 25 min</small></div><a class="small" href="operaciones.html">Ver</a></li>
-      <li data-sede="margarita"><span class="alert-ico b-danger" data-icon="box"></span><div class="grow"><b>23 botellas sin venta registrada</b><small>Margarita · licores premium · auditoría A&amp;B</small></div><a class="small" href="inventarios.html">Ver</a></li>
-      <li data-sede="maturin"><span class="alert-ico b-warn" data-icon="trend"></span><div class="grow"><b>Maturín bajo presupuesto</b><small>Ocupación 61% vs. 68% presupuestado</small></div><a class="small" href="tablero.html">Ver</a></li>
-      <li data-sede="canaima"><span class="alert-ico b-ok" data-icon="star"></span><div class="grow"><b>Canaima 92% en diciembre</b><small>Sugerencia: subir ADR 8% en nuevas ventas</small></div><a class="small" href="tablero.html">Ver</a></li>
-      <li data-sede="morrocoy"><span class="alert-ico b-warn" data-icon="plug"></span><div class="grow"><b>Conector Saint reintentando</b><small>Morrocoy · última sincronización 09:12</small></div><a class="small" href="integracion.html">Ver</a></li>
-    </ul>
+    <div class="card-h"><div><h2>Acciones rápidas</h2><p>A un clic desde el inicio</p></div></div>
+    <div class="card-b"><div class="quick" id="quick" style="grid-template-columns:minmax(0,1fr)"></div></div>
   </section>
 </div>
 
-<h2 class="mt-lg" style="margin-bottom:12px">Módulos</h2>
-<div class="grid g-4">
-  <a class="card mod-tile" href="tablero.html"><span class="kpi-ico" data-icon="chart"></span><div><h3>Tablero directivo</h3><p>RevPAR, ADR, ocupación y F&amp;B por sede.</p></div></a>
-  <a class="card mod-tile" href="crm.html"><span class="kpi-ico" data-icon="users"></span><div><h3>CRM &amp; Huéspedes</h3><p>Perfil 360, Club Tibisay y eventos por WhatsApp.</p></div></a>
-  <a class="card mod-tile" href="operaciones.html"><span class="kpi-ico" data-icon="bed"></span><div><h3>Operaciones</h3><p>Front desk, housekeeping, mantenimiento y A&amp;B.</p></div></a>
-  <a class="card mod-tile" href="rrhh.html"><span class="kpi-ico" data-icon="briefcase"></span><div><h3>Gestión Humana</h3><p>Personal, turnos, nómina y reclutamiento.</p></div></a>
-  <a class="card mod-tile" href="inventarios.html"><span class="kpi-ico" data-icon="box"></span><div><h3>IMS · Inventarios</h3><p>Productos, compras, transferencias, conteos y auditoría A&amp;B.</p></div></a>
-  <a class="card mod-tile" href="integracion.html"><span class="kpi-ico teal" data-icon="plug"></span><div><h3>Integración</h3><p>Opera/Prestige y Profit Plus/Saint/a2 conectados.</p></div></a>
-  <a class="card mod-tile" href="it.html"><span class="kpi-ico teal" data-icon="server"></span><div><h3>Panel de IT</h3><p>Redes, Wi-Fi, servidores, respaldos y tickets de soporte.</p></div></a>
-  <div class="card mod-tile" style="border-style:dashed;box-shadow:none"><span class="kpi-ico teal" data-icon="plus"></span><div><h3>Próximo módulo</h3><p>Se define en la sesión de trabajo con Tibisay.</p></div></div>
-</div>
-
-<div class="grid g-2 mt-lg">
-  <section class="card">
-    <div class="card-h"><h2>Eventos de la semana</h2><a class="small" href="crm.html">Ver pipeline</a></div>
+<div class="section-title"><h2>Más información</h2><span class="small muted">Se abre bajo demanda</span></div>
+<div id="secs">
+  <details class="acc" data-sec="occ">
+    <summary><span class="grow">Ocupación últimos 12 meses <span class="muted">· propiedad seleccionada vs. año anterior</span></span></summary>
+    <div class="acc-b"><div class="legend" style="margin-bottom:8px"><span><i></i>2025–26</span><span><i class="alt line"></i>Año anterior</span></div><div id="chartOcc"></div></div>
+  </details>
+  <details class="acc" data-sec="ev">
+    <summary><span class="grow">Eventos de la semana <span class="muted">· BEO confirmados y por confirmar</span></span><a class="small" href="crm.html#eventos">Ver pipeline</a></summary>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Fecha</th><th>Evento</th><th>Espacio</th><th class="num">Pax</th><th>Estado</th></tr></thead>
+      <thead><tr><th>Fecha</th><th>Evento</th><th class="num">Pax</th><th>Estado</th></tr></thead>
       <tbody>
-        <tr data-sede="margarita"><td>Mié 30/09</td><td class="strong">Desayuno de trabajo Digitel<span class="sub">Margarita</span></td><td>Sala Guaraguao</td><td class="num">35</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="maracaibo"><td>Jue 01/10</td><td class="strong">Congreso Ingeniería Petrolera<span class="sub">Maracaibo</span></td><td>Gran Salón</td><td class="num">300</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="margarita"><td>Vie 02/10</td><td class="strong">Cóctel bienvenida congreso<span class="sub">Margarita</span></td><td>Terraza</td><td class="num">120</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
-        <tr data-sede="margarita"><td>Sáb 03/10</td><td class="strong">Boda Marcano–Figueroa<span class="sub">Margarita</span></td><td>Gran Salón</td><td class="num">210</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="merida"><td>Sáb 03/10</td><td class="strong">Convención Farmacéutica Andina<span class="sub">Mérida</span></td><td>Salón Sierra Nevada</td><td class="num">80</td><td><span class="badge b-info">Tentativo</span></td></tr>
-        <tr data-sede="morrocoy"><td>Dom 04/10</td><td class="strong">Boda Pérez–Lugo (prueba de menú)<span class="sub">Morrocoy</span></td><td>Restaurante</td><td class="num">6</td><td><span class="badge b-info">Agendado</span></td></tr>
+        <tr data-sede="margarita"><td>Mié 30/09</td><td class="strong">Desayuno de trabajo Digitel<span class="sub">Margarita · Sala Guaraguao</span></td><td class="num">35</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="maracaibo"><td>Jue 01/10</td><td class="strong">Congreso Ingeniería Petrolera<span class="sub">Maracaibo · Gran Salón</span></td><td class="num">300</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="margarita"><td>Vie 02/10</td><td class="strong">Cóctel bienvenida congreso<span class="sub">Margarita · Terraza</span></td><td class="num">120</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
+        <tr data-sede="margarita"><td>Sáb 03/10</td><td class="strong">Boda Marcano–Figueroa<span class="sub">Margarita · Gran Salón</span></td><td class="num">210</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="merida"><td>Sáb 03/10</td><td class="strong">Convención Farmacéutica Andina<span class="sub">Mérida · Salón Sierra Nevada</span></td><td class="num">80</td><td><span class="badge b-info">Tentativo</span></td></tr>
+        <tr data-sede="morrocoy"><td>Dom 04/10</td><td class="strong">Boda Pérez–Lugo (prueba de menú)<span class="sub">Morrocoy · Restaurante</span></td><td class="num">6</td><td><span class="badge b-info">Agendado</span></td></tr>
       </tbody>
     </table></div>
-  </section>
-  <section class="card">
-    <div class="card-h"><h2>Actividad reciente</h2><span class="small muted">En vivo</span></div>
+  </details>
+  <details class="acc" data-sec="act">
+    <summary><span class="grow">Actividad reciente <span class="muted">· en vivo</span></span></summary>
     <ul class="list">
       <li data-sede="margarita"><span class="avatar avatar-sm avatar-gold">DR</span><div class="grow"><b>Daniela Rivas</b> envió cotización EV-2026-0418 por WhatsApp<small>Boda González–Salazar · hace 8 min</small></div></li>
       <li data-sede="maracaibo"><span class="avatar avatar-sm">LF</span><div class="grow"><b>Luis Fernández</b> aprobó OC-2026-1188<small>Distribuidora Zulia Food · $ 4.120 · hace 20 min</small></div></li>
@@ -82,7 +64,20 @@
       <li data-sede="canaima"><span class="avatar avatar-sm">HS</span><div class="grow"><b>Héctor Salazar</b> registró llegada grupo Banco del Sur<small>24 pax · hace 1 h</small></div></li>
       <li data-sede="todas"><span class="avatar avatar-sm avatar-gold">GS</span><div class="grow"><b>Geek Solutions</b> completó respaldo nocturno de las 7 sedes<small>SQL Server + archivos · 03:10 a.m.</small></div></li>
     </ul>
-  </section>
+  </details>
+  <details class="acc" data-sec="mods">
+    <summary><span class="grow">Todos los módulos</span></summary>
+    <div class="acc-b"><div class="grid g-4">
+      <a class="card mod-tile" href="tablero.html"><span class="kpi-ico" data-icon="chart"></span><div><h3>Tablero directivo</h3><p>RevPAR, ADR, ocupación y F&amp;B por sede.</p></div></a>
+      <a class="card mod-tile" href="crm.html"><span class="kpi-ico" data-icon="users"></span><div><h3>CRM &amp; Huéspedes</h3><p>Pipeline de eventos, huéspedes 360 y Club Tibisay.</p></div></a>
+      <a class="card mod-tile" href="operaciones.html"><span class="kpi-ico" data-icon="bed"></span><div><h3>Operaciones</h3><p>El día en una línea de tiempo: llegadas, salidas, pisos, A&amp;B.</p></div></a>
+      <a class="card mod-tile" href="rrhh.html"><span class="kpi-ico" data-icon="briefcase"></span><div><h3>Gestión Humana</h3><p>Asistencia, turnos, nómina y reclutamiento.</p></div></a>
+      <a class="card mod-tile" href="inventarios.html"><span class="kpi-ico" data-icon="box"></span><div><h3>IMS · Inventarios</h3><p>Buscar, comprar, recibir, transferir y ajustar.</p></div></a>
+      <a class="card mod-tile" href="integracion.html"><span class="kpi-ico teal" data-icon="plug"></span><div><h3>Integración</h3><p>Opera/Prestige y Profit Plus/Saint/a2 conectados.</p></div></a>
+      <a class="card mod-tile" href="it.html"><span class="kpi-ico teal" data-icon="server"></span><div><h3>Panel de IT</h3><p>Redes, servidores, respaldos y tickets.</p></div></a>
+      <div class="card mod-tile" style="border-style:dashed;box-shadow:none"><span class="kpi-ico teal" data-icon="plus"></span><div><h3>Próximo módulo</h3><p>Se define en la sesión de trabajo con Tibisay.</p></div></div>
+    </div></div>
+  </details>
 </div>
 </main>
 </div>
@@ -92,23 +87,102 @@
 <script>
 (function () {
   var D = TIBISAY;
+  function $(n) { return "$ " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
   function agg(p) {
     var list = p === "todas" ? D.propiedades : D.propiedades.filter(function (x) { return x.id === p; });
     var hab = list.reduce(function (a, x) { return a + x.hab; }, 0);
     var occ = list.reduce(function (a, x) { return a + x.hab * x.occ; }, 0) / hab;
-    return { hab: hab, occ: Math.round(occ), list: list };
+    return { hab: hab, occ: Math.round(occ), list: list, f: hab / 532 };
   }
-  App.onProp(function (p) {
-    var a = agg(p), f = a.hab / 532;
-    var enCasa = Math.round(a.hab * a.occ / 100);
-    document.getElementById("kpis").innerHTML = [
-      ["Ocupación hoy", a.occ + "%", "▲ 3 pts", "up", enCasa + " de " + a.hab + " hab.", "percent"],
-      ["Llegadas", Math.round(118 * f), "", "", Math.round(41 * f) + " ya registradas", "calendar"],
-      ["Salidas", Math.round(96 * f), "", "", Math.round(19 * f) + " con late check-out", "logout"],
-      ["Tickets abiertos", Math.max(1, Math.round(23 * f)), "▼ 18%", "up", "vs. semana pasada", "wrench"]
-    ].map(function (k, i) {
-      return '<div class="card kpi' + (i === 0 ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[5]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + (k[2] ? '<span class="delta ' + k[3] + '">' + k[2] + "</span>" : "") + k[4] + "</div></div>";
-    }).join("");
+
+  /* ---------- Bandeja: cada alerta sabe a qué roles le importa y a dónde lleva */
+  var A = [
+    { r: ["frontdesk"], sede: "margarita", ic: "bed", c: "b-warn", t: "Hab. 406 aún sin liberar para los Hayes", s: "Llegan 2:15 p.m. · Club Oro · aniversario 40", a: "Avisar a HK", toast: "Aviso enviado a housekeeping: priorizar hab. 406 (demo)" },
+    { r: ["frontdesk"], sede: "todas", ic: "dollar", c: "b-warn", t: "3 salidas con saldo pendiente", s: "Cobrar antes de las 12:00 m.", a: "Ver salidas", h: "operaciones.html#hoy" },
+    { r: ["frontdesk", "gerencia"], sede: "margarita", ic: "wrench", c: "b-danger", t: "A/A hab. 410 sin enfriar", s: "Margarita · ticket urgente hace 25 min", a: "Ver ticket", h: "operaciones.html#mt" },
+    { r: ["frontdesk"], sede: "margarita", ic: "star", c: "b-ok", t: "Cumpleaños de Valentina Rojas (Platino) el 02/10", s: "Suite 512 · torta y detalle en la habitación", a: "Ver ficha", h: "crm.html#huespedes" },
+    { r: ["gerencia", "ab"], sede: "catatumbo", ic: "alert", c: "b-warn", t: "Food cost Catatumbo 36%", s: "4 pts sobre la meta · proteínas", a: "Revisar", h: "inventarios.html#aud" },
+    { r: ["gerencia", "ab", "almacen"], sede: "margarita", ic: "box", c: "b-danger", t: "23 botellas sin venta registrada", s: "Margarita · licores premium · auditoría A&amp;B", a: "Investigar", h: "inventarios.html#aud" },
+    { r: ["ab"], sede: "margarita", ic: "utensils", c: "b-warn", t: "Menú del cóctel de bienvenida por aprobar", s: "Vie 02/10 · Terraza · 120 pax · BEO-0937", a: "Aprobar", toast: "Menú aprobado · BEO-0937 actualizado y enviado a cocina (demo)" },
+    { r: ["ab"], sede: "margarita", ic: "chat", c: "b-info", t: "Boda González–Salazar: vista, sin respuesta", s: "EV-2026-0418 · vence 09/10", a: "Recordar", toast: "Recordatorio enviado por WhatsApp a Mariana González (demo)" },
+    { r: ["almacen", "ab", "gerencia"], sede: "maracaibo", ic: "cart", c: "b-warn", t: "OC-2026-1190 por aprobar", s: "Distribuidora Zulia Food · 4 líneas", a: "Aprobar", toast: "OC-2026-1190 aprobada y enviada al proveedor (demo)" },
+    { r: ["almacen", "gerencia"], sede: "maracaibo", ic: "truck", c: "b-warn", t: "TR-0351 por aprobar", s: "Maracaibo → Catatumbo · 36 botellas", a: "Aprobar", toast: "TR-0351 aprobada por el gerente de Maracaibo (demo)" },
+    { r: ["almacen"], sede: "margarita", ic: "archive", c: "b-info", t: "OC-2026-1188 con recepción parcial", s: "Licores del Caribe · 60% recibido", a: "Recibir", h: "inventarios.html#recibir" },
+    { r: ["almacen", "ab"], sede: "catatumbo", ic: "alert", c: "b-warn", t: "Ajuste AJ-0919 pendiente", s: "Solomo de res · −56 kg · requiere contraloría", a: "Revisar", h: "inventarios.html#ajustes" },
+    { r: ["rrhh", "gerencia"], sede: "todas", ic: "clock", c: "b-warn", t: "Nómina 2.ª quincena por aprobar", s: "$ 136.130 · asiento automático al ERP", a: "Revisar", h: "rrhh.html#nomina" },
+    { r: ["rrhh"], sede: "todas", ic: "alert", c: "b-danger", t: "Ausencias sin justificar en el turno A", s: "Se notificó a los jefes de departamento", a: "Ver", h: "rrhh.html#asist" },
+    { r: ["rrhh"], sede: "margarita", ic: "users", c: "b-info", t: "4 extras para la boda del sábado", s: "Housekeeping · turno B · por publicar", a: "Ver turnos", h: "rrhh.html#turnos" },
+    { r: ["rrhh"], sede: "canaima", ic: "briefcase", c: "b-ok", t: "Oferta a 2 guías bilingües", s: "Reclutamiento · inicio 15/10", a: "Ver", h: "rrhh.html#recl" },
+    { r: ["it", "gerencia"], sede: "morrocoy", ic: "plug", c: "b-danger", t: "Conector Saint con error", s: "Morrocoy · sin sincronizar desde 09:12", a: "Ver", h: "integracion.html" },
+    { r: ["it"], sede: "morrocoy", ic: "server", c: "b-danger", t: "Servidor Saint sin respuesta", s: "IT-3318 · crítica · Jorge L.", a: "Ver ticket", h: "it.html#tk" },
+    { r: ["it", "frontdesk"], sede: "margarita", ic: "alert", c: "b-warn", t: "Impresora fiscal de recepción no imprime", s: "IT-3317 · alta · en curso", a: "Ver", h: "it.html#tk" },
+    { r: ["gerencia"], sede: "maturin", ic: "trend", c: "b-warn", t: "Maturín bajo presupuesto", s: "Ocupación 61% vs. 68% presupuestado", a: "Ver", h: "tablero.html" },
+    { r: ["gerencia"], sede: "canaima", ic: "star", c: "b-ok", t: "Canaima 92% en diciembre", s: "Sugerencia: subir ADR 8% en nuevas ventas", a: "Ver", h: "tablero.html" }
+  ];
+
+  /* ---------- Acciones clave por rol (regla de 3 clics: aquí queda a 1) */
+  var Q = {
+    gerencia: [["Ver tablero directivo", "tablero.html", "chart"], ["Aprobar nómina", "rrhh.html#nomina", "clock"], ["Aprobar compras", "inventarios.html#compras", "cart"], ["Cotizar evento", "crm.html#nueva-cotizacion", "chat"]],
+    frontdesk: [["Hacer check-in", "operaciones.html#checkin", "key"], ["Walk-in", "operaciones.html#walkin", "plus"], ["Buscar huésped", "crm.html#huespedes", "users"], ["Reportar falla", "operaciones.html#reportar", "wrench"]],
+    ab: [["Cotizar evento", "crm.html#nueva-cotizacion", "chat"], ["Crear orden de compra", "inventarios.html#nueva-oc", "cart"], ["Registrar merma", "inventarios.html#merma", "archive"], ["Salones de hoy", "operaciones.html#ab", "utensils"]],
+    rrhh: [["Registrar marcación", "rrhh.html#marcar", "clock"], ["Turnos de la semana", "rrhh.html#turnos", "calendar"], ["Revisar nómina", "rrhh.html#nomina", "dollar"], ["Nueva vacante", "rrhh.html#nueva-vacante", "plus"]],
+    almacen: [["Crear orden de compra", "inventarios.html#nueva-oc", "cart"], ["Recibir mercancía", "inventarios.html#recibir", "truck"], ["Aprobar transferencias", "inventarios.html#transferencias", "check"], ["Nuevo conteo", "inventarios.html#conteo", "archive"]],
+    it: [["Nuevo ticket", "it.html#nuevo-ticket", "plus"], ["Tickets abiertos", "it.html#tk", "wrench"], ["Estado de conexiones", "integracion.html", "plug"], ["Respaldos", "it.html#bk", "archive"]]
+  };
+  var SECS = { gerencia: ["occ", "ev", "act", "mods"], frontdesk: ["ev", "act", "occ", "mods"], ab: ["ev", "act", "occ", "mods"], rrhh: ["act", "mods", "occ", "ev"], almacen: ["act", "mods", "ev", "occ"], it: ["act", "mods", "occ", "ev"] };
+
+  function heroFor(r, a) {
+    var f = a.f, lleg = Math.round(118 * f), reg = Math.round(41 * f), sal = Math.round(96 * f), enCasa = Math.round(a.hab * a.occ / 100);
+    var H = {
+      gerencia: [{ label: "Ocupación hoy", value: a.occ, unit: "%", sub: enCasa + " de " + a.hab + " hab. · ▲ 3 pts vs. semana pasada" },
+        [["Llegadas", lleg, reg + " registradas"], ["Salidas", sal, Math.round(19 * f) + " late check-out"], ["Tickets abiertos", Math.max(1, Math.round(23 * f)), "▼ 18% semanal"], ["Eventos esta semana", Math.max(1, Math.round(6 * f)), "ver pipeline en CRM"]]],
+      frontdesk: [{ label: "Llegadas pendientes de check-in", value: lleg - reg, unit: "de " + lleg, sub: reg + " ya registradas · próxima 1:00 p.m." },
+        [["Salidas hoy", sal, Math.round(sal * 0.3) + " ya salieron"], ["En casa", enCasa, "hab. ocupadas"], ["Hab. sin liberar", Math.max(1, Math.round(9 * f)), "para llegadas", "warn"], ["Late check-out", Math.round(19 * f), "aprobados"]]],
+      ab: [{ label: "Food cost del mes", value: "31,4", unit: "%", sub: "meta 32% · beverage cost 21%" },
+        [["Eventos esta semana", Math.max(1, Math.round(6 * f)), "BEO vinculados"], ["Cubiertos almuerzo", Math.round(390 * f), "hoy"], ["Diferencia A&amp;B", $(3480 * f), "consumo vs. salida ERP", "danger"], ["OC por aprobar", Math.max(1, Math.round(2 * f)), "compras A&amp;B"]]],
+      rrhh: [{ label: "Presentes ahora", value: Math.round(548 * f), unit: "de " + Math.round(582 * f), sub: "programados en turnos iniciados · puntualidad 89%" },
+        [["Tardanzas", Math.round(46 * f), "promedio 17 min", "warn"], ["Ausencias", Math.max(1, Math.round(19 * f)), "sin justificar", "danger"], ["Vacantes temporada", 23, "38 en entrevistas"], ["Nómina", "Por aprobar", "2.ª quincena sep."]]],
+      almacen: [{ label: "Pendientes de tu acción", value: 7, sub: "aprobaciones, recepciones y ajustes" },
+        [["Bajo mínimo", Math.max(2, Math.round(9 * f)), "sugerir OC", "warn"], ["OC por recibir", 3, "1 parcial"], ["Transferencias en curso", 3, "1 por aprobar"], ["Ajustes por aprobar", 3, "1 a contraloría"]]],
+      it: [{ label: "Conexiones con error", value: 1, sub: "Saint · Morrocoy · desde 09:12" },
+        [["Disponibilidad 30 d", "99,82%", "meta 99,5%", "ok"], ["Tickets abiertos", 9, "4 alta o crítica", "warn"], ["Respaldos anoche", "6 / 7", "1 falló", "danger"], ["Sedes con incidencias", "5 / 7", "ver matriz"]]]
+    };
+    return H[r.id];
+  }
+
+  function render() {
+    var r = App.role(), p = App.prop(), a = agg(p);
+    document.getElementById("roleName").textContent = r.label;
+    var h = heroFor(r, a);
+    document.getElementById("hero").innerHTML = App.hero(h[0], h[1]);
+    var q = Q[r.id];
+    document.getElementById("roleCta").innerHTML = '<a class="btn btn-primary" href="' + q[0][1] + '">' + App.icon(q[0][2]) + q[0][0] + "</a>";
+    document.getElementById("quick").innerHTML = q.map(function (x) { return '<a href="' + x[1] + '"><span class="kpi-ico">' + App.icon(x[2]) + "</span>" + x[0] + '<span style="margin-left:auto;color:var(--text-3)">' + App.icon("arrow") + "</span></a>"; }).join("");
+
+    var vis = A.filter(function (x) { return p === "todas" || x.sede === "todas" || x.sede === p; });
+    var mine = vis.filter(function (x) { return x.r.indexOf(r.id) >= 0; }), other = vis.filter(function (x) { return x.r.indexOf(r.id) < 0; });
+    function li(x, o) {
+      var act = x.h ? '<a class="btn btn-ghost btn-sm" href="' + x.h + '">' + x.a + "</a>" : '<a class="btn ' + (o ? "btn-ghost" : "btn-primary") + ' btn-sm" href="#" data-toast="' + x.toast + '">' + x.a + "</a>";
+      return '<li' + (o ? ' style="opacity:.8"' : "") + '><span class="alert-ico ' + x.c + '">' + App.icon(x.ic) + '</span><div class="grow">' + (o ? '<span class="tag">Otra área</span>' : "") + "<b>" + x.t + "</b><small>" + x.s + "</small></div>" + act + "</li>";
+    }
+    var ul = document.getElementById("inbox");
+    ul.innerHTML = mine.map(function (x) { return li(x); }).join("") + other.map(function (x) { return li(x, true); }).join("") ||
+      '<li><span class="alert-ico b-ok">' + App.icon("check") + '</span><div class="grow"><b>Todo al día</b><small>No hay pendientes para esta vista</small></div></li>';
+    document.getElementById("inboxCount").textContent = mine.length;
+    document.getElementById("inboxSub").textContent = mine.length + " de tu área · " + other.length + " de otras áreas (plegadas)";
+    ul._moreOpen = false;
+    App.more(ul, Math.max(3, Math.min(5, mine.length)));
+
+    var box = document.getElementById("secs");
+    SECS[r.id].forEach(function (k, i) {
+      var d = box.querySelector('[data-sec="' + k + '"]');
+      box.appendChild(d);
+      d.open = r.id === "gerencia" && i === 0;
+    });
+    drawChart(a);
+  }
+
+  function drawChart(a) {
     var serie = D.meses.map(function (_, i) {
       var s = 0, h = 0;
       a.list.forEach(function (x) { s += D.ocupacionMensual[x.id][i] * x.hab; h += x.hab; });
@@ -117,11 +191,14 @@
     App.lineChart(document.getElementById("chartOcc"), {
       labels: D.meses, fmt: function (v) { return v + "%"; },
       series: [
-        { data: serie, color: "#c99d6b", area: true },
-        { data: serie.map(function (v) { return Math.round(v * D.crecimientoAnual); }), color: "#1c2e2e", dash: true }
+        { data: serie, color: "#c9a24b", area: true },
+        { data: serie.map(function (v) { return Math.round(v * D.crecimientoAnual); }), color: "#141414", dash: true }
       ]
     });
-  });
+  }
+
+  App.onProp(function () { if (document.getElementById("roleSelect")) render(); });
+  document.addEventListener("DOMContentLoaded", function () { App.onRole(render); });
 })();
 </script>
 </body>

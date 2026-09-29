@@ -17,40 +17,42 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / CRM &amp; Huéspedes</div>
     <h1>CRM &amp; Huéspedes <span class="scope-pill" data-prop-name></span></h1>
-    <p>Perfil 360 unificado desde Opera/Prestige, puntos de venta y WhatsApp.</p>
+    <p>¿Qué oportunidades y huéspedes necesitan seguimiento hoy?</p>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-tour-start data-icon="eye">Cómo usar este módulo</a>
-    <a class="btn btn-ghost" href="#" data-toast="Importando perfiles desde el PMS (demo)" data-icon="refresh">Sincronizar PMS</a>
-    <a class="btn btn-primary" href="#" data-toast="Nuevo huésped (demo)" data-icon="plus">Nuevo huésped</a>
+    <a class="btn btn-ghost" href="#" data-toast="Nuevo huésped (demo)" data-icon="plus">Nuevo huésped</a>
+    <a class="btn btn-primary" href="#" id="newQuote" data-hash="nueva-cotizacion" data-icon="chat">Nueva cotización</a>
   </div>
 </div>
 
-<div class="grid g-4" id="crmKpis">
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Perfiles activos</span><span class="kpi-ico" data-icon="users"></span></div><div class="kpi-value">18.426</div><div class="kpi-sub"><span class="delta up">▲ 6,2%</span>vs. trimestre anterior</div></div>
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Reservas directas</span><span class="kpi-ico" data-icon="calendar"></span></div><div class="kpi-value">41%</div><div class="kpi-sub"><span class="delta up">▲ 9 pts</span>vs. OTAs</div></div>
-  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Miembros Club Tibisay</span><span class="kpi-ico" data-icon="star"></span></div><div class="kpi-value">3.912</div><div class="kpi-sub"><span class="delta up">+214</span>este mes</div></div>
-  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Cotizaciones abiertas</span><span class="kpi-ico" data-icon="chat"></span></div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">—</div></div>
-</div>
+<section class="card hero" id="crmHero"></section>
 
 <section class="card mt" data-tabs id="crmTabs">
   <div class="tabs">
-    <button class="tab active" data-tab="huespedes" id="tabHuespedes">Huéspedes 360</button>
+    <button class="tab active" data-tab="eventos" id="tabEventos">Pipeline de eventos <span class="badge nodot b-gold" id="tabEvCount">0</span></button>
+    <button class="tab" data-tab="huespedes" id="tabHuespedes">Huéspedes 360</button>
     <button class="tab" data-tab="club" id="tabClub">Club Tibisay</button>
-    <button class="tab" data-tab="eventos" id="tabEventos">Eventos &amp; cotizaciones <span class="badge nodot b-gold" id="tabEvCount">0</span></button>
+  </div>
+
+  <!-- ============ PIPELINE ============ -->
+  <div class="tab-panel active" data-panel="eventos">
+    <div class="card-b">
+      <p class="small muted" style="margin:0 0 12px">Cada solicitud de WhatsApp se vuelve una cotización y avanza por etapas. Clic en una tarjeta para ver cotización y conversación.</p>
+      <div class="kanban" id="pipeline"></div>
+    </div>
   </div>
 
   <!-- ============ HUÉSPEDES ============ -->
-  <div class="tab-panel active" data-panel="huespedes">
+  <div class="tab-panel" data-panel="huespedes">
     <div class="grid g-2-1" style="gap:0">
       <div style="border-right:1px solid var(--border)" id="guestList">
         <div class="toolbar" id="guestTools">
           <div class="search"><span data-icon="search"></span><input class="input" type="search" id="guestFilter" placeholder="Nombre, empresa o ciudad…"></div>
           <select class="select select-sm" style="width:auto" id="segFilter"><option value="">Todos los segmentos</option><option>Corporativo</option><option>Placer</option><option>Eventos / bodas</option></select>
-          <span class="small muted" style="margin-left:auto">Clic en un huésped para ver su ficha 360</span>
+          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Importando perfiles desde el PMS (demo)" data-icon="refresh">Sincronizar PMS</a>
         </div>
         <div class="table-wrap"><table class="table" data-searchable id="guestTable">
-          <thead><tr><th style="min-width:210px">Huésped</th><th>Segmento</th><th>Club</th><th class="num">Estancias</th><th class="num">Gasto total</th><th>Estado / última visita</th></tr></thead>
+          <thead><tr><th style="min-width:220px">Huésped</th><th>Club</th><th>Estado</th></tr></thead>
           <tbody></tbody>
         </table></div>
         <div class="pager"><span id="guestCount">—</span><span>‹ 1 2 3 … 921 ›</span></div>
@@ -62,50 +64,34 @@
   <!-- ============ CLUB ============ -->
   <div class="tab-panel" data-panel="club">
     <div class="card-b" id="clubTiers">
-      <div class="grid g-3">
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Plata</span><span class="badge b-info">Al registrarse</span></div><div class="kpi-value">2.804</div><div class="kpi-sub">1 pto por $ · Wi-Fi premium · 5% en A&amp;B</div></div>
-        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Oro</span><span class="badge b-gold">8+ noches / año</span></div><div class="kpi-value">936</div><div class="kpi-sub">1,5 ptos por $ · upgrade sujeto a disp. · late check-out 2 p.m.</div></div>
-        <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Platino</span><span class="badge b-teal">20+ noches / año</span></div><div class="kpi-value">172</div><div class="kpi-sub">2 ptos por $ · upgrade garantizado · traslado · lounge</div></div>
+      <div class="stat-row">
+        <div class="stat"><small><span class="badge b-info">Plata</span> al registrarse</small><b>2.804</b><span>1 pto por $ · Wi-Fi premium · 5% en A&amp;B</span></div>
+        <div class="stat"><small><span class="badge b-gold">Oro</span> 8+ noches / año</small><b>936</b><span>1,5 ptos por $ · upgrade · late check-out 2 p.m.</span></div>
+        <div class="stat"><small><span class="badge b-teal">Platino</span> 20+ noches / año</small><b>172</b><span>2 ptos por $ · upgrade garantizado · traslado · lounge</span></div>
       </div>
     </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2><p>Puntos, nivel y avance al siguiente nivel (noches de los últimos 12 meses)</p></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2><p>Puntos y avance al siguiente nivel (noches de los últimos 12 meses)</p></div>
       <div class="seg" id="tierSeg"><button class="active" data-v="">Todos</button><button data-v="Platino">Platino</button><button data-v="Oro">Oro</button><button data-v="Plata">Plata</button></div></div>
     <div class="table-wrap"><table class="table" data-searchable id="memberTable">
-      <thead><tr><th>Miembro</th><th>N.º socio</th><th>Nivel</th><th class="num">Puntos</th><th class="num">Noches 12 m</th><th style="min-width:170px">Avance al siguiente nivel</th><th class="num">Ptos. por vencer</th><th>Último canje</th></tr></thead>
+      <thead><tr><th>Miembro</th><th>Nivel</th><th class="num">Puntos</th><th style="min-width:190px">Avance al siguiente nivel</th><th class="num">Ptos. por vencer</th></tr></thead>
       <tbody></tbody>
     </table></div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Campañas</h2><p>Segmentadas por nivel e historial</p></div></div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Campaña</th><th>Segmento</th><th>Canal</th><th class="num">Enviados</th><th class="num">Apertura</th><th class="num">Reservas</th><th class="num">Ingreso</th><th>Estado</th></tr></thead>
-      <tbody>
-        <tr data-sede="canaima"><td class="strong">Temporada de Tepuyes · puntos dobles</td><td>Oro + Platino</td><td>WhatsApp</td><td class="num">1.108</td><td class="num">71%</td><td class="num">64</td><td class="num">$ 38.200</td><td><span class="badge b-ok">Activa</span></td></tr>
-        <tr data-sede="margarita"><td class="strong">Aniversarios de octubre</td><td>Parejas con fecha registrada</td><td>WhatsApp + correo</td><td class="num">286</td><td class="num">64%</td><td class="num">31</td><td class="num">$ 21.700</td><td><span class="badge b-ok">Activa</span></td></tr>
-        <tr data-sede="maracaibo"><td class="strong">Tarifa corporativa 2027</td><td>Empresas Zulia</td><td>Correo</td><td class="num">142</td><td class="num">48%</td><td class="num">12</td><td class="num">Convenios</td><td><span class="badge b-info">Programada</span></td></tr>
-        <tr data-sede="morrocoy"><td class="strong">Carnaval en Morrocoy · preventa</td><td>Plata</td><td>WhatsApp</td><td class="num">2.340</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="badge b-muted">Borrador</span></td></tr>
-        <tr data-sede="merida"><td class="strong">Puntos por vencer · diciembre</td><td>Oro con &gt; 5.000 ptos</td><td>WhatsApp</td><td class="num">318</td><td class="num">58%</td><td class="num">22</td><td class="num">$ 9.460</td><td><span class="badge b-ok">Activa</span></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <!-- ============ EVENTOS ============ -->
-  <div class="tab-panel" data-panel="eventos">
-    <div class="card-b">
-      <div class="between" style="margin-bottom:12px;flex-wrap:wrap">
-        <div><h2>Pipeline de eventos y banquetes</h2><p class="small muted" style="margin:2px 0 0">Cada solicitud que llega por WhatsApp genera una cotización. Clic en una tarjeta para ver el detalle y la conversación.</p></div>
-        <a class="btn btn-primary btn-sm" href="#" data-toast="Nueva cotización en borrador (demo)" data-icon="plus">Nueva cotización</a>
-      </div>
-      <div class="kanban" id="pipeline"></div>
-
-      <div class="grid g-2 mt-lg" id="quoteDetail">
-        <div class="card" style="overflow:hidden;display:flex;flex-direction:column">
-          <div class="chat-h"><span class="avatar avatar-sm" style="background:var(--gold);color:#fff">T</span><div><b>Tibisay Eventos · WhatsApp Business</b><small id="chatWho">—</small></div></div>
-          <div class="chat" id="chat" style="flex:1"></div>
-        </div>
-        <div class="card" id="quoteCard"></div>
-      </div>
-    </div>
+    <details class="acc flat">
+      <summary><span class="grow">Campañas <span class="muted">· segmentadas por nivel e historial</span></span></summary>
+      <div class="table-wrap"><table class="table" data-searchable>
+        <thead><tr><th>Campaña</th><th>Segmento</th><th>Canal</th><th class="num">Enviados</th><th class="num">Apertura</th><th class="num">Reservas</th><th class="num">Ingreso</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr data-sede="canaima"><td class="strong">Temporada de Tepuyes · puntos dobles</td><td>Oro + Platino</td><td>WhatsApp</td><td class="num">1.108</td><td class="num">71%</td><td class="num">64</td><td class="num">$ 38.200</td><td><span class="badge b-ok">Activa</span></td></tr>
+          <tr data-sede="margarita"><td class="strong">Aniversarios de octubre</td><td>Parejas con fecha registrada</td><td>WhatsApp + correo</td><td class="num">286</td><td class="num">64%</td><td class="num">31</td><td class="num">$ 21.700</td><td><span class="badge b-ok">Activa</span></td></tr>
+          <tr data-sede="maracaibo"><td class="strong">Tarifa corporativa 2027</td><td>Empresas Zulia</td><td>Correo</td><td class="num">142</td><td class="num">48%</td><td class="num">12</td><td class="num">Convenios</td><td><span class="badge b-info">Programada</span></td></tr>
+          <tr data-sede="morrocoy"><td class="strong">Carnaval en Morrocoy · preventa</td><td>Plata</td><td>WhatsApp</td><td class="num">2.340</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="badge b-muted">Borrador</span></td></tr>
+          <tr data-sede="merida"><td class="strong">Puntos por vencer · diciembre</td><td>Oro con &gt; 5.000 ptos</td><td>WhatsApp</td><td class="num">318</td><td class="num">58%</td><td class="num">22</td><td class="num">$ 9.460</td><td><span class="badge b-ok">Activa</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
   </div>
 </section>
+<a class="btn btn-ghost help-fab" href="#" data-tour-start data-icon="eye">Cómo usar este módulo</a>
 </main>
 </div>
 
@@ -248,46 +234,48 @@
 
   var tb = document.querySelector("#guestTable tbody");
   tb.innerHTML = G.map(function (g, k) {
-    return '<tr data-sede="' + g.sede + '" data-g="' + k + '" data-seg="' + g.seg + '" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm' + (k % 2 ? " avatar-gold" : "") + '">' + g.i + '</span><div class="strong">' + g.n + '<span class="sub">' + g.e.split(" · ").pop() + "</span></div></div></td>" +
-      "<td>" + g.seg + '</td><td><span class="badge ' + CLUB[g.club] + '">' + (g.club || "Sin afiliar") + '</span></td><td class="num">' + g.est.length + '</td><td class="num">' + $(g.gasto) + "</td>" +
+    return '<tr data-sede="' + g.sede + '" data-g="' + k + '" data-seg="' + g.seg + '" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm' + (k % 2 ? " avatar-gold" : "") + '">' + g.i + '</span><div class="strong">' + g.n + '<span class="sub">' + g.e.split(" · ").pop() + " · " + g.seg + "</span></div></div></td>" +
+      '<td><span class="badge ' + CLUB[g.club] + '">' + (g.club || "Sin afiliar") + "</span></td>" +
       "<td>" + (g.casa ? '<span class="badge b-ok">' + g.estado + "</span>" : '<span class="small">' + g.estado + '</span>') + '<span class="sub">' + TIBISAY.sedeNombre(g.sede) + "</span></td></tr>";
   }).join("");
 
-  var cur = 0, tab = "resumen";
+  function d2n(d) { var x = d.split("/"); return +(x[2] + x[1] + x[0]); }
+  var cur = 0, extraNotes = {};
   function show(k) {
     cur = k;
     var g = G[k];
     [].forEach.call(tb.rows, function (r) { r.style.background = +r.dataset.g === k ? "var(--gold-soft)" : ""; });
-    var total = g.gasto, tabs = [["resumen", "Resumen"], ["estancias", "Estancias"], ["consumos", "Consumos"], ["pref", "Preferencias"], ["notas", "Notas"]];
-    var body = "";
-    if (tab === "resumen") {
-      body = '<dl class="dl"><dt>Teléfono</dt><dd>' + g.tel + "</dd><dt>Correo</dt><dd>" + g.mail + "</dd><dt>Ciudad</dt><dd>" + g.c + "</dd><dt>Cumpleaños</dt><dd>" + g.cumple + "</dd><dt>Idioma</dt><dd>" + g.idioma + "</dd><dt>Canal preferido</dt><dd>" + g.canal + "</dd><dt>Última encuesta NPS</dt><dd>" +
-        '<span class="badge ' + (g.nps >= 9 ? "b-ok" : g.nps >= 7 ? "b-warn" : "b-danger") + '">' + g.nps + " / 10</span></dd></dl>" +
-        '<h3 class="mt">Próxima acción sugerida</h3><div class="note" style="margin-top:6px">' + g.notas[0][0] + "<small>" + g.notas[0][1] + " · " + g.notas[0][2] + "</small></div>";
-    } else if (tab === "estancias") {
-      body = '<ul class="tl">' + g.est.map(function (e) { return "<li><div><b>" + e[0] + " · " + e[1] + "</b><br><span>" + e[3] + " · " + e[2] + " noche" + (e[2] > 1 ? "s" : "") + " · tarifa " + (e[4] ? $(e[4]) : "canje de puntos") + "</span></div><b>" + $(e[2] * e[4]) + "</b></li>"; }).join("") + "</ul>";
-    } else if (tab === "consumos") {
-      var sum = g.con.reduce(function (a, c) { return a + c[1]; }, 0);
-      body = g.con.map(function (c) { var p = Math.round(c[1] / sum * 100); return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") +
-        '<div class="between small mt" style="border-top:1px solid var(--border);padding-top:8px"><span class="muted">Total consumos (no alojamiento)</span><b>' + $(sum) + "</b></div>";
-    } else if (tab === "pref") {
-      body = '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + '</ul><p class="small muted mt">Las preferencias se envían al PMS como <i>traces</i> para recepción y housekeeping.</p>';
-    } else {
-      body = g.notas.map(function (n) { return '<div class="note">' + n[0] + "<small>" + n[1] + " · " + n[2] + "</small></div>"; }).join("") +
-        '<textarea class="input" style="height:64px;padding:8px 12px;margin-top:6px" placeholder="Agregar nota para el equipo…"></textarea><a class="btn btn-ghost btn-sm mt" href="#" data-toast="Nota guardada (demo)">Guardar nota</a>';
-    }
+    // Timeline de actividad (estilo HubSpot): estancias, notas, canjes y encuestas en una sola línea de tiempo
+    var ev = [];
+    (extraNotes[k] || []).forEach(function (n) { ev.push({ d: "29/09/2026", c: "tn", t: n, s: "Tú · ahora" }); });
+    g.notas.forEach(function (n) { ev.push({ d: n[2], c: "tn", t: n[0], s: n[1] }); });
+    g.est.forEach(function (e) { ev.push({ d: e[0], c: "stay", t: "Estancia en " + e[1] + " · " + e[3], s: e[2] + " noche" + (e[2] > 1 ? "s" : "") + " · " + (e[4] ? "tarifa " + $(e[4]) + " · total " + $(e[2] * e[4]) : "canje de puntos") }); });
+    if (g.canje !== "—") ev.push({ d: "15/" + ({ ene: "01", feb: "02", mar: "03", abr: "04", may: "05", jun: "06", jul: "07", ago: "08", sep: "09" }[g.canje.split(" · ")[1].slice(0, 3)] || "06") + "/2026", c: "", t: "Canje Club: " + g.canje.split(" · ")[0], s: "Club Tibisay" });
+    ev.push({ d: g.est[0][0], c: "", t: "Encuesta NPS: " + g.nps + " / 10", s: "Post estancia · " + g.canal });
+    ev.sort(function (a, b) { return d2n(b.d) - d2n(a.d); });
+    var sum = g.con.reduce(function (a, c) { return a + c[1]; }, 0);
     document.getElementById("guestCard").innerHTML =
       '<div class="row" style="margin-bottom:10px"><span class="avatar" style="width:52px;height:52px;font-size:17px">' + g.i + '</span><div style="min-width:0"><h2>' + g.n + '</h2><div class="small muted">' + g.e + "</div></div></div>" +
-      '<div class="row" style="flex-wrap:wrap;gap:6px"><span class="badge ' + CLUB[g.club] + '">' + (g.club ? "Club " + g.club + " · " + pts(g.pts) + " pts" : "Sin afiliar al Club") + '</span><span class="badge b-muted">' + g.seg + "</span></div>" +
-      '<div class="mini-kpis" id="p360Kpis"><div><small>Estancias</small><b>' + g.est.length + "</b></div><div><small>Noches 12 m</small><b>" + g.noches + "</b></div><div><small>Gasto total</small><b>" + $(total) + "</b></div></div>" +
-      '<div class="p360-tabs" id="p360Tabs">' + tabs.map(function (t) { return '<button data-t="' + t[0] + '"' + (t[0] === tab ? ' class="active"' : "") + ">" + t[1] + "</button>"; }).join("") + "</div>" +
-      '<div id="p360Body">' + body + "</div>" +
-      '<div class="row mt"><a class="btn btn-primary btn-sm" href="#" data-toast="Abriendo chat de WhatsApp con ' + g.n + ' (demo)" data-wa>' + App.icon("chat") + "WhatsApp</a>" +
-      '<a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva para ' + g.n + ' (demo)">' + App.icon("calendar") + "Reservar</a></div>";
+      '<div class="row" style="flex-wrap:wrap;gap:6px"><span class="badge ' + CLUB[g.club] + '">' + (g.club ? "Club " + g.club + " · " + pts(g.pts) + " pts" : "Sin afiliar al Club") + '</span><span class="badge b-muted">' + g.seg + '</span><span class="badge ' + (g.nps >= 9 ? "b-ok" : g.nps >= 7 ? "b-warn" : "b-danger") + '">NPS ' + g.nps + "</span></div>" +
+      '<div class="mini-kpis" id="p360Kpis"><div><small>Estancias</small><b>' + g.est.length + "</b></div><div><small>Noches 12 m</small><b>" + g.noches + "</b></div><div><small>Gasto total</small><b>" + $(g.gasto) + "</b></div></div>" +
+      '<div class="note mt"><b class="small">Próxima acción</b><br>' + g.notas[0][0] + "<small>" + g.notas[0][1] + " · " + g.notas[0][2] + "</small></div>" +
+      '<div class="row" style="margin:10px 0 16px"><a class="btn btn-primary btn-sm" href="#" data-toast="Abriendo chat de WhatsApp con ' + g.n + ' (demo)" data-wa>' + App.icon("chat") + "WhatsApp</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva para ' + g.n + ' (demo)">' + App.icon("calendar") + "Reservar</a></div>" +
+      '<h3 style="margin-bottom:8px">Actividad</h3>' +
+      '<div class="row" style="margin-bottom:12px"><input class="input input-sm" id="noteIn" placeholder="Agregar nota para el equipo…"><button class="btn btn-ghost btn-sm" id="noteAdd">Guardar</button></div>' +
+      '<ul class="tline" id="p360Tl">' + ev.map(function (e) { return '<li class="' + e.c + '"><b>' + e.t + "</b><small>" + e.d + " · " + e.s + "</small></li>"; }).join("") + "</ul>" +
+      '<details class="acc flat mt"><summary><span class="grow">Contacto</span></summary><div class="acc-b"><dl class="dl"><dt>Teléfono</dt><dd>' + g.tel + "</dd><dt>Correo</dt><dd>" + g.mail + "</dd><dt>Ciudad</dt><dd>" + g.c + "</dd><dt>Cumpleaños</dt><dd>" + g.cumple + "</dd><dt>Idioma</dt><dd>" + g.idioma + "</dd><dt>Canal preferido</dt><dd>" + g.canal + "</dd>" + (g.socio !== "—" ? "<dt>N.º socio</dt><dd>" + g.socio + "</dd>" : "") + "</dl></div></details>" +
+      '<details class="acc flat"><summary><span class="grow">Preferencias <span class="muted">· ' + g.pref.length + " · se envían al PMS</span></span></summary>" + '<div class="acc-b">' + '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + "</ul></div></details>" +
+      '<details class="acc flat" style="border-bottom-width:1px"><summary><span class="grow">Consumos por área <span class="muted">· ' + $(sum) + "</span></span></summary>" + '<div class="acc-b">' + g.con.map(function (c) { var p = Math.round(c[1] / sum * 100); return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") + "</div></details>";
+    App.more(document.getElementById("p360Tl"), 5);
   }
   document.getElementById("guestCard").addEventListener("click", function (e) {
-    var b = e.target.closest("[data-t]");
-    if (b) { tab = b.dataset.t; show(cur); }
+    if (!e.target.closest("#noteAdd")) return;
+    var v = document.getElementById("noteIn").value.trim();
+    if (!v) { App.toast("Escribe la nota primero"); return; }
+    (extraNotes[cur] = extraNotes[cur] || []).unshift(v);
+    show(cur);
+    App.toast("Nota guardada en la ficha (demo)");
   });
   tb.addEventListener("click", function (e) { var tr = e.target.closest("tr"); if (tr) show(+tr.dataset.g); });
 
@@ -314,13 +302,14 @@
     var next = m[2] === "Plata" ? ["Oro", 8] : m[2] === "Oro" ? ["Platino", 20] : null;
     var prog = next ? Math.min(100, Math.round(m[5] / next[1] * 100)) : 100;
     var txt = next ? (next[1] - m[5] <= 0 ? "Sube a " + next[0] + " en el próximo corte" : "Faltan " + (next[1] - m[5]) + " noches para " + next[0]) : "Nivel máximo · mantiene con 20 noches";
-    return '<tr data-sede="' + m[1] + '" data-tier="' + m[2] + '"><td class="strong">' + m[0] + '<span class="sub">' + TIBISAY.sedeNombre(m[1]) + '</span></td><td class="muted">' + m[3] + '</td><td><span class="badge ' + CLUB[m[2]] + '">' + m[2] + '</span></td><td class="num strong">' + pts(m[4]) + '</td><td class="num">' + m[5] + "</td>" +
-      '<td><div class="pcell"><div class="progress' + (next ? "" : " teal") + '"><span style="width:' + prog + '%"></span></div></div><span class="sub">' + txt + "</span></td>" +
-      '<td class="num">' + (m[6] ? '<span class="num-warn">' + pts(m[6]) + "</span>" : "—") + "</td><td>" + m[7] + "</td></tr>";
+    return '<tr data-sede="' + m[1] + '" data-tier="' + m[2] + '"><td class="strong">' + m[0] + '<span class="sub">' + m[3] + " · " + TIBISAY.sedeNombre(m[1]) + (m[7] !== "—" ? " · canje: " + m[7] : "") + '</span></td><td><span class="badge ' + CLUB[m[2]] + '">' + m[2] + '</span></td><td class="num strong">' + pts(m[4]) + "</td>" +
+      '<td><div class="pcell"><div class="progress' + (next ? "" : " teal") + '"><span style="width:' + prog + '%"></span></div></div><span class="sub">' + m[5] + " noches · " + txt + "</span></td>" +
+      '<td class="num">' + (m[6] ? '<span class="num-warn">' + pts(m[6]) + "</span>" : "—") + "</td></tr>";
   }).join("");
   document.querySelectorAll("#tierSeg button").forEach(function (b) {
     b.addEventListener("click", function () {
       document.querySelectorAll("#memberTable tbody tr").forEach(function (r) { r.hidden = !!b.dataset.v && r.dataset.tier !== b.dataset.v; });
+      App.more(document.querySelector("#memberTable tbody"), 8);
     });
   });
 
@@ -397,11 +386,11 @@
         }).join("") : '<div class="small muted" style="padding:8px 4px">Sin cotizaciones en esta propiedad</div>') + "</div>";
     }).join("");
     var open = vis.filter(function (q) { return q.st === "borrador" || q.st === "enviada"; });
-    document.getElementById("kpiPipe").textContent = $(open.reduce(function (a, q) { return a + q.total; }, 0));
-    document.getElementById("kpiPipeSub").textContent = open.length + " abiertas · " + vis.filter(function (q) { return q.st === "aprobada"; }).length + " aprobadas este trimestre";
+    var apr = vis.filter(function (q) { return q.st === "aprobada"; }), sinAbrir = vis.filter(function (q) { return q.st === "enviada" && !q.visto; }).length;
+    document.getElementById("crmHero").innerHTML = App.hero(
+      { label: "Pipeline de eventos abierto", value: $(open.reduce(function (a, q) { return a + q.total; }, 0)), sub: open.length + " cotizaciones en borrador o enviadas · " + sinAbrir + " sin abrir por el cliente" },
+      [["Aprobadas este trimestre", apr.length, $(apr.reduce(function (a, q) { return a + q.total; }, 0))], ["Perfiles activos", "18.426", "▲ 6,2% trimestral"], ["Reservas directas", "41%", "▲ 9 pts vs. OTAs"], ["Club Tibisay", "3.912", "+214 este mes"]]);
     document.getElementById("tabEvCount").textContent = open.length;
-    var sel = vis.find(function (q) { return q.id === curQ; }) || vis.find(function (q) { return q.st === "enviada"; }) || vis[0];
-    if (sel) showQ(sel.id);
   }
 
   var curQ = "EV-2026-0418";
@@ -409,8 +398,7 @@
     curQ = id;
     var q = Q.find(function (x) { return x.id === id; }), e = EST[q.st];
     document.querySelectorAll("#pipeline .kcard").forEach(function (k) { k.style.borderColor = k.dataset.q === id ? "var(--gold)" : ""; });
-    document.getElementById("chatWho").textContent = "Conversación con " + q.ct + " · " + q.tel;
-    document.getElementById("chat").innerHTML = q.chat.map(function (m) {
+    var chat = q.chat.map(function (m) {
       return '<div class="msg' + (m[0] === "out" ? " out" : "") + '">' + m[1] + "<small>" + m[2] + "</small></div>";
     }).join("") + (q.st === "borrador" ? '<div class="msg out" style="opacity:.6;border:1px dashed var(--gold)">📄 Cotización ' + q.id + " lista para enviar…<small>borrador</small></div>" : "");
     var steps = [["Solicitud WhatsApp", true], ["Borrador", true], ["Enviada", q.st !== "borrador"], [q.st === "perdida" ? "Perdida" : "Aprobada", q.st === "aprobada" || q.st === "perdida"]];
@@ -423,26 +411,59 @@
     var info = q.st === "enviada" ? "Enviada el " + q.env + " · " + (q.visto ? "vista por el cliente ✓✓" : "aún no la abre") + " · vence " + q.vence
       : q.st === "aprobada" ? "Aprobada el " + q.aprob + " · anticipo " + q.anticipo + "% recibido · " + q.beo + " generado"
       : q.st === "perdida" ? "Motivo: " + q.motivo : "Borrador creado automáticamente desde la conversación · responsable " + q.ej;
-    document.getElementById("quoteCard").innerHTML =
-      '<div class="card-h"><div><h2>Cotización ' + q.id + "</h2><p>" + q.ev + " · " + q.cli + '</p></div><span class="badge ' + e.c + '">' + e.t + "</span></div>" +
-      '<div class="card-b" style="padding-bottom:10px"><div class="steps" style="margin-bottom:12px">' + steps.map(function (s, k) { return (k ? "<em>→</em>" : "") + '<span class="' + (s[1] ? (k === steps.length - 1 || !steps[k + 1][1] ? "now" : "done") : "") + '">' + s[0] + "</span>"; }).join("") + "</div>" +
+    var detalle = '<div class="card-b" style="padding-bottom:10px"><div class="steps" style="margin-bottom:12px">' + steps.map(function (s, k) { return (k ? "<em>→</em>" : "") + '<span class="' + (s[1] ? (k === steps.length - 1 || !steps[k + 1][1] ? "now" : "done") : "") + '">' + s[0] + "</span>"; }).join("") + "</div>" +
       '<div class="small ' + (q.st === "perdida" ? "num-danger" : "muted") + '" style="margin-bottom:10px">' + info + "</div>" +
-      '<dl class="dl"><dt>Tipo</dt><dd>' + q.tipo + "</dd><dt>Propiedad</dt><dd>" + TIBISAY.sedeNombre(q.sede) + "</dd><dt>Fecha</dt><dd>" + q.fecha + "</dd><dt>Invitados</dt><dd>" + q.pax + "</dd><dt>Espacio</dt><dd>" + q.esp + "</dd><dt>Ejecutivo</dt><dd>" + q.ej + "</dd></dl></div>" +
-      '<div class="table-wrap"><table class="table"><thead><tr><th>Concepto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Total</th></tr></thead><tbody>' +
-      items(q).map(function (i) { return "<tr><td>" + i[0] + '</td><td class="num">' + i[1] + '</td><td class="num">' + $(i[2]) + '</td><td class="num">' + $(i[1] * i[2]) + "</td></tr>"; }).join("") +
-      '</tbody><tfoot><tr><td colspan="3">Total estimado (antes de IVA)</td><td class="num">' + $(q.total) + "</td></tr></tfoot></table></div>" +
-      '<div class="card-f row" style="justify-content:flex-end;flex-wrap:wrap">' + acts[q.st] + "</div>";
+      '<dl class="dl"><dt>Fecha</dt><dd>' + q.fecha + "</dd><dt>Invitados</dt><dd>" + q.pax + "</dd><dt>Espacio</dt><dd>" + q.esp + "</dd><dt>Propiedad</dt><dd>" + TIBISAY.sedeNombre(q.sede) + "</dd><dt>Ejecutivo</dt><dd>" + q.ej + "</dd></dl></div>" +
+      '<div class="table-wrap"><table class="table"><thead><tr><th>Concepto</th><th class="num">Cant.</th><th class="num">Total</th></tr></thead><tbody>' +
+      items(q).map(function (i) { return "<tr><td>" + i[0] + '<span class="sub">' + $(i[2]) + ' c/u</span></td><td class="num">' + i[1] + '</td><td class="num">' + $(i[1] * i[2]) + "</td></tr>"; }).join("") +
+      '</tbody><tfoot><tr><td colspan="2">Total estimado (antes de IVA)</td><td class="num">' + $(q.total) + "</td></tr></tfoot></table></div>";
+    var d = App.drawer('<div class="drawer-h"><div><h2>' + q.ev + "</h2><p>" + q.id + " · " + q.tipo + " · " + q.cli + '</p></div><span class="badge ' + e.c + '">' + e.t + '</span><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+      '<div class="tabs" id="qTabs"><button class="tab active" data-qt="cot">Cotización</button><button class="tab" data-qt="wa">WhatsApp · ' + q.ct + "</button></div>" +
+      '<div class="drawer-b"><div data-qp="cot">' + detalle + '</div><div data-qp="wa" hidden style="height:100%"><div class="chat">' + chat + "</div></div></div>" +
+      '<div class="drawer-f">' + acts[q.st] + "</div>");
+    d.querySelector("#qTabs").onclick = function (ev) {
+      var t = ev.target.closest("[data-qt]");
+      if (!t) return;
+      d.querySelectorAll("[data-qt]").forEach(function (x) { x.classList.toggle("active", x === t); });
+      d.querySelectorAll("[data-qp]").forEach(function (x) { x.hidden = x.dataset.qp !== t.dataset.qt; });
+    };
   }
   document.getElementById("pipeline").addEventListener("click", function (e) {
     var k = e.target.closest("[data-q]");
-    if (k) { showQ(k.dataset.q); document.getElementById("quoteDetail").scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+    if (k) showQ(k.dataset.q);
   });
+
+  /* ------------------------------------------------------------ Nueva cotización (pocos campos) */
+  var TIPOS = ["Boda", "Evento corporativo", "Convención", "Congreso", "Cena de gala", "Retiro corporativo", "Graduación"];
+  document.getElementById("newQuote").addEventListener("click", function (e) {
+    e.preventDefault();
+    var p = App.prop();
+    App.wizard({
+      title: "Nueva cotización", sub: "Solo lo esencial: el detalle se completa en el borrador",
+      steps: [{ t: "Datos", html: function () {
+        return '<div class="field"><label>Cliente o empresa</label><input class="input" id="nqCli" value="Asociación Hotelera de Nueva Esparta"></div>' +
+          '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo de evento</label><select class="select" id="nqTipo">' + TIPOS.map(function (t) { return "<option>" + t + "</option>"; }).join("") + '</select></div>' +
+          '<div class="field"><label>Propiedad</label><select class="select" id="nqSede">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === (p === "todas" ? "margarita" : p) ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + "</select></div>" +
+          '<div class="field"><label>Fecha</label><input class="input" type="date" id="nqFecha" value="2026-11-20"></div><div class="field"><label>Invitados</label><input class="input" type="number" id="nqPax" value="120" min="1"></div></div>' +
+          '<p class="small muted" style="margin:0">Se crea en <b>Borrador</b> con el salón y el menú sugeridos para esa cantidad de invitados.</p>';
+      }, read: function (el, st) { st.cli = el.querySelector("#nqCli").value || "Cliente nuevo"; st.tipo = el.querySelector("#nqTipo").value; st.sede = el.querySelector("#nqSede").value; st.fecha = el.querySelector("#nqFecha").value; st.pax = Math.max(1, +el.querySelector("#nqPax").value || 50); } }],
+      done: { label: "Crear borrador", toast: function (st) { return "Cotización creada en borrador para " + st.cli + " (demo)"; }, fn: function (st) {
+        var f = st.fecha.split("-"), n = 437 + Q.filter(function (x) { return x.nuevo; }).length;
+        Q.unshift({ id: "EV-2026-0" + n, nuevo: true, ev: st.tipo + " " + st.cli.split(" ").slice(-2).join(" "), tipo: st.tipo, cli: st.cli, ct: st.cli, tel: "—", sede: st.sede, fecha: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][new Date(st.fecha + "T12:00").getDay()] + " " + f[2] + "/" + f[1] + "/" + f[0], pax: st.pax, esp: "Salón principal", st: "borrador", ej: App.session().usuario.split(" ")[0], hab: [0, 0, 0], menu: ["Menú sugerido 3 tiempos", 48], barra: 0, salon: 1800, chat: [] });
+        Q[0].total = items(Q[0]).reduce(function (a, i) { return a + i[1] * i[2]; }, 0);
+        document.getElementById("tabEventos").click();
+        renderPipe(App.prop());
+      } }
+    });
+  });
+
 
   App.onProp(function (p) {
     var first = [].find.call(tb.rows, function (tr) { return p === "todas" || tr.dataset.sede === p; });
     show(first ? +first.dataset.g : 0);
     renderPipe(p);
     setTimeout(filterGuests);
+    App.more(document.querySelector("#memberTable tbody"), 8);
   });
 
   /* ------------------------------------------------------------ Onboarding */
@@ -451,16 +472,18 @@
     icono: "users",
     titulo: "Bienvenido al CRM de Tibisay",
     intro: "Aquí está todo lo que sabemos de cada huésped, el programa de fidelización y las cotizaciones de eventos que llegan por WhatsApp. Te mostramos cómo usarlo en 2 minutos.",
-    fin: { sel: "#tabHuespedes" },
+    fin: { sel: "#tabEventos" },
     pasos: [
-      { sel: "#crmKpis", titulo: "Indicadores del CRM", texto: "Resumen de la base de huéspedes: perfiles activos, % de reservas directas (sin comisión de OTA), miembros del Club y el monto de cotizaciones de eventos abiertas.", antes: "#tabHuespedes" },
-      { sel: "#guestTools", titulo: "Busca y filtra huéspedes", texto: "Escribe un nombre, empresa o ciudad, o filtra por segmento (corporativo, placer, bodas). Los perfiles se unifican desde Opera/Prestige: un mismo huésped aparece una sola vez aunque haya ido a varios hoteles.", antes: "#tabHuespedes" },
-      { sel: "#guestTable", titulo: "Lista de huéspedes", texto: "Cada fila muestra su nivel en el Club, cuántas veces se ha hospedado, cuánto ha gastado en total y si está en casa hoy. Haz clic en una fila para abrir su ficha 360." },
-      { sel: "#guestCard", titulo: "Ficha 360 del huésped", texto: "Todo el huésped en una sola vista. Usa las pestañas para navegar:", lista: ["<b>Resumen:</b> contacto, cumpleaños, NPS y próxima acción", "<b>Estancias:</b> historial en todas las propiedades", "<b>Consumos:</b> restaurante, bar, spa, eventos…", "<b>Preferencias:</b> se envían al PMS para recepción y pisos", "<b>Notas:</b> lo que el equipo debe saber"] },
+      { sel: "#crmHero", titulo: "Lo más importante primero", texto: "Arriba, una sola cifra protagonista: el monto de cotizaciones de eventos abiertas. Al lado, los datos secundarios: aprobadas, perfiles, reservas directas y Club.", antes: "#tabEventos" },
+      { sel: "#pipeline", titulo: "Pipeline de eventos", texto: "Cada solicitud de evento que llega por WhatsApp se convierte en una tarjeta y avanza por 4 etapas:", lista: ["<b>Borrador:</b> el ejecutivo la está armando", "<b>Enviada:</b> el cliente la recibió (✓✓ = la vio)", "<b>Aprobada:</b> pasa a BEO y anticipo", "<b>Perdida:</b> se guarda el motivo"] },
+      { sel: "#drawer", titulo: "Detalle bajo demanda", texto: "Al hacer clic en una tarjeta se abre este panel con la cotización y, en la otra pestaña, la conversación de WhatsApp. Los botones de abajo cambian según la etapa: enviar, recordar, aprobar o registrar el pago.", antes: "#pipeline .kcard" },
+      { sel: "#newQuote", titulo: "Nueva cotización en 3 clics", texto: "Solo 5 campos: cliente, tipo, propiedad, fecha e invitados. El resto se completa en el borrador.", antes: "#drawer [data-close-drawer]" },
+      { sel: "#guestTools", titulo: "Busca y filtra huéspedes", texto: "Escribe un nombre, empresa o ciudad, o filtra por segmento. Los perfiles se unifican desde Opera/Prestige: un mismo huésped aparece una sola vez aunque haya ido a varios hoteles.", antes: "#tabHuespedes" },
+      { sel: "#guestTable", titulo: "Lista de huéspedes", texto: "Solo lo esencial: quién es, su nivel en el Club y si está en casa. Haz clic en una fila para abrir su ficha." },
+      { sel: "#guestCard", titulo: "Ficha del huésped con línea de tiempo", texto: "Arriba la próxima acción sugerida. Debajo, toda su actividad en orden: estancias, notas del equipo, canjes y encuestas. Contacto, preferencias y consumos quedan plegados hasta que los necesites." },
       { sel: "#clubTiers", titulo: "Club Tibisay: niveles", texto: "Plata, Oro y Platino. El nivel se calcula automáticamente por noches de los últimos 12 meses y los puntos por consumo en toda la cadena.", antes: "#tabClub" },
-      { sel: "#memberTable", titulo: "Miembros y puntos", texto: "Ve los puntos de cada socio, cuánto le falta para subir de nivel y qué puntos están por vencer. Filtra por nivel con los botones de arriba para lanzar campañas." },
-      { sel: "#pipeline", titulo: "Pipeline de cotizaciones", texto: "Cada solicitud de evento que llega por WhatsApp se convierte en una cotización y avanza por 4 estados:", lista: ["<b>Borrador:</b> el ejecutivo la está armando", "<b>Enviada:</b> el cliente la recibió (✓✓ = la vio)", "<b>Aprobada:</b> pasa a BEO y anticipo", "<b>Perdida:</b> se guarda el motivo"], antes: "#tabEventos" },
-      { sel: "#quoteDetail", titulo: "Detalle y conversación", texto: "Al hacer clic en una tarjeta ves la conversación de WhatsApp a la izquierda y la cotización a la derecha. Los botones cambian según el estado: enviar, recordar, aprobar o registrar el pago." },
+      { sel: "#memberTable", titulo: "Miembros y puntos", texto: "Puntos, avance al siguiente nivel y puntos por vencer. Filtra por nivel para lanzar campañas (plegadas debajo)." },
+      { sel: "#roleSelect", titulo: "Vista por rol", texto: "Cambia la vista (Gerencia, Front Desk, A&B…) y el menú y el inicio muestran primero lo tuyo." },
       { sel: "#propSelect", titulo: "Cambia de hotel", texto: "El selector de propiedad filtra todo el módulo por hotel. Elige «Todas las propiedades» para la vista de cadena." },
       { sel: "[data-tour-start]", titulo: "¿Necesitas repasar?", texto: "Puedes repetir este recorrido cuando quieras con este botón." }
     ]

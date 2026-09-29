@@ -17,52 +17,53 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Panel de IT</div>
     <h1>Panel de IT <span class="scope-pill" data-prop-name></span></h1>
-    <p>Estado de la infraestructura, tickets de soporte por sede y monitoreo · actualizado hace 1 min.</p>
+    <p>¿Está operativa la infraestructura? Incidencias, tickets y respaldos · actualizado hace 1 min.</p>
   </div>
   <div class="actions">
     <a class="btn btn-ghost" href="#" data-toast="Reporte mensual de IT exportado en PDF (demo)" data-icon="download">Reporte mensual</a>
-    <a class="btn btn-primary" href="#" data-toast="Nuevo ticket de soporte IT (demo)" data-icon="plus">Nuevo ticket</a>
+    <a class="btn btn-primary" href="#" id="btnTk" data-hash="nuevo-ticket" data-icon="plus">Nuevo ticket</a>
   </div>
 </div>
 
-<div class="grid g-4" id="kpis"></div>
+<section class="card hero" id="itHero"></section>
 
 <section class="card mt" data-tabs>
   <div class="tabs">
-    <button class="tab active" data-tab="infra">Infraestructura</button>
-    <button class="tab" data-tab="tk">Tickets de soporte <span class="badge nodot b-danger" id="bTk">0</span></button>
+    <button class="tab active" data-tab="infra">Estado</button>
+    <button class="tab" data-tab="tk">Tickets <span class="badge nodot b-danger" id="bTk">0</span></button>
     <button class="tab" data-tab="mon">Monitoreo</button>
     <button class="tab" data-tab="bk">Respaldos</button>
   </div>
 
-  <!-- ============ INFRAESTRUCTURA ============ -->
+  <!-- ============ ESTADO ============ -->
   <div class="tab-panel active" data-panel="infra">
-    <div class="card-h"><div><h2>Estado por sede</h2><p>Verde = operativo · amarillo = degradado · rojo = caído</p></div>
+    <div class="card-h"><div><h2>Incidencias activas</h2><p>Primero lo caído, luego lo degradado</p></div></div>
+    <ul class="list inbox" id="incList"></ul>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado por sede</h2><p>Pasa el cursor sobre un punto para ver el detalle</p></div>
       <div class="legend"><span><span class="status-dot ok"></span> Operativo</span><span><span class="status-dot warn"></span> Degradado</span><span><span class="status-dot danger"></span> Caído</span></div></div>
     <div class="table-wrap"><table class="table matrix">
       <thead><tr><th>Sede</th><th>Internet ppal.</th><th>Internet resp.</th><th>LAN</th><th>Wi-Fi huésp.</th><th>Wi-Fi oper.</th><th>Servidor</th><th>Telefonía</th><th>CCTV</th><th>Respaldo</th></tr></thead>
       <tbody id="matrix"></tbody>
     </table></div>
-    <div class="card-b" style="border-top:1px solid var(--border)"><div class="grid g-4" id="infraCards"></div></div>
   </div>
 
   <!-- ============ TICKETS ============ -->
   <div class="tab-panel" data-panel="tk">
     <div class="toolbar">
-      <div class="seg" id="tkSeg"><button class="active" data-v="">Abiertos y en curso</button><button data-v="Nuevo">Nuevos</button><button data-v="En curso">En curso</button><button data-v="Esperando usuario">Esperando usuario</button><button data-v="Resuelto">Resueltos hoy</button></div>
+      <div class="seg" id="tkSeg"><button class="active" data-v="">Abiertos</button><button data-v="Nuevo">Nuevos</button><button data-v="En curso">En curso</button><button data-v="Esperando usuario">En espera</button><button data-v="Resuelto">Resueltos hoy</button></div>
       <span class="small muted" style="margin-left:auto">SLA · crítica 1 h · alta 4 h · media 1 día · baja 3 días</span>
     </div>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Ticket</th><th>Sede</th><th>Asunto</th><th>Categoría</th><th>Solicitante</th><th>Prioridad</th><th>Estado</th><th>Asignado</th><th>Abierto</th><th>SLA</th></tr></thead>
+      <thead><tr><th style="min-width:240px">Asunto</th><th>Sede</th><th>Prioridad</th><th>Estado</th><th>SLA</th></tr></thead>
       <tbody id="tkBody"></tbody>
     </table></div>
-    <div class="card-b" style="border-top:1px solid var(--border)">
-      <div class="grid g-2">
+    <details class="acc flat">
+      <summary><span class="grow">Estadísticas del mes <span class="muted">· por sede y por categoría</span></span></summary>
+      <div class="acc-b"><div class="grid g-2">
         <div><h3 style="margin-bottom:10px">Tickets abiertos por sede</h3><div id="tkChart"></div></div>
-        <div><h3 style="margin-bottom:10px">Por categoría (mes)</h3>
-          <div class="donut-wrap"><div id="tkDonut"></div><ul class="donut-list" id="tkDonutList"></ul></div></div>
-      </div>
-    </div>
+        <div><h3 style="margin-bottom:10px">Por categoría (mes)</h3><div class="donut-wrap"><div id="tkDonut"></div><ul class="donut-list" id="tkDonutList"></ul></div></div>
+      </div></div>
+    </details>
   </div>
 
   <!-- ============ MONITOREO ============ -->
@@ -71,31 +72,33 @@
       <div style="border-right:1px solid var(--border)">
         <div class="card-h"><div><h2>Disponibilidad · últimos 30 días</h2><p>Cada barra es un día</p></div></div>
         <div class="card-b" id="uptime"></div>
-        <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Latencia hacia la nube (ms) · hoy</h2><p>Enlace principal por sede · promedio cada 2 h</p></div><div class="legend" id="latLegend"></div></div>
-        <div class="card-b"><div id="latChart"></div></div>
       </div>
       <div>
         <div class="card-h"><div><h2>Alertas recientes</h2><p>Del sistema de monitoreo</p></div></div>
         <ul class="list" id="alerts"></ul>
       </div>
     </div>
+    <details class="acc flat">
+      <summary><span class="grow">Latencia hacia la nube (ms) · hoy <span class="muted">· enlace principal por sede</span></span><span class="legend" id="latLegend"></span></summary>
+      <div class="acc-b"><div id="latChart"></div></div>
+    </details>
   </div>
 
   <!-- ============ RESPALDOS ============ -->
   <div class="tab-panel" data-panel="bk">
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Sistema</th><th>Sede</th><th>Tipo</th><th>Última ejecución</th><th>Duración</th><th class="num">Tamaño</th><th>Destino</th><th>Estado</th><th>Última prueba de restauración</th></tr></thead>
+      <thead><tr><th>Sistema</th><th>Sede</th><th>Última ejecución</th><th>Estado</th><th>Prueba de restauración</th></tr></thead>
       <tbody>
-        <tr data-sede="margarita"><td class="strong">Base de datos Opera PMS</td><td>Margarita</td><td>Incremental c/ 4 h + completo diario</td><td>Hoy 02:00 a.m.</td><td>18 min</td><td class="num">42 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
-        <tr data-sede="maracaibo"><td class="strong">Base de datos Opera PMS</td><td>Maracaibo</td><td>Incremental c/ 4 h + completo diario</td><td>Hoy 02:00 a.m.</td><td>15 min</td><td class="num">36 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
-        <tr data-sede="margarita"><td class="strong">Profit Plus (contabilidad)</td><td>Margarita</td><td>Completo diario</td><td>Hoy 01:00 a.m.</td><td>9 min</td><td class="num">11 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>05/09/2026 · OK</td></tr>
-        <tr data-sede="morrocoy"><td class="strong">Saint Enterprise</td><td>Morrocoy</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>—</td><td class="num">—</td><td>NAS local + nube</td><td><span class="badge b-danger">Falló · servidor sin respuesta</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="merida"><td class="strong">Saint Enterprise</td><td>Mérida</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>7 min</td><td class="num">6 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="maturin"><td class="strong">Saint Enterprise</td><td>Maturín</td><td>Completo diario</td><td>Hoy 01:30 a.m.</td><td>6 min</td><td class="num">5 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="canaima"><td class="strong">a2 Softway</td><td>Canaima</td><td>Completo diario</td><td>Hoy 01:45 a.m.</td><td>31 min</td><td class="num">3 GB</td><td>Nube (enlace satelital)</td><td><span class="badge b-warn">Lento · enlace saturado</span></td><td>15/08/2026 · OK</td></tr>
-        <tr data-sede="catatumbo"><td class="strong">a2 Softway</td><td>Catatumbo</td><td>Completo diario</td><td>Hoy 01:45 a.m.</td><td>8 min</td><td class="num">4 GB</td><td>NAS local + nube</td><td><span class="badge b-ok">Correcto</span></td><td>15/08/2026 · OK</td></tr>
-        <tr data-sede="todas"><td class="strong">Plataforma Tibisay (CRM, IMS, RR. HH.)</td><td>Nube · cadena</td><td>Continuo (réplica) + diario</td><td>Hoy 03:00 a.m.</td><td>4 min</td><td class="num">28 GB</td><td>Nube (2 regiones)</td><td><span class="badge b-ok">Correcto</span></td><td>20/09/2026 · OK</td></tr>
-        <tr data-sede="todas"><td class="strong">Servidor de archivos corporativo</td><td>Oficina central</td><td>Incremental diario</td><td>Hoy 00:30 a.m.</td><td>22 min</td><td class="num">310 GB</td><td>NAS + cinta semanal</td><td><span class="badge b-ok">Correcto</span></td><td>01/09/2026 · OK</td></tr>
+        <tr data-sede="margarita"><td class="strong">Base de datos Opera PMS<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 02:00 a.m.<span class="sub">18 min · 42 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Base de datos Opera PMS<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Maracaibo</td><td>Hoy 02:00 a.m.<span class="sub">15 min · 36 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="margarita"><td class="strong">Profit Plus (contabilidad)<span class="sub">Completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 01:00 a.m.<span class="sub">9 min · 11 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>05/09/2026 · OK</td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Morrocoy</td><td>Hoy 01:30 a.m.<span class="sub">— · —</span></td><td><span class="badge b-danger">Falló · servidor sin respuesta</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="merida"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Mérida</td><td>Hoy 01:30 a.m.<span class="sub">7 min · 6 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="maturin"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Maturín</td><td>Hoy 01:30 a.m.<span class="sub">6 min · 5 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="canaima"><td class="strong">a2 Softway<span class="sub">Completo diario · Nube (enlace satelital)</span></td><td>Canaima</td><td>Hoy 01:45 a.m.<span class="sub">31 min · 3 GB</span></td><td><span class="badge b-warn">Lento · enlace saturado</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="catatumbo"><td class="strong">a2 Softway<span class="sub">Completo diario · NAS local + nube</span></td><td>Catatumbo</td><td>Hoy 01:45 a.m.<span class="sub">8 min · 4 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="todas"><td class="strong">Plataforma Tibisay (CRM, IMS, RR. HH.)<span class="sub">Continuo (réplica) + diario · Nube (2 regiones)</span></td><td>Nube · cadena</td><td>Hoy 03:00 a.m.<span class="sub">4 min · 28 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>20/09/2026 · OK</td></tr>
+        <tr data-sede="todas"><td class="strong">Servidor de archivos corporativo<span class="sub">Incremental diario · NAS + cinta semanal</span></td><td>Oficina central</td><td>Hoy 00:30 a.m.<span class="sub">22 min · 310 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>01/09/2026 · OK</td></tr>
       </tbody>
     </table></div>
     <div class="card-f">Política 3-2-1: 3 copias, 2 medios distintos, 1 fuera de la sede. Prueba de restauración mensual por sistema.</div>
@@ -161,33 +164,36 @@
       ["server", "Servidores", (srv - srvDown) + "/" + srv, "servidores en línea · CPU media 34%", srvDown ? "danger" : "ok", srvDown ? "Morrocoy · servidor Saint caído" : "Disco más lleno: 71%"],
       ["archive", "Respaldos de anoche", sedes.filter(function (h) { return INFRA[h.id][8] !== 2; }).length + "/" + sedes.length, "sedes con respaldo correcto", srvDown ? "danger" : sedes.some(function (h) { return INFRA[h.id][8] === 1; }) ? "warn" : "ok", srvDown ? "Morrocoy · reintentar tras recuperar servidor" : "Último: hoy 03:00 a.m."]
     ];
-    document.getElementById("infraCards").innerHTML = cards.map(function (c) {
-      return '<div class="card infra"><div class="infra-h"><span class="kpi-ico teal">' + App.icon(c[0]) + "</span><h3>" + c[1] + '</h3><span class="status-dot ' + c[4] + '"></span></div><div class="kpi-value">' + c[2] + '</div><div class="kpi-sub">' + c[3] + '</div><div class="small mt" style="color:var(--' + (c[4] === "ok" ? "text-3" : c[4] === "warn" ? "warn" : "danger") + ')">' + c[5] + "</div></div>";
-    }).join("");
-
-    // KPIs
     var tks = TK.filter(function (t) { return p === "todas" || t[1] === p; }), open = tks.filter(function (t) { return t[6] !== "Resuelto"; });
-    var inc = sedes.filter(function (h) { return INFRA[h.id].some(function (v) { return v; }); }).length;
     var avail = p === "todas" ? "99,82%" : p === "morrocoy" ? "99,41%" : p === "canaima" ? "98,90%" : "99,9" + (sedes[0].hab % 9) + "%";
-    document.getElementById("kpis").innerHTML = [
-      ["Disponibilidad de red (30 d)", avail, "meta 99,5%", "wifi", true],
-      ["Sedes con incidencias", inc + " / " + sedes.length, inc ? "ver matriz de infraestructura" : "todo operativo", "building"],
-      ["Tickets IT abiertos", open.length, open.filter(function (t) { return t[5] === "Crítica" || t[5] === "Alta"; }).length + " de prioridad alta o crítica", "wrench"],
-      ["Respaldos de anoche", sedes.filter(function (h) { return INFRA[h.id][8] !== 2; }).length + " / " + sedes.length, srvDown ? "1 falló · Morrocoy" : "todos correctos", "archive"]
-    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
+    var inc = [];
+    sedes.forEach(function (h) { INFRA[h.id].forEach(function (v, i) { if (v) inc.push({ v: v, h: h, i: i, t: NOTE[h.id + "|" + i] || LBL[v] }); }); });
+    inc.sort(function (a, b) { return b.v - a.v; });
+    var down = inc.filter(function (x) { return x.v === 2; }).length;
+    var COMP = ["Internet principal", "Internet de respaldo", "LAN", "Wi-Fi huéspedes", "Wi-Fi operativo", "Servidor", "Telefonía", "CCTV", "Respaldo"];
+    document.getElementById("itHero").innerHTML = App.hero(
+      { label: "Incidencias activas", value: inc.length, sub: (down ? down + " caída" + (down > 1 ? "s" : "") + " · " : "") + (inc.length - down) + (inc.length - down === 1 ? " degradada" : " degradadas") + " · disponibilidad 30 d " + avail },
+      cards.map(function (c) { return [c[1], c[2], c[5], c[4] === "ok" ? "" : c[4]]; }));
+    var tkBy = { "5": "IT-3318", "7": "IT-3314", "0": "IT-3316", "3": "IT-3313" };
+    document.getElementById("incList").innerHTML = inc.map(function (x) {
+      var tk = tkBy[x.i] && TK.find(function (t) { return t[0] === tkBy[x.i] && t[1] === x.h.id; });
+      return '<li><span class="alert-ico b-' + (x.v === 2 ? "danger" : "warn") + '">' + App.icon(x.i === 5 ? "server" : x.i === 7 ? "camera" : x.i === 8 ? "archive" : "wifi") + '</span><div class="grow"><b>' + x.t + "</b><small>" + x.h.nombre + " · " + COMP[x.i] + " · " + LBL[x.v].toLowerCase() + "</small></div>" +
+        (tk ? '<a class="btn btn-ghost btn-sm" href="#" data-open-tk>Ver ' + tk[0] + "</a>" : '<a class="btn btn-ghost btn-sm" href="#" data-toast="Ticket creado para ' + x.h.nombre + " · " + COMP[x.i] + ' (demo)">Crear ticket</a>') + "</li>";
+    }).join("") || '<li><span class="alert-ico b-ok">' + App.icon("check") + '</span><div class="grow"><b>Todo operativo</b><small>Sin incidencias en esta sede</small></div></li>';
+    App.more(document.getElementById("incList"), 4);
 
     // Tickets
     document.getElementById("bTk").textContent = open.length;
     document.getElementById("tkBody").innerHTML = tks.map(function (t) {
       var late = t[6] !== "Resuelto" && t[6] !== "Esperando proveedor" && t[6] !== "Esperando usuario" && t[8] > t[9];
       var sla = t[6] === "Resuelto" ? '<span class="sem ok">Cumplido</span>' : t[6].indexOf("Esperando") === 0 ? '<span class="sem muted">Pausado</span>' : late ? '<span class="sem danger">Vencido</span>' : '<span class="sem ok">En tiempo</span>';
-      return '<tr data-st="' + t[6] + '"><td class="strong">' + t[0] + "</td><td>" + D.sedeNombre(t[1]) + '</td><td class="strong">' + t[2] + "</td><td>" + t[3] + '</td><td class="small">' + t[4] + '</td><td><span class="badge ' + PR[t[5]] + '">' + t[5] + '</span></td><td><span class="badge nodot ' + TST[t[6]] + '">' + t[6] + "</span></td><td>" + (t[7] === "—" ? '<a class="small" href="#" data-toast="' + t[0] + ' asignado a ' + TECH[t[0].charCodeAt(6) % 3] + ' (demo)">Asignar</a>' : t[7]) + "</td><td>" + ago(t[8]) + "</td><td>" + sla + "</td></tr>";
-    }).join("") || '<tr><td colspan="10" class="muted">Sin tickets para esta sede</td></tr>';
+      return '<tr data-st="' + t[6] + '"><td class="strong">' + t[2] + '<span class="sub">' + t[0] + " · " + t[3] + " · " + t[4] + "</span></td><td>" + D.sedeNombre(t[1]) + '</td><td><span class="badge ' + PR[t[5]] + '">' + t[5] + '</span></td><td><span class="badge nodot ' + TST[t[6]] + '">' + t[6] + '</span><span class="sub">' + (t[7] === "—" ? '<a href="#" data-toast="' + t[0] + ' asignado a ' + TECH[t[0].charCodeAt(6) % 3] + ' (demo)">Asignar</a>' : t[7]) + "</span></td><td>" + sla + '<span class="sub">' + ago(t[8]) + "</span></td></tr>";
+    }).join("") || '<tr><td colspan="5" class="muted">Sin tickets para esta sede</td></tr>';
     filterTk();
 
     var bySede = D.propiedades.map(function (h) { return TK.filter(function (t) { return t[1] === h.id && t[6] !== "Resuelto"; }).length + (h.hab > 100 ? 2 : 0); });
     App.barChart(document.getElementById("tkChart"), { labels: D.propiedades.map(function (h) { return h.nombre.slice(0, 4) + "."; }), series: [{ data: bySede }], values: true, highlight: p === "todas" ? -1 : D.propiedades.findIndex(function (h) { return h.id === p; }) });
-    var cats = [["Internet / Wi-Fi", 34, "#c99d6b"], ["Punto de venta", 18, "#1c2e2e"], ["Impresora fiscal", 14, "#2f6377"], ["Accesos y usuarios", 12, "#a8690f"], ["Otros", 22, "#d6cfc3"]];
+    var cats = [["Internet / Wi-Fi", 34, "#c9a24b"], ["Punto de venta", 18, "#141414"], ["Impresora fiscal", 14, "#2f6377"], ["Accesos y usuarios", 12, "#a8690f"], ["Otros", 22, "#cfc9bd"]];
     App.donut(document.getElementById("tkDonut"), cats.map(function (c) { return { v: c[1], color: c[2] }; }), ["100", "tickets"]);
     document.getElementById("tkDonutList").innerHTML = cats.map(function (c) { return '<li><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + c[2] + ';margin-right:8px"></i>' + c[0] + "</span><b>" + c[1] + "</b></li>"; }).join("");
 
@@ -211,7 +217,7 @@
     var lab = ["0h", "2h", "4h", "6h", "8h", "10h", "12h", "14h", "16h", "18h", "20h", "22h"];
     var lines = (p === "todas" ? ["margarita", "maracaibo", "canaima"] : [p]).map(function (id, j) {
       var base = id === "canaima" ? 620 : id === "morrocoy" ? 70 : 38 + j * 6;
-      return { data: lab.map(function (_, i) { return Math.round(base * (1 + (i >= 5 && i <= 10 ? 0.35 : 0) + ((i * 7 + j * 3) % 5) / 20)); }), color: ["#c99d6b", "#1c2e2e", "#2f6377"][j], area: j === 0, name: D.sedeNombre(id) };
+      return { data: lab.map(function (_, i) { return Math.round(base * (1 + (i >= 5 && i <= 10 ? 0.35 : 0) + ((i * 7 + j * 3) % 5) / 20)); }), color: ["#c9a24b", "#141414", "#2f6377"][j], area: j === 0, name: D.sedeNombre(id) };
     });
     App.lineChart(document.getElementById("latChart"), { labels: lab, series: lines, min: 0, fmt: function (v) { return v; } });
     document.getElementById("latLegend").innerHTML = lines.map(function (l) { return '<span><i class="line" style="background:' + l.color + '"></i>' + l.name + "</span>"; }).join("");
@@ -239,6 +245,18 @@
     });
   }
   document.querySelectorAll("#tkSeg button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(filterTk); }); });
+
+  document.addEventListener("click", function (e) { if (e.target.closest("[data-open-tk]")) { e.preventDefault(); document.querySelector('.tab[data-tab="tk"]').click(); } });
+  document.getElementById("btnTk").addEventListener("click", function (e) {
+    e.preventDefault();
+    var p = App.prop();
+    App.wizard({ title: "Nuevo ticket de soporte IT", sub: "Se asigna al técnico de guardia según la categoría", steps: [{ t: "Ticket", html: function () {
+      return '<div class="field"><label>Asunto</label><input class="input" placeholder="Ej.: la impresora fiscal no imprime"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Sede</label><select class="select">' + D.propiedades.map(function (h) { return "<option" + (h.id === p ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + '</select></div>' +
+        '<div class="field"><label>Categoría</label><select class="select"><option>Internet / Wi-Fi</option><option>Punto de venta</option><option>Impresora fiscal</option><option>Accesos y usuarios</option><option>Servidores</option><option>CCTV</option><option>Telefonía</option></select></div></div>' +
+        '<div class="field" style="margin:0"><label>Prioridad</label><div class="seg" style="display:flex"><button type="button">Baja</button><button type="button" class="active">Media</button><button type="button">Alta</button><button type="button">Crítica</button></div></div>';
+    }, after: function (el) { el.querySelector(".seg").onclick = function (ev) { var b = ev.target.closest("button"); if (b) el.querySelectorAll(".seg button").forEach(function (x) { x.classList.toggle("active", x === b); }); }; } }],
+      done: { label: "Crear ticket", toast: "Ticket IT-3319 creado y asignado a Ricardo P. (demo)" } });
+  });
 
   App.onProp(render);
 })();

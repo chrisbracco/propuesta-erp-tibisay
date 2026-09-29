@@ -17,100 +17,102 @@
   <div>
     <div class="crumbs"><a href="dashboard.html">Inicio</a> / Operaciones</div>
     <h1>Operaciones · Hotel Tibisay <span data-prop-hotel></span></h1>
-    <p>Front desk, housekeeping, mantenimiento y alimentos &amp; bebidas del día · martes 29/09/2026.</p>
+    <p>¿Cómo va el día? Martes 29/09/2026 · reservas desde <b id="pmsName">Opera</b>, actualizado hace 1 min.</p>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-toast="Nuevo ticket de mantenimiento (demo)" data-icon="wrench">Reportar falla</a>
-    <a class="btn btn-ghost" href="#" data-toast="Walk-in: buscando habitación disponible (demo)" data-icon="plus">Walk-in</a>
-    <a class="btn btn-primary" href="#" data-toast="Check-in exprés iniciado (demo)" data-icon="key">Check-in</a>
+    <a class="btn btn-ghost" href="#" id="btnFalla" data-hash="reportar" data-icon="wrench">Reportar falla</a>
+    <a class="btn btn-primary" href="#" id="btnCheckin" data-hash="checkin" data-icon="key">Check-in</a>
   </div>
 </div>
 
-<div class="grid g-4" id="kpis"></div>
+<section class="card hero" id="opsHero"></section>
 
 <section class="card mt" data-tabs>
   <div class="tabs">
-    <button class="tab active" data-tab="fd">Front desk</button>
+    <button class="tab active" data-tab="hoy">Hoy</button>
+    <button class="tab" data-tab="rooms">Habitaciones</button>
     <button class="tab" data-tab="hk">Housekeeping <span class="badge nodot b-warn" id="hkBadge">0</span></button>
     <button class="tab" data-tab="mt">Mantenimiento <span class="badge nodot b-danger" id="mtBadge">0</span></button>
     <button class="tab" data-tab="ab">A&amp;B y salones</button>
   </div>
 
-  <!-- ============ FRONT DESK ============ -->
-  <div class="tab-panel active" data-panel="fd">
-    <div class="toolbar">
-      <div class="seg" id="fdSeg"><button class="active" data-v="lleg">Llegadas <span id="cLleg"></span></button><button data-v="sal">Salidas <span id="cSal"></span></button><button data-v="casa">En casa <span id="cCasa"></span></button></div>
-      <span class="small muted" style="margin-left:auto">Reservas del día desde <b id="pmsName">Opera</b> · actualizado hace 1 min</span>
-    </div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead id="fdHead"></thead>
-      <tbody id="fdBody"></tbody>
-    </table></div>
+  <!-- ============ HOY: timeline + journey ============ -->
+  <div class="tab-panel active" data-panel="hoy">
+    <div class="card-h"><div><h2>Línea de tiempo del día</h2><p>Llegadas, salidas, eventos, restaurante, pisos y fallas en una sola vista · clic en un elemento para ver el detalle</p></div>
+      <div class="legend"><span><i style="background:var(--gold-soft)"></i>Llegada</span><span><i style="background:var(--warn-bg)"></i>Salida</span><span><i style="background:var(--teal)"></i>Evento</span><span><i style="background:var(--champagne-soft)"></i>Restaurante</span><span><i style="background:var(--danger-bg)"></i>Falla</span></div></div>
+    <div class="dayline"><div class="dl-inner" id="dayline"></div></div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Journey del huésped</h2><p>Reserva → check-in → estancia → check-out · cada huésped con su siguiente paso</p></div>
+      <a class="btn btn-ghost btn-sm" href="#" id="btnWalkin" data-hash="walkin" data-icon="plus">Walk-in</a></div>
+    <div class="card-b"><div class="journey" id="journey"></div></div>
+  </div>
 
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado de habitaciones por piso</h2><p>Rack de recepción: estado de la estadía + estado de limpieza</p></div>
-      <div class="legend"><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--warn-bg)"></i>Salida hoy</span><span><i style="background:var(--gold-soft)"></i>Llegada asignada</span><span><i style="background:var(--ok-bg)"></i>Vacía lista</span><span><i style="background:var(--danger-bg)"></i>Vacía sucia</span><span><i style="background:#ece9e3"></i>Fuera de serv.</span></div></div>
+  <!-- ============ HABITACIONES ============ -->
+  <div class="tab-panel" data-panel="rooms">
+    <div class="card-h"><div><h2>Estado de habitaciones por piso</h2><p>Estado de la estadía + estado de limpieza · pasa el cursor para ver el detalle</p></div>
+      <div class="legend"><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--warn-bg)"></i>Salida hoy</span><span><i style="background:var(--gold-soft)"></i>Llegada</span><span><i style="background:var(--ok-bg)"></i>Vacía lista</span><span><i style="background:var(--danger-bg)"></i>Vacía sucia</span><span><i style="background:#ece9e3"></i>F/S</span></div></div>
     <div class="card-b" id="rack"></div>
   </div>
 
   <!-- ============ HOUSEKEEPING ============ -->
   <div class="tab-panel" data-panel="hk">
-    <div class="card-b">
-      <div class="semaforo" id="hkSum"></div>
-    </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Asignación por camarera</h2><p>Turno A 7:00–15:00 · asignación automática por piso según salidas y llegadas</p></div>
-      <div class="legend"><span><i style="background:var(--ok-bg)"></i>Limpia</span><span><i style="background:var(--danger-bg)"></i>Sucia</span><span><i style="background:#e8e4f3"></i>En limpieza</span><span><i style="background:var(--warn-bg)"></i>Por inspeccionar</span></div></div>
-    <div class="card-b"><div class="grid g-3" id="maids"></div></div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Cola de inspección</h2><p>La supervisora libera la habitación a recepción al aprobarla</p></div></div>
+    <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="hkSum"></div></div>
+    <div class="card-h"><div><h2>Por inspeccionar</h2><p>La supervisora libera la habitación a recepción al aprobarla · llegadas primero</p></div></div>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Hab.</th><th>Tipo</th><th>Limpió</th><th>Terminó</th><th>Llegada asignada</th><th>Prioridad</th><th></th></tr></thead>
+      <thead><tr><th>Hab.</th><th>Limpió</th><th>Llegada asignada</th><th></th></tr></thead>
       <tbody id="inspBody"></tbody>
     </table></div>
+    <details class="acc flat">
+      <summary><span class="grow">Asignación por camarera <span class="muted">· turno A 7:00–15:00 · automática por piso</span></span></summary>
+      <div class="acc-b"><div class="grid g-3" id="maids"></div></div>
+    </details>
   </div>
 
   <!-- ============ MANTENIMIENTO ============ -->
   <div class="tab-panel" data-panel="mt">
-    <div class="toolbar">
+    <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="mtSum"></div></div>
+    <div class="toolbar" style="border-bottom:0">
       <div class="seg" id="mtSeg"><button class="active" data-v="">Todas</button><button data-v="Urgente">Urgente</button><button data-v="Alta">Alta</button><button data-v="Media">Media</button><button data-v="Baja">Baja</button></div>
       <select class="select select-sm" style="width:auto" id="mtState"><option value="">Todos los estados</option><option>Abierto</option><option>Asignado</option><option>En proceso</option><option>Esperando repuesto</option><option>Resuelto</option></select>
       <span class="small muted" style="margin-left:auto">SLA: urgente 30 min · alta 2 h · media 8 h · baja 48 h</span>
     </div>
-    <div class="card-b" style="padding-bottom:0"><div class="semaforo" id="mtSum"></div></div>
-    <div class="table-wrap mt"><table class="table" data-searchable>
-      <thead><tr><th>Ticket</th><th>Ubicación</th><th>Falla</th><th>Categoría</th><th>Prioridad</th><th>Estado</th><th>Técnico</th><th>Abierto</th><th>SLA</th></tr></thead>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Falla</th><th>Ubicación</th><th>Prioridad</th><th>Estado</th><th>SLA</th></tr></thead>
       <tbody id="mtBody"></tbody>
     </table></div>
   </div>
 
   <!-- ============ A&B ============ -->
   <div class="tab-panel" data-panel="ab">
-    <div class="card-b"><div class="grid g-4" id="abKpis"></div></div>
-    <div class="grid g-2" style="gap:0;border-top:1px solid var(--border)">
+    <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="abKpis"></div></div>
+    <div class="grid g-2" style="gap:0">
       <div style="border-right:1px solid var(--border)">
         <div class="card-h"><div><h2>Reservas de restaurante · hoy</h2><p id="restName">—</p></div><a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva de mesa (demo)">+ Mesa</a></div>
         <div class="table-wrap"><table class="table" data-searchable>
-          <thead><tr><th>Hora</th><th>Nombre</th><th class="num">Pax</th><th>Mesa</th><th>Huésped</th><th>Nota</th></tr></thead>
+          <thead><tr><th>Hora</th><th>Nombre</th><th class="num">Pax</th><th>Nota</th></tr></thead>
           <tbody id="restBody"></tbody>
         </table></div>
       </div>
       <div>
-        <div class="card-h"><div><h2>Gran Salón y salas · hoy</h2><p>Montajes y eventos del día por espacio</p></div></div>
+        <div class="card-h"><div><h2>Salones · hoy</h2><p>Montajes y eventos del día por espacio</p></div></div>
         <div class="card-b"><div class="grid" style="gap:10px" id="venues"></div></div>
       </div>
     </div>
-    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Agenda de salones · semana 40</h2><p>Gran Salón, salas de reuniones, terraza y jardín · BEO vinculado desde CRM</p></div></div>
-    <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
-      <tbody>
-        <tr data-sede="margarita"><td>Mié 30/09</td><td>Sala Guaraguao</td><td class="strong">Desayuno de trabajo Digitel</td><td>Escuela</td><td class="num">35</td><td>BEO-0931</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="maracaibo"><td>Jue 01/10</td><td>Gran Salón Del Lago</td><td class="strong">Congreso Ingeniería Petrolera</td><td>Auditorio</td><td class="num">300</td><td>BEO-0926</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="margarita"><td>Jue 01/10</td><td>Sala El Yaque</td><td class="strong">Capacitación Laboratorios Leti</td><td>Herradura</td><td class="num">22</td><td>BEO-0934</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="margarita"><td>Vie 02/10</td><td>Terraza Pampatar</td><td class="strong">Cóctel bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
-        <tr data-sede="margarita"><td>Sáb 03/10</td><td>Gran Salón Nueva Esparta</td><td class="strong">Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="merida"><td>Sáb 03/10</td><td>Salón Sierra Nevada</td><td class="strong">Encuentro regional de ventas</td><td>Escuela</td><td class="num">80</td><td>BEO-0941</td><td><span class="badge b-info">Tentativo</span></td></tr>
-        <tr data-sede="canaima"><td>Dom 04/10</td><td>Churuata principal</td><td class="strong">Cena Banco del Sur</td><td>Imperial</td><td class="num">24</td><td>BEO-0944</td><td><span class="badge b-ok">Confirmado</span></td></tr>
-        <tr data-sede="morrocoy"><td>Dom 04/10</td><td>Jardín frente al mar</td><td class="strong">Brunch Club Tibisay</td><td>Buffet</td><td class="num">80</td><td>BEO-0940</td><td><span class="badge b-info">Tentativo</span></td></tr>
-      </tbody>
-    </table></div>
+    <details class="acc flat">
+      <summary><span class="grow">Agenda de salones · semana 40 <span class="muted">· BEO vinculado desde CRM</span></span></summary>
+      <div class="table-wrap"><table class="table" data-searchable>
+        <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr data-sede="margarita"><td>Mié 30/09</td><td>Sala Guaraguao</td><td class="strong">Desayuno de trabajo Digitel</td><td>Escuela</td><td class="num">35</td><td>BEO-0931</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr data-sede="maracaibo"><td>Jue 01/10</td><td>Gran Salón Del Lago</td><td class="strong">Congreso Ingeniería Petrolera</td><td>Auditorio</td><td class="num">300</td><td>BEO-0926</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr data-sede="margarita"><td>Jue 01/10</td><td>Sala El Yaque</td><td class="strong">Capacitación Laboratorios Leti</td><td>Herradura</td><td class="num">22</td><td>BEO-0934</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr data-sede="margarita"><td>Vie 02/10</td><td>Terraza Pampatar</td><td class="strong">Cóctel bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
+          <tr data-sede="margarita"><td>Sáb 03/10</td><td>Gran Salón Nueva Esparta</td><td class="strong">Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr data-sede="merida"><td>Sáb 03/10</td><td>Salón Sierra Nevada</td><td class="strong">Encuentro regional de ventas</td><td>Escuela</td><td class="num">80</td><td>BEO-0941</td><td><span class="badge b-info">Tentativo</span></td></tr>
+          <tr data-sede="canaima"><td>Dom 04/10</td><td>Churuata principal</td><td class="strong">Cena Banco del Sur</td><td>Imperial</td><td class="num">24</td><td>BEO-0944</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+          <tr data-sede="morrocoy"><td>Dom 04/10</td><td>Jardín frente al mar</td><td class="strong">Brunch Club Tibisay</td><td>Buffet</td><td class="num">80</td><td>BEO-0940</td><td><span class="badge b-info">Tentativo</span></td></tr>
+        </tbody>
+      </table></div>
+    </details>
   </div>
 </section>
 </main>
@@ -144,7 +146,7 @@
   };
   var eventos = [["Desayuno de trabajo", "Escuela", "7:30–10:00"], ["Capacitación corporativa", "Herradura", "8:30–17:00"], ["Almuerzo ejecutivo", "Imperial", "12:30–14:30"], ["Montaje boda (sábado)", "Banquete redondo", "14:00–20:00"], ["Cóctel de networking", "Cóctel", "18:30–21:30"], ["Reunión de directorio", "Imperial", "9:00–12:00"], ["Cena aniversario", "Banquete redondo", "19:30–23:30"]];
 
-  var fdMode = "lleg", data;
+  var data;
 
   function build(prop) {
     var r = rng(prop.id), occ = prop.occ / 100, rooms = [];
@@ -176,32 +178,87 @@
   var FDS = { ocupada: "Ocupada", salida: "Sale hoy", llegada: "Llega", vacia: "Vacía", fuera: "F/S" };
   var HKS = { limpia: "Limpia", sucia: "Sucia", proceso: "Limpiando", insp: "Insp.", ocupada: "Sin salir", fuera: "—" };
 
-  function renderFD() {
-    var rs = data.rooms, rows = "", head = "";
-    if (fdMode === "lleg") {
-      head = "<tr><th>Hora est.</th><th>Reserva</th><th>Huésped</th><th>Hab.</th><th>Tipo</th><th class=\"num\">Noches</th><th class=\"num\">Tarifa</th><th>Canal</th><th>Hab. lista</th><th></th></tr>";
-      rs.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; }).slice(0, 12).forEach(function (x, i) {
-        var lista = x.hk === "limpia", done = i < 3;
-        rows += "<tr><td>" + hhmm(x.hora) + '</td><td class="muted">' + x.res + '</td><td class="strong">' + x.g + "</td><td>" + x.n + "</td><td>" + x.tipo + '</td><td class="num">' + x.noches + '</td><td class="num">' + $(x.tarifa) + "</td><td>" + x.canal + "</td><td>" +
-          (done ? '<span class="badge b-ok">Registrado</span>' : lista ? '<span class="badge b-ok">Lista</span>' : '<span class="badge ' + (x.hk === "insp" ? "b-warn" : "b-danger") + '">' + HK[x.hk][0] + "</span>") + "</td><td>" +
-          (done ? '<span class="small muted">Check-in ' + hhmm(x.hora - 40) + "</span>" : '<a class="btn ' + (lista ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-toast="' + (lista ? "Check-in de " + x.g + " · hab. " + x.n + " · llave emitida (demo)" : "Hab. " + x.n + " aún no está lista: aviso enviado a housekeeping (demo)") + '">' + (lista ? "Check-in" : "Avisar a HK") + "</a>") + "</td></tr>";
-      });
-    } else if (fdMode === "sal") {
-      head = "<tr><th>Hab.</th><th>Huésped</th><th>Reserva</th><th class=\"num\">Noches</th><th>Folio</th><th class=\"num\">Saldo</th><th>Estado</th><th></th></tr>";
-      rs.filter(function (x) { return x.fd === "salida"; }).slice(0, 12).forEach(function (x) {
-        var out = x.hk !== "ocupada";
-        rows += "<tr><td class=\"strong\">" + x.n + '</td><td class="strong">' + x.g + '</td><td class="muted">' + x.res + '</td><td class="num">' + x.noches + "</td><td>" + (x.canal === "Corporativo" ? "Crédito empresa" : "Particular") + '</td><td class="num">' + (x.saldo ? '<span class="num-warn">' + $(x.saldo) + "</span>" : "$ 0") + "</td><td>" +
-          (out ? '<span class="badge b-ok">Check-out hecho</span>' : x.saldo ? '<span class="badge b-warn">Saldo pendiente</span>' : '<span class="badge b-info">Por salir · 12:00</span>') + "</td><td>" +
-          (out ? "" : '<a class="btn btn-primary btn-sm" href="#" data-toast="Check-out hab. ' + x.n + ": folio cerrado, factura fiscal enviada al ERP y habitación marcada sucia (demo)\">Check-out</a>") + "</td></tr>";
-      });
-    } else {
-      head = "<tr><th>Hab.</th><th>Huésped</th><th>Tipo</th><th class=\"num\">Noches</th><th>Canal</th><th class=\"num\">Tarifa</th><th>Limpieza hoy</th></tr>";
-      rs.filter(function (x) { return x.fd === "ocupada"; }).slice(0, 14).forEach(function (x) {
-        rows += '<tr><td class="strong">' + x.n + '</td><td class="strong">' + x.g + "</td><td>" + x.tipo + '</td><td class="num">' + x.noches + "</td><td>" + x.canal + '</td><td class="num">' + $(x.tarifa) + '</td><td><span class="room ' + HK[x.hk][1] + '" style="display:inline-block;padding:2px 8px">' + HK[x.hk][0] + "</span></td></tr>";
-      });
-    }
-    document.getElementById("fdHead").innerHTML = head;
-    document.getElementById("fdBody").innerHTML = rows;
+  var NOW = 10 * 60 + 42, H0 = 6 * 60, H1 = 24 * 60;
+  function X(m) { return ((Math.max(H0, Math.min(H1, m)) - H0) / (H1 - H0) * 100).toFixed(2) + "%"; }
+  function W(a, b) { return ((Math.min(H1, b) - Math.max(H0, a)) / (H1 - H0) * 100).toFixed(2) + "%"; }
+
+  // Etapa del journey para cada habitación con huésped
+  function stage(x, i) {
+    if (x.fd === "llegada") return x._reg ? "estancia" : "reserva";
+    if (x.fd === "salida") return x.hk !== "ocupada" ? "fuera" : "checkout";
+    if (x.fd === "ocupada") return "estancia";
+    return null;
+  }
+  function guestDrawer(n) {
+    var x = data.rooms.find(function (r) { return r.n === n; });
+    if (!x) return;
+    var st = x._st, lista = x.hk === "limpia";
+    var order = ["reserva", "checkin", "estancia", "checkout"], idx = st === "reserva" ? (lista ? 1 : 0) : st === "estancia" ? 2 : st === "checkout" ? 3 : 4;
+    var lbl = ["Reserva", "Check-in", "Estancia", "Check-out"];
+    var act = st === "reserva" ? (lista ? '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Check-in de ' + x.g + " · hab. " + x.n + ' · llave emitida (demo)">' + App.icon("key") + "Hacer check-in</a>" : '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Hab. ' + x.n + ' aún no está lista: aviso enviado a housekeeping (demo)">Avisar a housekeeping</a>')
+      : st === "checkout" ? '<a class="btn btn-ghost btn-sm" href="#" data-toast="Late check-out hasta las 2:00 p.m. aprobado (demo)">Late check-out</a><a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Check-out hab. ' + x.n + ': folio cerrado, factura fiscal enviada al ERP y habitación marcada sucia (demo)">Hacer check-out</a>'
+      : st === "fuera" ? '<a class="btn btn-ghost btn-sm" href="#" data-toast="Factura fiscal reenviada por correo a ' + x.g + ' (demo)">Reenviar factura</a>'
+      : '<a class="btn btn-ghost btn-sm" href="#" data-toast="Cargo a la habitación ' + x.n + ' registrado (demo)">Cargar consumo</a><a class="btn btn-primary btn-sm" href="crm.html#huespedes">Ver ficha 360</a>';
+    App.drawer('<div class="drawer-h"><div><h2>' + x.g + "</h2><p>Hab. " + x.n + " · " + x.tipo + " · " + x.res + '</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+      '<div class="drawer-b"><div class="card-b"><div class="jstep">' + lbl.map(function (l, k) { return '<span class="' + (k < idx ? "done" : k === idx ? "now" : "") + '">' + l + "</span>"; }).join("") + "</div>" +
+      '<dl class="dl"><dt>' + (st === "reserva" ? "Llegada estimada" : st === "checkout" ? "Salida" : st === "fuera" ? "Check-out" : "Estancia") + "</dt><dd>" + (st === "reserva" ? hhmm(x.hora) : st === "checkout" ? "Hoy 12:00 m." : st === "fuera" ? "Hecho hoy" : x.noches + " noche(s) restantes") + "</dd><dt>Noches</dt><dd>" + x.noches + "</dd><dt>Tarifa</dt><dd>" + $(x.tarifa) + "</dd><dt>Canal</dt><dd>" + x.canal + "</dd><dt>Folio</dt><dd>" + (x.canal === "Corporativo" ? "Crédito empresa" : "Particular") + "</dd><dt>Saldo</dt><dd" + (x.saldo ? ' class="num-warn"' : "") + ">" + $(x.saldo) + "</dd><dt>Limpieza</dt><dd>" + HK[x.hk][0] + "</dd></dl></div></div>" +
+      '<div class="drawer-f">' + act + "</div>");
+  }
+
+  function renderHoy(prop) {
+    var rs = data.rooms, r = rng(prop.id + "tl");
+    rs.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; }).forEach(function (x, i) { x._reg = i < 3; });
+    rs.forEach(function (x, i) { x._st = stage(x, i); });
+    var hrs = "";
+    for (var h = 6; h < 24; h += 2) hrs += "<span>" + h + ":00</span>";
+    var lleg = rs.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; });
+    var sal = rs.filter(function (x) { return x.fd === "salida"; });
+    function lane(ic, t, sub, items) { return '<div class="dl-lane"><div class="dl-lab">' + App.icon(ic) + "<div>" + t + "<small>" + sub + '</small></div></div><div class="dl-track">' + items + "</div></div>"; }
+    // Llegadas agrupadas por media hora
+    var byH = {};
+    lleg.forEach(function (x) { (byH[x.hora] = byH[x.hora] || []).push(x); });
+    var L = Object.keys(byH).map(function (k) { var g = byH[k]; return '<div class="dl-item lleg pt" style="left:' + X(+k) + '" data-room="' + g[0].n + '" title="' + g.map(function (x) { return x.g + " · hab. " + x.n; }).join("\n") + '">' + g.length + "</div>"; }).join("");
+    var S = '<div class="dl-item sal" style="left:' + X(7 * 60) + ";width:" + W(7 * 60, 12 * 60) + '" data-room="' + (sal[0] ? sal[0].n : "") + '">' + sal.length + " salidas · hasta 12:00</div>" +
+      '<div class="dl-item sal pt" style="left:' + X(14 * 60) + '" title="Late check-out">' + Math.max(1, Math.round(sal.length * 0.15)) + "</div>";
+    var ab = AB[prop.id], E = "";
+    ab.venues.forEach(function (v, i) {
+      var e = eventos[(i * 3 + prop.hab) % eventos.length], t = e[2].split("–").map(function (z) { var q = z.split(":"); return +q[0] * 60 + +q[1]; });
+      if (i < 3) E += '<div class="dl-item ev" style="left:' + X(t[0]) + ";width:" + W(t[0], t[1]) + '" data-toast="' + e[0] + " · " + v[0] + " · " + e[1] + ' (demo)" title="' + v[0] + '">' + e[0] + " · " + v[0] + "</div>";
+    });
+    var Rr = '<div class="dl-item rest" style="left:' + X(12 * 60) + ";width:" + W(12 * 60, 15 * 60) + '" data-tab-go="ab">Almuerzo · ' + Math.round(prop.fb * 0.32) + " cub.</div>" +
+      '<div class="dl-item rest" style="left:' + X(19 * 60) + ";width:" + W(19 * 60, 23 * 60) + '" data-tab-go="ab">Cena · ' + Math.round(prop.fb * 0.24) + " reservas</div>";
+    var hkc = rs.filter(function (x) { return x.hk === "sucia" || x.hk === "proceso"; }).length;
+    var HKl = '<div class="dl-item hk" style="left:' + X(7 * 60) + ";width:" + W(7 * 60, 15 * 60) + '" data-tab-go="hk">Turno A · ' + hkc + " hab. por limpiar</div>" +
+      '<div class="dl-item hk" style="left:' + X(15 * 60) + ";width:" + W(15 * 60, 23 * 60) + ';opacity:.7" data-tab-go="hk">Turno B · servicio de cobertura</div>';
+    var M = data.tickets.filter(function (t) { return t.st !== "Resuelto" && (t.p === "Urgente" || t.p === "Alta"); }).slice(0, 4).map(function (t) {
+      return '<div class="dl-item mt pt" style="left:' + X(NOW - t.min) + '" data-tab-go="mt" title="' + t.id + " · " + t.f + " · " + t.loc + '">!</div>';
+    }).join("");
+    document.getElementById("dayline").innerHTML =
+      '<div class="dl-hours"><div></div><div class="dl-track" style="height:auto">' + hrs + "</div></div>" +
+      '<div style="position:relative">' +
+      lane("key", "Llegadas", lleg.length + " hoy", L) + lane("logout", "Salidas", sal.length + " hoy", S) + lane("calendar", "Eventos y salones", Math.min(3, ab.venues.length) + " montajes", E) +
+      lane("utensils", "Restaurante", ab.rest, Rr) + lane("bed", "Housekeeping", "2 turnos", HKl) + lane("wrench", "Mantenimiento", "urgentes y altas", M) +
+      '<div style="position:absolute;top:0;bottom:0;left:130px;right:0;pointer-events:none"><div class="dl-now" data-t="Ahora 10:42" style="left:' + X(NOW) + '"></div></div></div>';
+
+    // Journey
+    var cols = [
+      ["reserva", "Reserva · llegan hoy", "pendientes de check-in"], ["estancia", "En casa", "estancia en curso"],
+      ["checkout", "Check-out", "salen hoy antes de las 12:00"], ["fuera", "Salieron hoy", "folio cerrado"]
+    ];
+    var J = { reserva: [], estancia: [], checkout: [], fuera: [] };
+    rs.forEach(function (x) { if (x._st && J[x._st]) J[x._st].push(x); });
+    J.reserva.sort(function (a, b) { return a.hora - b.hora; });
+    // Columna «check-in»: las llegadas con habitación lista se destacan dentro de la primera
+    document.getElementById("journey").innerHTML = cols.map(function (c) {
+      var list = J[c[0]];
+      return '<div class="jcol"><div class="jcol-h"><b>' + c[1] + '</b><div class="kpi-value">' + list.length + "</div><small>" + c[2] + '</small></div><ul data-j="' + c[0] + '">' + list.map(function (x) {
+        var tag = c[0] === "reserva" ? (x.hk === "limpia" ? '<span class="badge b-ok">Lista</span>' : '<span class="badge ' + (x.hk === "insp" ? "b-warn" : "b-danger") + '">' + HK[x.hk][0] + "</span>")
+          : c[0] === "checkout" ? (x.saldo ? '<span class="badge b-warn">' + $(x.saldo) + "</span>" : '<span class="badge b-info">12:00</span>')
+          : c[0] === "fuera" ? '<span class="badge b-muted">' + HK[x.hk][0] + "</span>" : '<span class="small muted">' + x.noches + " n</span>";
+        return '<li class="jcard" data-room="' + x.n + '"><div><b>' + x.g + '</b><span class="muted">Hab. ' + x.n + " · " + (c[0] === "reserva" ? hhmm(x.hora) : x.tipo) + "</span></div>" + tag + "</li>";
+      }).join("") + "</ul></div>";
+    }).join("");
+    document.querySelectorAll("#journey ul").forEach(function (ul) { App.more(ul, 4); });
   }
 
   function render(prop) {
@@ -212,20 +269,10 @@
     var lleg = c(function (x) { return x.fd === "llegada"; }), sal = c(function (x) { return x.fd === "salida"; }), fuera = c(function (x) { return x.fd === "fuera"; });
     var listas = c(function (x) { return x.fd === "vacia" && x.hk === "limpia"; });
     document.getElementById("pmsName").textContent = prop.pms;
-    document.getElementById("cLleg").textContent = "(" + lleg + ")";
-    document.getElementById("cSal").textContent = "(" + sal + ")";
-    document.getElementById("cCasa").textContent = "(" + ocup + ")";
-
-    document.getElementById("kpis").innerHTML = [
-      ["En casa", ocup + " hab.", "Ocupación " + Math.round(ocup / prop.hab * 100) + "% · " + prop.hab + " hab.", "bed", true],
-      ["Llegadas hoy", lleg, Math.min(3, lleg) + " ya registradas · " + c(function (x) { return x.fd === "llegada" && x.hk !== "limpia"; }) + " hab. sin liberar", "key"],
-      ["Salidas hoy", sal, c(function (x) { return x.fd === "salida" && x.hk !== "ocupada"; }) + " con check-out hecho", "logout"],
-      ["Disponibles para venta", listas, fuera + " fuera de servicio", "check"]
-    ].map(function (k) {
-      return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>";
-    }).join("");
-
-    renderFD();
+    var sinLib = c(function (x) { return x.fd === "llegada" && x.hk !== "limpia"; });
+    document.getElementById("opsHero").innerHTML = App.hero(
+      { label: "Llegadas pendientes de check-in", value: lleg - Math.min(3, lleg), unit: "de " + lleg, sub: Math.min(3, lleg) + " ya registradas · " + sinLib + " sin habitación lista" },
+      [["En casa", ocup + " hab.", "ocupación " + Math.round(ocup / prop.hab * 100) + "%"], ["Salidas hoy", sal, c(function (x) { return x.fd === "salida" && x.hk !== "ocupada"; }) + " con check-out hecho"], ["Disponibles para venta", listas, fuera + " fuera de servicio", "ok"], ["Hab. sin liberar", sinLib, "para llegadas de hoy", sinLib ? "warn" : ""]]);
 
     // Rack por piso
     var rack = "";
@@ -243,9 +290,9 @@
     rs.forEach(function (x) { if (hkc[x.hk] != null) hkc[x.hk]++; });
     document.getElementById("hkBadge").textContent = hkc.sucia + hkc.insp;
     document.getElementById("hkSum").innerHTML = [
-      ["ok", "Limpias", hkc.limpia, "listas o servidas hoy"], ["danger", "Sucias", hkc.sucia, "pendientes por limpiar"],
-      ["muted", "En limpieza", hkc.proceso, "camarera trabajando ahora"], ["warn", "Por inspeccionar", hkc.insp, "esperando a la supervisora"]
-    ].map(function (s) { return '<div class="sem-card ' + s[0] + '"><span class="sem ' + s[0] + '">' + s[1] + '</span><div class="kpi-value" style="margin-top:6px">' + s[2] + '</div><div class="kpi-sub">' + s[3] + "</div></div>"; }).join("");
+      ["warn", "Por inspeccionar", hkc.insp, "esperando a la supervisora"], ["danger", "Sucias", hkc.sucia, "pendientes por limpiar"],
+      ["", "En limpieza", hkc.proceso, "camarera trabajando ahora"], ["ok", "Limpias", hkc.limpia, "listas o servidas hoy"]
+    ].map(function (s) { return '<div class="stat"><small><span class="sem ' + (s[0] || "muted") + '">' + s[1] + '</span></small><b class="' + s[0] + '">' + s[2] + "</b><span>" + s[3] + "</span></div>"; }).join("");
 
     var trabajo = rs.filter(function (x) { return x.fd !== "fuera" && !(x.fd === "vacia" && x.hk === "limpia") && !(x.fd === "llegada" && x.hk === "limpia" && r() < 0.5); });
     var nM = Math.max(2, Math.min(camareras.length, Math.round(trabajo.length / 13)));
@@ -263,9 +310,11 @@
 
     document.getElementById("inspBody").innerHTML = rs.filter(function (x) { return x.hk === "insp"; }).slice(0, 8).map(function (x, i) {
       var vip = x.fd === "llegada";
-      return '<tr><td class="strong">' + x.n + "</td><td>" + x.tipo + "</td><td>" + camareras[i % nM] + "</td><td>" + hhmm(8 * 60 + 5 + i * 11) + "</td><td>" + (vip ? x.g + " · " + hhmm(x.hora) : '<span class="muted">—</span>') + "</td><td>" + (vip ? '<span class="badge b-danger">Alta</span>' : '<span class="badge b-muted">Normal</span>') +
-        '</td><td><a class="btn btn-primary btn-sm" href="#" data-toast="Hab. ' + x.n + ' aprobada y liberada a recepción (demo)">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-toast="Hab. ' + x.n + ' devuelta a la camarera con observaciones (demo)">Rechazar</a></td></tr>';
-    }).join("") || '<tr><td colspan="7" class="muted">Sin habitaciones por inspeccionar</td></tr>';
+      return '<tr data-vip="' + (vip ? 1 : 0) + '"><td class="strong">' + x.n + '<span class="sub">' + x.tipo + "</span></td><td>" + camareras[i % nM] + '<span class="sub">terminó ' + hhmm(8 * 60 + 5 + i * 11) + "</span></td><td>" + (vip ? '<span class="badge b-danger">Prioridad</span> ' + x.g + " · " + hhmm(x.hora) : '<span class="muted">—</span>') +
+        '</td><td class="right" style="white-space:nowrap"><a class="btn btn-primary btn-sm" href="#" data-toast="Hab. ' + x.n + ' aprobada y liberada a recepción (demo)">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-toast="Hab. ' + x.n + ' devuelta a la camarera con observaciones (demo)">Rechazar</a></td></tr>';
+    }).join("") || '<tr><td colspan="4" class="muted">Sin habitaciones por inspeccionar</td></tr>';
+    var ib = document.getElementById("inspBody");
+    [].slice.call(ib.rows).sort(function (a, b) { return b.dataset.vip - a.dataset.vip; }).forEach(function (tr) { ib.appendChild(tr); });
 
     // Mantenimiento
     var fallas = [
@@ -285,6 +334,7 @@
       if (fl[1] === "Refrigeración" && st === "Abierto") st = "Esperando repuesto";
       return { id: "MT-" + (6120 + i * 3 + Math.floor(r() * 3)), loc: fl[3] ? "Hab. " + hab + (fl[2] === "Urgente" ? " · bloqueada" : "") : areas[fl[1]] || "Áreas comunes", f: fl[0], cat: fl[1], p: fl[2], st: st, tec: st === "Abierto" ? "—" : pick(r, tecnicos), min: min, oc: st === "Esperando repuesto" ? "OC-2026-" + (1170 + Math.floor(r() * 20)) : "" };
     });
+    data.tickets = tickets;
     tickets.sort(function (a, b) { return ["Urgente", "Alta", "Media", "Baja"].indexOf(a.p) - ["Urgente", "Alta", "Media", "Baja"].indexOf(b.p); });
     var abiertos = tickets.filter(function (t) { return t.st !== "Resuelto"; });
     document.getElementById("mtBadge").textContent = abiertos.length;
@@ -292,13 +342,13 @@
     document.getElementById("mtSum").innerHTML = [
       ["danger", "Urgentes abiertos", abiertos.filter(function (t) { return t.p === "Urgente"; }).length, "atención inmediata"],
       ["warn", "Fuera de SLA", vencidos, "superan el tiempo objetivo"],
-      ["muted", "Esperando repuesto", tickets.filter(function (t) { return t.st === "Esperando repuesto"; }).length, "vinculados a una OC"],
+      ["", "Esperando repuesto", tickets.filter(function (t) { return t.st === "Esperando repuesto"; }).length, "vinculados a una OC"],
       ["ok", "Resueltos hoy", tickets.filter(function (t) { return t.st === "Resuelto"; }).length + 6, "tiempo medio 42 min"]
-    ].map(function (s) { return '<div class="sem-card ' + s[0] + '"><span class="sem ' + s[0] + '">' + s[1] + '</span><div class="kpi-value" style="margin-top:6px">' + s[2] + '</div><div class="kpi-sub">' + s[3] + "</div></div>"; }).join("");
+    ].map(function (s) { return '<div class="stat"><small>' + s[1] + '</small><b class="' + s[0] + '">' + s[2] + "</b><span>" + s[3] + "</span></div>"; }).join("");
     document.getElementById("mtBody").innerHTML = tickets.map(function (t) {
       var fuera = t.st !== "Resuelto" && t.st !== "Esperando repuesto" && t.min > SLA[t.p];
       var ab = t.min < 60 ? "hace " + t.min + " min" : t.min < 1440 ? "hace " + Math.floor(t.min / 60) + " h " + (t.min % 60) + " min" : "hace " + Math.floor(t.min / 1440) + " días";
-      return '<tr data-p="' + t.p + '" data-st="' + t.st + '"><td class="strong">' + t.id + "</td><td>" + t.loc + '</td><td class="strong">' + t.f + (t.oc ? '<span class="sub">' + t.oc + " en tránsito</span>" : "") + "</td><td>" + t.cat + '</td><td><span class="badge ' + PR[t.p] + '">' + t.p + '</span></td><td><span class="badge nodot ' + ST[t.st] + '">' + t.st + "</span></td><td>" + t.tec + "</td><td>" + ab + "</td><td>" +
+      return '<tr data-p="' + t.p + '" data-st="' + t.st + '"><td class="strong">' + t.f + '<span class="sub">' + t.id + " · " + t.cat + (t.oc ? " · " + t.oc + " en tránsito" : "") + "</span></td><td>" + t.loc + '<span class="sub">' + ab + '</span></td><td><span class="badge ' + PR[t.p] + '">' + t.p + '</span></td><td><span class="badge nodot ' + ST[t.st] + '">' + t.st + '</span><span class="sub">' + (t.tec === "—" ? "sin asignar" : t.tec) + "</span></td><td>" +
         (t.st === "Resuelto" ? '<span class="sem ok">Cumplido</span>' : t.st === "Esperando repuesto" ? '<span class="sem muted">Pausado</span>' : fuera ? '<span class="sem danger">Vencido</span>' : '<span class="sem ok">En tiempo</span>') + "</td></tr>";
     }).join("");
     filterMt();
@@ -307,18 +357,18 @@
     var ab = AB[prop.id], cub = Math.round(prop.fb * 0.32), bar = Math.round(prop.fb * 0.14);
     var tot = ab.venues.reduce(function (a, v) { return a + v[1]; }, 0);
     document.getElementById("abKpis").innerHTML = [
-      [ab.rest, cub, "cubiertos almuerzo · ticket " + $(22 + r() * 8), "utensils"],
-      [ab.bar, bar, "comandas abiertas · happy hour 6–8 p.m.", "star"],
-      ["Room service", Math.round(prop.fb * 0.06), "órdenes · tiempo medio " + (18 + Math.floor(r() * 8)) + " min", "bed"],
-      ["Food cost del mes", (29 + r() * 4).toFixed(1).replace(".", ",") + "%", "meta 32% · beverage cost 21%", "percent", true]
-    ].map(function (k) { return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>"; }).join("");
+      ["Food cost del mes", (29 + r() * 4).toFixed(1).replace(".", ",") + "%", "meta 32% · beverage 21%"],
+      [ab.rest, cub, "cubiertos almuerzo · ticket " + $(22 + r() * 8)],
+      [ab.bar, bar, "comandas abiertas · happy hour 6–8 p.m."],
+      ["Room service", Math.round(prop.fb * 0.06), "órdenes · " + (18 + Math.floor(r() * 8)) + " min promedio"]
+    ].map(function (k) { return '<div class="stat"><small>' + k[0] + "</small><b>" + k[1] + "</b><span>" + k[2] + "</span></div>"; }).join("");
     document.getElementById("restName").textContent = ab.rest + " · almuerzo y cena";
     var notas = ["Aniversario · postre de cortesía", "Alergia a mariscos", "Mesa en terraza", "Silla para bebé", "Cliente Club Platino", "—", "—", "Vegetariano", "Cumpleaños"];
     var rr = "";
     for (var i = 0; i < 9; i++) {
       var h = i < 4 ? 12 * 60 + i * 30 : 19 * 60 + (i - 4) * 30, rm = rs[Math.floor(r() * rs.length)];
       var hues = r() < 0.65;
-      rr += "<tr><td>" + hhmm(h) + '</td><td class="strong">' + (hues ? rm.g : pick(r, ["Fam. Rodríguez", "Sr. Castillo", "Grupo Digitel", "Sra. Hernández", "Fam. Suárez"])) + '</td><td class="num">' + (2 + Math.floor(r() * 5)) + "</td><td>" + (i < 4 ? "S" : "T") + (1 + Math.floor(r() * 18)) + "</td><td>" + (hues ? '<span class="badge b-info">Hab. ' + rm.n + "</span>" : '<span class="badge b-muted">Externo</span>') + '</td><td class="small">' + notas[i] + "</td></tr>";
+      rr += "<tr><td>" + hhmm(h) + '</td><td class="strong">' + (hues ? rm.g : pick(r, ["Fam. Rodríguez", "Sr. Castillo", "Grupo Digitel", "Sra. Hernández", "Fam. Suárez"])) + '<span class="sub">Mesa ' + (i < 4 ? "S" : "T") + (1 + Math.floor(r() * 18)) + " · " + (hues ? "Hab. " + rm.n : "Externo") + '</span></td><td class="num">' + (2 + Math.floor(r() * 5)) + '</td><td class="small">' + notas[i] + "</td></tr>";
     }
     document.getElementById("restBody").innerHTML = rr;
     document.getElementById("venues").innerHTML = ab.venues.map(function (v, i) {
@@ -327,6 +377,7 @@
       return '<div class="venue"><div class="venue-h"><div><b>' + v[0] + '</b><div class="small muted">Capacidad ' + v[1] + ' pax</div></div>' + (sl.length ? '<span class="badge b-gold">' + sl.length + " evento" + (sl.length > 1 ? "s" : "") + "</span>" : '<span class="badge b-ok">Disponible</span>') + "</div>" +
         (sl.length ? '<ul class="slots">' + sl.map(function (e) { var pax = Math.round(v[1] * (0.4 + r() * 0.5)); return "<li><span>" + e[2] + "</span><b>" + e[0] + '</b><span class="small muted">' + e[1] + " · " + pax + " pax</span></li>"; }).join("") + "</ul>" : '<div class="small muted">Sin reservas hoy · se puede ofrecer para walk-in corporativo</div>') + "</div>";
     }).join("");
+    renderHoy(prop);
   }
 
   function filterMt() {
@@ -336,7 +387,34 @@
   }
   document.querySelectorAll("#mtSeg button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(filterMt); }); });
   document.getElementById("mtState").addEventListener("change", filterMt);
-  document.querySelectorAll("#fdSeg button").forEach(function (b) { b.addEventListener("click", function () { fdMode = b.dataset.v; renderFD(); }); });
+  // Clic en la línea de tiempo o en el journey → drawer del huésped o pestaña del área
+  document.querySelector('[data-panel="hoy"]').addEventListener("click", function (e) {
+    var g = e.target.closest("[data-tab-go]");
+    if (g) { document.querySelector('.tab[data-tab="' + g.dataset.tabGo + '"]').click(); return; }
+    var rm = e.target.closest("[data-room]");
+    if (rm && rm.dataset.room) guestDrawer(+rm.dataset.room);
+  });
+  // Check-in: abre la próxima llegada con habitación lista (2 clics desde el menú)
+  document.getElementById("btnCheckin").addEventListener("click", function (e) {
+    e.preventDefault();
+    var x = data.rooms.filter(function (r) { return r._st === "reserva" && r.hk === "limpia"; }).sort(function (a, b) { return a.hora - b.hora; })[0];
+    if (x) guestDrawer(x.n); else App.toast("No hay llegadas con habitación lista en este momento");
+  });
+  document.getElementById("btnWalkin").addEventListener("click", function (e) {
+    e.preventDefault();
+    var libres = data.rooms.filter(function (r) { return r.fd === "vacia" && r.hk === "limpia"; });
+    App.wizard({ title: "Walk-in", sub: libres.length + " habitaciones vacías y listas", steps: [{ t: "Datos", html: function () {
+      return '<div class="field"><label>Huésped</label><input class="input" value="Huésped sin reserva"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Noches</label><input class="input" type="number" value="1" min="1"></div>' +
+        '<div class="field"><label>Habitación sugerida</label><select class="select">' + libres.slice(0, 8).map(function (r) { return "<option>" + r.n + " · " + r.tipo + " · " + $(r.tarifa) + "</option>"; }).join("") + "</select></div></div>";
+    } }], done: { label: "Registrar y emitir llave", toast: "Walk-in registrado en el PMS · llave emitida (demo)" } });
+  });
+  document.getElementById("btnFalla").addEventListener("click", function (e) {
+    e.preventDefault();
+    App.wizard({ title: "Reportar falla", sub: "Se asigna al técnico de turno según la categoría", steps: [{ t: "Falla", html: function () {
+      return '<div class="field"><label>Ubicación</label><input class="input" value="Hab. 410"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Categoría</label><select class="select"><option>Climatización</option><option>Plomería</option><option>Electricidad</option><option>Cerrajería</option><option>Electrónica</option></select></div>' +
+        '<div class="field"><label>Prioridad</label><select class="select"><option>Urgente</option><option selected>Alta</option><option>Media</option><option>Baja</option></select></div></div><div class="field"><label>Qué pasa</label><input class="input" placeholder="Ej.: el A/A no enfría"></div>';
+    } }], done: { label: "Crear ticket", toast: "Ticket MT-6160 creado y asignado a José A. Rivas (demo)" } });
+  });
 
   App.onProp(function (p) {
     render(D.propiedades.find(function (x) { return x.id === p; }) || D.propiedades[0]);
