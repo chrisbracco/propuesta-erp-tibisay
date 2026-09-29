@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMS · Inventarios · Propuesta ERP Tibisay</title>
+  <meta name="description" content="Módulo de inventarios y compras: almacenes por hotel, órdenes de compra, transferencias entre propiedades y auditoría de A&amp;B.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<!-- ============ HEADER (igual en todas las páginas) ============ -->
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
+    <nav class="nav" aria-label="Módulos">
+      <a href="index.html">Inicio</a>
+      <a href="crm.html">CRM</a>
+      <a href="operaciones.html">Operaciones</a>
+      <a href="rrhh.html">Gestión Humana</a>
+      <a href="indicadores.html">Indicadores</a>
+      <a href="inventarios.html">Inventarios</a>
+      <a href="integracion.html">Integración</a>
+      <a href="servicios.html">Servicios</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=80')">
+  <div class="hero__content">
+    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 05</div>
+    <span class="eyebrow">IMS · Inventarios &amp; Compras</span>
+    <h1>Cada botella y cada kilo, bajo control</h1>
+    <p>Almacenes, compras y transferencias entre hoteles, con una auditoría continua que detiene la fuga de margen en A&amp;B.</p>
+  </div>
+</section>
+
+<!-- ============ ALMACENES ============ -->
+<section class="section section--white">
+  <div class="container">
+    <div class="grid grid-4">
+      <div class="kpi"><div class="kpi__label">Valor en inventario</div><div class="kpi__value">$ 486 K</div><div class="kpi__delta">21 almacenes · 7 sedes</div></div>
+      <div class="kpi"><div class="kpi__label">Rotación promedio</div><div class="kpi__value">11 días</div><div class="kpi__delta up">▼ 3 días</div></div>
+      <div class="kpi"><div class="kpi__label">Artículos bajo mínimo</div><div class="kpi__value">38</div><div class="kpi__delta down">12 críticos</div></div>
+      <div class="kpi kpi--dark"><div class="kpi__label">Fuga detectada (mes)</div><div class="kpi__value">$ 7.940</div><div class="kpi__delta" style="color:#fff">Recuperable: $ 5.300</div></div>
+    </div>
+
+    <div class="mock mt-2">
+      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Existencias por almacén <span class="mock__meta">Filtra por sede</span></div>
+      <div class="mock__body">
+        <div class="mock__toolbar">
+          <input class="mock__search" type="text" placeholder="Buscar artículo o código…">
+          <div class="chips" data-filter=".stock-row">
+            <span class="chip active" data-value="todas">Todas</span>
+            <span class="chip" data-value="margarita">Margarita</span>
+            <span class="chip" data-value="maracaibo">Maracaibo</span>
+            <span class="chip" data-value="canaima">Canaima</span>
+            <span class="chip" data-value="morrocoy">Morrocoy</span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Código</th><th>Artículo</th><th>Sede / almacén</th><th class="num">Existencia</th><th class="num">Mínimo</th><th class="num">Costo unit.</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr class="stock-row" data-sede="margarita"><td>AB-1021</td><td><strong>Ron añejo reserva 0,75 L</strong></td><td>Margarita · Bar</td><td class="num">46</td><td class="num">30</td><td class="num">$ 18,40</td><td><span class="badge badge--ok">OK</span></td></tr>
+              <tr class="stock-row" data-sede="margarita"><td>AB-2310</td><td><strong>Pargo rojo fresco (kg)</strong></td><td>Margarita · Cocina</td><td class="num">12</td><td class="num">25</td><td class="num">$ 9,80</td><td><span class="badge badge--alerta">Bajo mínimo</span></td></tr>
+              <tr class="stock-row" data-sede="maracaibo"><td>AB-1450</td><td><strong>Queso de mano (kg)</strong></td><td>Maracaibo · Cocina</td><td class="num">18</td><td class="num">15</td><td class="num">$ 6,20</td><td><span class="badge badge--ok">OK</span></td></tr>
+              <tr class="stock-row" data-sede="maracaibo"><td>HK-0402</td><td><strong>Juego de toallas premium</strong></td><td>Maracaibo · Lencería</td><td class="num">210</td><td class="num">240</td><td class="num">$ 14,00</td><td><span class="badge badge--warn">Reponer</span></td></tr>
+              <tr class="stock-row" data-sede="canaima"><td>AB-3302</td><td><strong>Agua mineral 600 ml</strong></td><td>Canaima · Almacén general</td><td class="num">1.440</td><td class="num">800</td><td class="num">$ 0,45</td><td><span class="badge badge--ok">OK</span></td></tr>
+              <tr class="stock-row" data-sede="canaima"><td>MT-0077</td><td><strong>Combustible planta eléctrica (L)</strong></td><td>Canaima · Mantenimiento</td><td class="num">2.100</td><td class="num">3.000</td><td class="num">$ 0,50</td><td><span class="badge badge--alerta">Crítico</span></td></tr>
+              <tr class="stock-row" data-sede="morrocoy"><td>AB-1188</td><td><strong>Cerveza nacional (caja 36)</strong></td><td>Morrocoy · Pool bar</td><td class="num">54</td><td class="num">40</td><td class="num">$ 21,60</td><td><span class="badge badge--ok">OK</span></td></tr>
+              <tr class="stock-row" data-sede="morrocoy"><td>AM-0215</td><td><strong>Amenities kit baño</strong></td><td>Morrocoy · Pisos</td><td class="num">380</td><td class="num">300</td><td class="num">$ 1,90</td><td><span class="badge badge--ok">OK</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMPRAS + TRANSFERENCIAS ============ -->
+<section class="section section--cream">
+  <div class="container grid grid-2">
+    <div>
+      <span class="eyebrow">Compras</span>
+      <h2>Órdenes de compra con aprobación</h2>
+      <hr class="divider" style="margin-left:0">
+      <p>Requisición desde cocina o pisos, comparación de proveedores, aprobación por monto y recepción contra la orden. Todo se contabiliza en su ERP.</p>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>OC</th><th>Proveedor</th><th>Sede</th><th class="num">Monto</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>OC-2026-1190</td><td>Pesquera Nueva Esparta</td><td>Margarita</td><td class="num">$ 2.840</td><td><span class="badge badge--warn">Por aprobar</span></td></tr>
+            <tr><td>OC-2026-1188</td><td>Distribuidora Zulia Food</td><td>Maracaibo</td><td class="num">$ 4.120</td><td><span class="badge badge--info">En tránsito</span></td></tr>
+            <tr><td>OC-2026-1185</td><td>Licores del Caribe</td><td>Margarita</td><td class="num">$ 6.300</td><td><span class="badge badge--ok">Recibida</span></td></tr>
+            <tr><td>OC-2026-1182</td><td>Frío Industrial Andino</td><td>Maracaibo</td><td class="num">$ 1.460</td><td><span class="badge badge--info">En tránsito</span></td></tr>
+            <tr><td>OC-2026-1179</td><td>Textiles Hoteleros C.A.</td><td>Cadena</td><td class="num">$ 11.800</td><td><span class="badge badge--gold">Compra consolidada</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <span class="eyebrow">Transferencias</span>
+      <h2>Entre propiedades, sin papeles</h2>
+      <hr class="divider" style="margin-left:0">
+      <p>Si a Morrocoy le sobra lo que a Margarita le falta, se transfiere con trazabilidad y costo, y cada hotel lo ve en su inventario.</p>
+      <div class="mock">
+        <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Transferencia TR-0347</div>
+        <div class="mock__body">
+          <div class="diagram" style="grid-template-columns:1fr auto 1fr">
+            <div class="node"><h4>Origen</h4>Morrocoy<br><span class="small muted">Almacén general</span></div>
+            <div class="arrow">→</div>
+            <div class="node node--core"><h4>Destino</h4>Margarita<br><span class="small">Bar principal</span></div>
+          </div>
+          <ul class="meta-list mt-1">
+            <li><span>Vino tinto reserva (caja 12)</span><span>8 cajas</span></li>
+            <li><span>Ginebra premium 0,75 L</span><span>24 und.</span></li>
+            <li><span>Costo transferido</span><span>$ 1.912</span></li>
+            <li><span>Transporte</span><span>Ferry Puerto La Cruz · 01/10</span></li>
+            <li><span>Estado</span><span><span class="badge badge--info">Despachada</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUDITORÍA A&B ============ -->
+<section class="section section--white">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Auditoría continua A&amp;B</span>
+      <h2>Lo vendido contra lo comprado</h2>
+      <hr class="divider">
+      <p>Cada noche el sistema cruza lo que se consumió según el PMS y los puntos de venta (recetas estándar) con lo que se compró y salió del almacén según el ERP. La diferencia es margen que se está yendo.</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow__step"><h4>Consumos PMS / POS</h4><p>Platos y tragos vendidos, cargos a habitación y banquetes.</p></div>
+      <div class="flow__step"><h4>Recetas estándar</h4><p>Cada venta se traduce en gramos y mililitros teóricos.</p></div>
+      <div class="flow__step"><h4>Salidas ERP</h4><p>Compras y salidas reales de almacén por centro de costo.</p></div>
+      <div class="flow__step"><h4>Varianza</h4><p>Alerta al gerente de A&amp;B cuando supera el umbral.</p></div>
+    </div>
+
+    <div class="mock mt-3">
+      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Varianza teórico vs. real · Septiembre <span class="mock__meta">Umbral: 3%</span></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Sede</th><th>Categoría</th><th class="num">Consumo teórico (PMS)</th><th class="num">Salida real (ERP)</th><th class="num">Varianza</th><th class="num">Impacto</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Catatumbo</strong></td><td>Proteínas (res)</td><td class="num">412 kg</td><td class="num">468 kg</td><td class="num down">+13,6%</td><td class="num">$ 616</td><td><span class="badge badge--alerta">Investigar</span></td></tr>
+            <tr><td><strong>Margarita</strong></td><td>Licores premium</td><td class="num">318 bot.</td><td class="num">341 bot.</td><td class="num down">+7,2%</td><td class="num">$ 1.380</td><td><span class="badge badge--alerta">Investigar</span></td></tr>
+            <tr><td><strong>Maracaibo</strong></td><td>Mariscos</td><td class="num">186 kg</td><td class="num">197 kg</td><td class="num down">+5,9%</td><td class="num">$ 240</td><td><span class="badge badge--warn">Revisar</span></td></tr>
+            <tr><td><strong>Morrocoy</strong></td><td>Cerveza</td><td class="num">1.520 und.</td><td class="num">1.548 und.</td><td class="num">+1,8%</td><td class="num">$ 17</td><td><span class="badge badge--ok">En rango</span></td></tr>
+            <tr><td><strong>Mérida</strong></td><td>Lácteos</td><td class="num">240 kg</td><td class="num">244 kg</td><td class="num">+1,7%</td><td class="num">$ 22</td><td><span class="badge badge--ok">En rango</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="note mt-1"><strong>Caso típico:</strong> en Margarita, 23 botellas de licor premium salieron del almacén sin venta registrada. El sistema señala turno, bar y responsable para aclararlo antes del cierre de mes.</div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container module-nav">
+    <a href="indicadores.html"><small>← Anterior</small>Indicadores</a>
+    <a href="integracion.html"><small>Siguiente módulo →</small>Integración</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER (igual en todas las páginas) ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
+        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
+      </div>
+      <div>
+        <h4>Módulos</h4>
+        <ul>
+          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
+          <li><a href="operaciones.html">Gestión Operativa</a></li>
+          <li><a href="rrhh.html">Gestión Humana</a></li>
+          <li><a href="indicadores.html">Indicadores</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>&nbsp;</h4>
+        <ul>
+          <li><a href="inventarios.html">IMS · Inventarios</a></li>
+          <li><a href="integracion.html">Integración</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Sedes</h4>
+        <ul>
+          <li>Margarita · Canaima · Catatumbo</li>
+          <li>Maracaibo · Morrocoy</li>
+          <li>Mérida · Maturín</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
+      <span>Mockup de referencia · datos ilustrativos</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

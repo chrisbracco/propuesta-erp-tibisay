@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM &amp; Fidelización · Propuesta ERP Tibisay</title>
+  <meta name="description" content="Módulo CRM: perfil 360 del huésped, reservas directas, Club Tibisay, concierge digital y cotización de eventos por WhatsApp.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<!-- ============ HEADER (igual en todas las páginas) ============ -->
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
+    <nav class="nav" aria-label="Módulos">
+      <a href="index.html">Inicio</a>
+      <a href="crm.html">CRM</a>
+      <a href="operaciones.html">Operaciones</a>
+      <a href="rrhh.html">Gestión Humana</a>
+      <a href="indicadores.html">Indicadores</a>
+      <a href="inventarios.html">Inventarios</a>
+      <a href="integracion.html">Integración</a>
+      <a href="servicios.html">Servicios</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=2000&q=80')">
+  <div class="hero__content">
+    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 01</div>
+    <span class="eyebrow">CRM &amp; Fidelización</span>
+    <h1>Cada huésped, recordado en las siete sedes</h1>
+    <p>Quien toma su café sin azúcar en Maracaibo no debería tener que repetirlo en Margarita.</p>
+  </div>
+</section>
+
+<!-- ============ RESUMEN KPI ============ -->
+<section class="section section--white section--tight">
+  <div class="container grid grid-4">
+    <div class="kpi"><div class="kpi__label">Perfiles activos</div><div class="kpi__value">18.426</div><div class="kpi__delta up">▲ 6,2% vs. trimestre anterior</div></div>
+    <div class="kpi"><div class="kpi__label">Reservas directas (mes)</div><div class="kpi__value">41%</div><div class="kpi__delta up">▲ 9 pts vs. OTAs</div></div>
+    <div class="kpi"><div class="kpi__label">Miembros Club Tibisay</div><div class="kpi__value">3.912</div><div class="kpi__delta up">▲ 214 nuevos</div></div>
+    <div class="kpi kpi--dark"><div class="kpi__label">Cotizaciones de eventos abiertas</div><div class="kpi__value">27</div><div class="kpi__delta" style="color:#fff">$ 186.400 en pipeline</div></div>
+  </div>
+</section>
+
+<!-- ============ PERFIL 360 ============ -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Perfil 360</span>
+      <h2>Todo sobre el huésped, en una sola ficha</h2>
+      <hr class="divider">
+      <p>Estancias, consumos, preferencias y conversaciones unificadas desde Opera/Prestige, los puntos de venta y WhatsApp.</p>
+    </div>
+
+    <div class="mock">
+      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> CRM · Ficha de huésped <span class="mock__meta">Sincronizado con PMS hace 3 min</span></div>
+      <div class="mock__body profile">
+        <aside class="profile__side">
+          <div class="avatar">AM</div>
+          <h3 class="mb-0">Andrés Mendoza Rivas</h3>
+          <p class="small muted">Director Comercial · Petroandina C.A.</p>
+          <span class="tag">Club Tibisay · Oro</span>
+          <ul class="meta-list">
+            <li><span>Estancias</span><span>23</span></li>
+            <li><span>Sedes visitadas</span><span>Maracaibo, Margarita, Mérida</span></li>
+            <li><span>Gasto histórico</span><span>$ 14.870</span></li>
+            <li><span>Puntos</span><span>28.450</span></li>
+            <li><span>Canal preferido</span><span>WhatsApp</span></li>
+            <li><span>Idioma</span><span>Español / Inglés</span></li>
+            <li><span>Última visita</span><span>12/09/2026</span></li>
+          </ul>
+        </aside>
+        <div data-tabs>
+          <div class="tabs">
+            <button class="tab active" data-tab="pref">Preferencias</button>
+            <button class="tab" data-tab="hist">Historial</button>
+            <button class="tab" data-tab="consumo">Consumos</button>
+            <button class="tab" data-tab="notas">Notas del equipo</button>
+          </div>
+          <div class="tab-panel active" data-panel="pref">
+            <div class="grid grid-2">
+              <div class="card"><h4>Habitación</h4><ul class="check-list mb-0"><li>Junior Suite, piso alto, vista al lago</li><li>Almohada firme, sin plumas (alergia)</li><li>Check-in exprés, late check-out 2:00 p.m.</li></ul></div>
+              <div class="card"><h4>A&amp;B</h4><ul class="check-list mb-0"><li>Café negro sin azúcar al despertar</li><li>Whisky 18 años en el lounge bar</li><li>Evita mariscos</li></ul></div>
+              <div class="card"><h4>Ocasiones</h4><ul class="check-list mb-0"><li>Aniversario: 14 de febrero (esposa: Carolina)</li><li>Cumpleaños: 3 de junio</li></ul></div>
+              <div class="card"><h4>Empresa</h4><ul class="check-list mb-0"><li>Tarifa corporativa Petroandina: $ 118</li><li>Factura a nombre de la empresa, RIF J-40123456-7</li></ul></div>
+            </div>
+          </div>
+          <div class="tab-panel" data-panel="hist">
+            <ul class="timeline">
+              <li><time>12/09/2026 · Maracaibo</time>3 noches, Junior Suite · Reunión de directorio en Sala Catatumbo · $ 612</li>
+              <li><time>18/07/2026 · Margarita</time>5 noches, Suite Vista Mar con Carolina · Cena en restaurante · $ 1.940</li>
+              <li><time>02/05/2026 · Mérida</time>2 noches, Superior · Conferencia regional · $ 348</li>
+              <li><time>14/02/2026 · Margarita</time>Aniversario · Upgrade cortesía a Suite · Botella de espumante · $ 1.120</li>
+            </ul>
+          </div>
+          <div class="tab-panel" data-panel="consumo">
+            <div class="bars">
+              <div class="bar"><span>Habitación</span><div class="bar__track"><div class="bar__fill" style="width:78%"></div></div><span class="bar__val">$ 9.840</span></div>
+              <div class="bar"><span>Restaurante</span><div class="bar__track"><div class="bar__fill" style="width:32%"></div></div><span class="bar__val">$ 2.610</span></div>
+              <div class="bar"><span>Lounge bar</span><div class="bar__track"><div class="bar__fill" style="width:18%"></div></div><span class="bar__val">$ 1.480</span></div>
+              <div class="bar"><span>Eventos</span><div class="bar__track"><div class="bar__fill bar__fill--dark" style="width:11%"></div></div><span class="bar__val">$ 940</span></div>
+            </div>
+          </div>
+          <div class="tab-panel" data-panel="notas">
+            <div class="note mb-0"><strong>Recepción Maracaibo · M. Urdaneta:</strong> Prefiere que no lo llamen a la habitación; todo por WhatsApp. Suele llegar tarde desde el aeropuerto La Chinita.</div>
+            <div class="note mt-1"><strong>A&amp;B Margarita · J. Marcano:</strong> Celebra aniversario en febrero. Ofrecer mesa en terraza con vista al mar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESERVAS DIRECTAS + FIDELIZACIÓN ============ -->
+<section class="section section--white">
+  <div class="container grid grid-2">
+    <div>
+      <span class="eyebrow">Reservas directas</span>
+      <h2>Menos comisión, más relación</h2>
+      <hr class="divider" style="margin-left:0">
+      <p>Motor de reservas en la web con tarifas miembro, códigos corporativos y pago en línea. Cada reserva directa crea o enriquece el perfil del huésped.</p>
+      <div class="mock mt-1">
+        <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Reservas por canal · Septiembre</div>
+        <div class="mock__body">
+          <div class="bars">
+            <div class="bar"><span>Web directa</span><div class="bar__track"><div class="bar__fill" style="width:41%"></div></div><span class="bar__val">41%</span></div>
+            <div class="bar"><span>WhatsApp</span><div class="bar__track"><div class="bar__fill" style="width:17%"></div></div><span class="bar__val">17%</span></div>
+            <div class="bar"><span>Corporativo</span><div class="bar__track"><div class="bar__fill" style="width:19%"></div></div><span class="bar__val">19%</span></div>
+            <div class="bar"><span>OTAs</span><div class="bar__track"><div class="bar__fill bar__fill--dark" style="width:23%"></div></div><span class="bar__val">23%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <span class="eyebrow">Club Tibisay</span>
+      <h2>Fidelización que se siente</h2>
+      <hr class="divider" style="margin-left:0">
+      <p>Programa por niveles con beneficios reales en las siete propiedades, acumulación en habitación, restaurantes y eventos.</p>
+      <div class="table-wrap mt-1">
+        <table class="table">
+          <thead><tr><th>Nivel</th><th>Requisito</th><th>Beneficios</th><th class="num">Miembros</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge--info">Plata</span></td><td>Registro</td><td>Wi-Fi premium, 5% en A&amp;B</td><td class="num">2.804</td></tr>
+            <tr><td><span class="badge badge--gold">Oro</span></td><td>8 noches/año</td><td>Upgrade sujeto a disponibilidad, late check-out</td><td class="num">936</td></tr>
+            <tr><td><span class="badge badge--warn">Platino</span></td><td>20 noches/año</td><td>Upgrade garantizado, traslado aeropuerto, lounge</td><td class="num">172</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note mt-1"><strong>Campaña activa:</strong> "Temporada de Tepuyes" — miembros Oro y Platino acumulan puntos dobles en Canaima hasta el 30/11.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVENTOS POR WHATSAPP ============ -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Eventos &amp; banquetes</span>
+      <h2>De "¿tienen fecha?" a cotización en minutos</h2>
+      <hr class="divider">
+      <p>Bodas de destino, convenciones y cenas corporativas: el asistente precalifica por WhatsApp y el ejecutivo de ventas recibe la solicitud lista para cotizar.</p>
+    </div>
+    <div class="grid grid-2 align-center">
+      <div class="mock">
+        <div class="chat__head"><div class="avatar">T</div><div><b>Tibisay Eventos</b><small>Cuenta de empresa verificada</small></div></div>
+        <div class="chat">
+          <div class="msg">¡Buenas tardes! Estamos planificando nuestra boda en Margarita para marzo 2027. ¿Tienen disponibilidad?<small>3:12 p.m.</small></div>
+          <div class="msg msg--out msg--bot">¡Qué alegría, felicidades! 💍 Con gusto te ayudo. ¿Cuántos invitados esperan y qué fecha tienen en mente?<small>3:12 p.m. · Asistente</small></div>
+          <div class="msg">Unos 150 invitados, sábado 20 de marzo. Ceremonia en la playa y recepción en la noche.<small>3:14 p.m.</small></div>
+          <div class="msg msg--out msg--bot">El 20/03 está disponible 🌴 Para 150 personas recomiendo ceremonia en el jardín frente al mar y recepción en el Gran Salón. ¿Desean bloque de habitaciones para invitados?<small>3:14 p.m. · Asistente</small></div>
+          <div class="msg">Sí, unas 40 habitaciones por 2 noches.<small>3:15 p.m.</small></div>
+          <div class="msg msg--out">Perfecto, soy Daniela, ejecutiva de eventos. En 30 minutos te envío la cotización con tres opciones de menú. 😊<small>3:21 p.m. · Daniela R.</small></div>
+        </div>
+      </div>
+      <div>
+        <div class="mock">
+          <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Solicitud EV-2026-0418 <span class="mock__meta">Creada desde WhatsApp</span></div>
+          <div class="mock__body">
+            <ul class="meta-list mt-0">
+              <li><span>Tipo</span><span>Boda de destino</span></li>
+              <li><span>Sede</span><span>Margarita · Pampatar</span></li>
+              <li><span>Fecha</span><span>Sáb. 20/03/2027</span></li>
+              <li><span>Invitados</span><span>150</span></li>
+              <li><span>Espacios</span><span>Jardín frente al mar + Gran Salón</span></li>
+              <li><span>Bloque habitaciones</span><span>40 hab. × 2 noches</span></li>
+              <li><span>Estimado</span><span>$ 38.500</span></li>
+              <li><span>Estado</span><span><span class="badge badge--warn">Cotizando</span></span></li>
+            </ul>
+            <div class="btn-row mt-1"><span class="btn btn--sm">Generar cotización</span><span class="btn btn--sm btn--dark">Bloquear salón</span></div>
+          </div>
+        </div>
+        <div class="grid grid-2 mt-1">
+          <div class="kpi"><div class="kpi__label">Tiempo medio de respuesta</div><div class="kpi__value">6 min</div><div class="kpi__delta up">Antes: 2 días</div></div>
+          <div class="kpi"><div class="kpi__label">Conversión cotización → evento</div><div class="kpi__value">34%</div><div class="kpi__delta up">▲ 12 pts</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PIPELINE ============ -->
+<section class="section section--white">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Pipeline de ventas</span>
+      <h2>Eventos en curso</h2>
+      <hr class="divider">
+    </div>
+    <div class="kanban">
+      <div class="kanban__col">
+        <h4>Nuevas <span>6</span></h4>
+        <div class="kanban__card"><strong>Convención Farmacéutica Andina</strong>Mérida · 80 pax · Abr 2027<small><span>WhatsApp</span><span>$ 22.000</span></small></div>
+        <div class="kanban__card"><strong>Cena de gala Cámara Zuliana</strong>Maracaibo · 220 pax · Dic 2026<small><span>Correo</span><span>$ 18.700</span></small></div>
+      </div>
+      <div class="kanban__col">
+        <h4>Cotizadas <span>9</span></h4>
+        <div class="kanban__card"><strong>Boda González–Salazar</strong>Margarita · 150 pax · Mar 2027<small><span>Daniela R.</span><span>$ 38.500</span></small></div>
+        <div class="kanban__card"><strong>Retiro directivo Banco del Sur</strong>Canaima · 24 pax · Ene 2027<small><span>Luis P.</span><span>$ 31.200</span></small></div>
+      </div>
+      <div class="kanban__col">
+        <h4>Negociación <span>7</span></h4>
+        <div class="kanban__card"><strong>Lanzamiento automotriz</strong>Maturín · 120 pax · Nov 2026<small><span>Luis P.</span><span>$ 14.300</span></small></div>
+        <div class="kanban__card"><strong>Boda Pérez–Lugo</strong>Morrocoy · 90 pax · Feb 2027<small><span>Daniela R.</span><span>$ 21.600</span></small></div>
+      </div>
+      <div class="kanban__col">
+        <h4>Confirmadas <span>5</span></h4>
+        <div class="kanban__card"><strong>Congreso de Ingeniería Petrolera</strong>Maracaibo · 300 pax · Oct 2026<small><span>Anticipo 50%</span><span>$ 42.800</span></small></div>
+        <div class="kanban__card"><strong>Aniversario Seguros Caribe</strong>Margarita · 180 pax · Nov 2026<small><span>BEO enviado</span><span>$ 27.900</span></small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCIERGE DIGITAL ============ -->
+<section class="section section--dark">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Concierge digital</span>
+      <h2>Un anfitrión en el bolsillo del huésped</h2>
+      <hr class="divider">
+    </div>
+    <div class="grid grid-4">
+      <div class="card"><div class="card__icon">✉</div><h3>Pre-llegada</h3><p>Mensaje 48 h antes: hora estimada, traslado desde el aeropuerto y preferencias.</p></div>
+      <div class="card"><div class="card__icon">⌂</div><h3>Durante la estancia</h3><p>Room service, reservas en restaurante, spa y excursiones a Coche o Los Roques.</p></div>
+      <div class="card"><div class="card__icon">☼</div><h3>Experiencias</h3><p>Tours a Salto Ángel, Los Médanos o el teleférico de Mérida, según la sede.</p></div>
+      <div class="card"><div class="card__icon">★</div><h3>Post-estancia</h3><p>Encuesta de satisfacción, puntos acreditados y oferta personalizada de regreso.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container module-nav">
+    <a href="index.html"><small>← Volver</small>Inicio</a>
+    <a href="operaciones.html"><small>Siguiente módulo →</small>Gestión Operativa</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER (igual en todas las páginas) ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
+        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
+      </div>
+      <div>
+        <h4>Módulos</h4>
+        <ul>
+          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
+          <li><a href="operaciones.html">Gestión Operativa</a></li>
+          <li><a href="rrhh.html">Gestión Humana</a></li>
+          <li><a href="indicadores.html">Indicadores</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>&nbsp;</h4>
+        <ul>
+          <li><a href="inventarios.html">IMS · Inventarios</a></li>
+          <li><a href="integracion.html">Integración</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Sedes</h4>
+        <ul>
+          <li>Margarita · Canaima · Catatumbo</li>
+          <li>Maracaibo · Morrocoy</li>
+          <li>Mérida · Maturín</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
+      <span>Mockup de referencia · datos ilustrativos</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
