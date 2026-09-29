@@ -3,170 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Servicios · Propuesta ERP Tibisay</title>
-  <meta name="description" content="Servicios de Geek Solutions para Hoteles Tibisay: redes, servidores, cloud, ciberseguridad, videovigilancia, Microsoft 365, SQL Server, desarrollo web y Odoo.">
+  <title>Servicios · Tibisay ERP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-
-<!-- ============ HEADER (igual en todas las páginas) ============ -->
-<header class="header">
-  <div class="container">
-    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-    <nav class="nav" aria-label="Módulos">
-      <a href="index.html">Inicio</a>
-      <a href="crm.html">CRM</a>
-      <a href="operaciones.html">Operaciones</a>
-      <a href="rrhh.html">Gestión Humana</a>
-      <a href="indicadores.html">Indicadores</a>
-      <a href="inventarios.html">Inventarios</a>
-      <a href="integracion.html">Integración</a>
-      <a href="servicios.html">Servicios</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Servicios</div>
+    <h1>Servicios · Geek Solutions</h1>
+    <p>Infraestructura, seguridad y soporte que mantienen la plataforma y los hoteles en línea.</p>
   </div>
-</header>
-
-<!-- ============ HERO ============ -->
-<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80')">
-  <div class="hero__content">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 07</div>
-    <span class="eyebrow">Servicios · Geek Solutions</span>
-    <h1>La infraestructura que nadie ve y todos disfrutan</h1>
-    <p>Wi-Fi que no falla en la piscina, servidores que no se caen en temporada y datos de huéspedes protegidos.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="#" data-toast="Solicitud de soporte creada · SLA 30 min (demo)" data-icon="plus">Solicitar soporte</a>
   </div>
-</section>
+</div>
 
-<!-- ============ CATÁLOGO ============ -->
-<section class="section section--white">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Catálogo de servicios</span>
-      <h2>Un solo aliado tecnológico</h2>
-      <hr class="divider">
-    </div>
-    <div class="grid grid-3">
-      <div class="card"><div class="card__icon">⌁</div><span class="tag tag--outline">CCNP · MTCRE</span><h3>Redes y conectividad</h3><p>Diseño y administración con MikroTik y Cisco: Wi-Fi de huésped por habitación y áreas comunes, portal cautivo, enlaces redundantes entre sedes.</p></div>
-      <div class="card"><div class="card__icon">▤</div><span class="tag tag--outline">On-premise</span><h3>Administración de servidores</h3><p>Servidores del PMS, archivos y aplicaciones: monitoreo 24/7, parches, capacidad y continuidad.</p></div>
-      <div class="card"><div class="card__icon">☁</div><span class="tag tag--outline">AWS · Azure</span><h3>Cloud</h3><p>Migración y operación de cargas en la nube, esquemas híbridos y optimización de costos.</p></div>
-      <div class="card"><div class="card__icon">◈</div><span class="tag tag--outline">Seguridad</span><h3>Ciberseguridad y respaldo</h3><p>Firewall, segmentación de redes de huéspedes y administrativa, antimalware y respaldos probados fuera de sitio.</p></div>
-      <div class="card"><div class="card__icon">◉</div><span class="tag tag--outline">CCTV</span><h3>Videovigilancia</h3><p>Cámaras IP en accesos, almacenes, bares y estacionamientos, con grabación centralizada y acceso remoto.</p></div>
-      <div class="card"><div class="card__icon">✉</div><span class="tag tag--outline">Microsoft 365</span><h3>Microsoft 365</h3><p>Correo, Teams, OneDrive y SharePoint para la cadena, con licenciamiento y seguridad de identidad.</p></div>
-      <div class="card"><div class="card__icon">⛁</div><span class="tag tag--outline">SQL Server</span><h3>Bases de datos</h3><p>Administración, rendimiento y respaldo de SQL Server, la base de Profit Plus, Saint y a2.</p></div>
-      <div class="card"><div class="card__icon">@</div><span class="tag tag--outline">Correo</span><h3>Infraestructura de correo</h3><p>Dominios, reputación de envío, anti-spam y correo transaccional para confirmaciones de reserva.</p></div>
-      <div class="card"><div class="card__icon">⚿</div><span class="tag tag--outline">Licencias</span><h3>Licencias digitales</h3><p>Gestión centralizada de licencias de software por sede, vencimientos y cumplimiento.</p></div>
-      <div class="card span-2"><div class="card__icon">✦</div><span class="tag tag--outline">Web · Odoo</span><h3>Desarrollo web y Odoo</h3><p>Sitio web y motor de reservas con el look &amp; feel Tibisay, y desarrollo a la medida sobre Odoo para los módulos de esta propuesta: CRM, inventario, compras, RRHH y tableros.</p></div>
-      <div class="card-photo" style="min-height:260px;background-image:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80')">
-        <div class="card-photo__body"><span class="tag">Soporte</span><h3>Mesa de ayuda</h3><p>Atención a las 7 sedes con tiempos de respuesta acordados.</p></div>
-      </div>
-    </div>
+<div class="grid g-4">
+  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Disponibilidad plataforma</span><span class="kpi-ico" data-icon="server"></span></div><div class="kpi-value">99,94%</div><div class="kpi-sub">últimos 30 días</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Tickets de soporte abiertos</span><span class="kpi-ico" data-icon="wrench"></span></div><div class="kpi-value">6</div><div class="kpi-sub">tiempo de respuesta 18 min</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Último respaldo</span><span class="kpi-ico" data-icon="database"></span></div><div class="kpi-value">03:10</div><div class="kpi-sub"><span class="delta up">OK</span>7 sedes · fuera de sitio</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Enlaces entre sedes</span><span class="kpi-ico" data-icon="wifi"></span></div><div class="kpi-value">14 / 14</div><div class="kpi-sub">principal + respaldo</div></div>
+</div>
+
+<div class="grid g-4 mt">
+  <div class="card svc"><span class="kpi-ico" data-icon="wifi"></span><h3>Redes y conectividad</h3><p>Diseño y administración con Cisco y MikroTik. Wi-Fi de huésped por habitación y áreas comunes, portal cautivo y enlaces redundantes entre sedes.</p><div class="tags"><span class="badge nodot b-gold">CCNP</span><span class="badge nodot b-gold">MTCRE</span><span class="badge nodot b-muted">Cisco</span><span class="badge nodot b-muted">MikroTik</span></div></div>
+  <div class="card svc"><span class="kpi-ico" data-icon="cloud"></span><h3>Cloud</h3><p>Operación en AWS y Azure, esquemas híbridos con los servidores locales del PMS y optimización de costos.</p><div class="tags"><span class="badge nodot b-muted">AWS</span><span class="badge nodot b-muted">Azure</span><span class="badge nodot b-muted">Híbrido</span></div></div>
+  <div class="card svc"><span class="kpi-ico" data-icon="server"></span><h3>Administración de servidores</h3><p>Monitoreo 24/7, parches, capacidad y continuidad de los servidores de PMS, archivos y aplicaciones.</p><div class="tags"><span class="badge nodot b-muted">Windows Server</span><span class="badge nodot b-muted">Linux</span><span class="badge nodot b-muted">Virtualización</span></div></div>
+  <div class="card svc"><span class="kpi-ico" data-icon="shield"></span><h3>Ciberseguridad</h3><p>Firewall, segmentación de la red de huéspedes y la administrativa, antimalware y protección de datos de tarjetas.</p><div class="tags"><span class="badge nodot b-muted">Firewall</span><span class="badge nodot b-muted">EDR</span><span class="badge nodot b-muted">VPN</span></div></div>
+  <div class="card svc"><span class="kpi-ico teal" data-icon="archive"></span><h3>Respaldos</h3><p>Copias automáticas y cifradas fuera de sitio, con pruebas periódicas de restauración.</p><div class="tags"><span class="badge nodot b-muted">3-2-1</span><span class="badge nodot b-muted">Cifrado</span></div></div>
+  <div class="card svc"><span class="kpi-ico teal" data-icon="camera"></span><h3>Videovigilancia</h3><p>Cámaras IP en accesos, almacenes, bares y estacionamientos, grabación centralizada y acceso remoto.</p><div class="tags"><span class="badge nodot b-muted">CCTV IP</span><span class="badge nodot b-muted">NVR</span></div></div>
+  <div class="card svc"><span class="kpi-ico teal" data-icon="mail"></span><h3>Microsoft 365 y correo</h3><p>Correo, Teams, OneDrive y SharePoint para la cadena, dominios, anti-spam y licenciamiento.</p><div class="tags"><span class="badge nodot b-muted">Exchange</span><span class="badge nodot b-muted">Teams</span><span class="badge nodot b-muted">Licencias</span></div></div>
+  <div class="card svc"><span class="kpi-ico teal" data-icon="database"></span><h3>SQL Server</h3><p>Administración, rendimiento y respaldo de SQL Server, la base de datos de Profit Plus, Saint y a2.</p><div class="tags"><span class="badge nodot b-muted">DBA</span><span class="badge nodot b-muted">Tuning</span></div></div>
+  <div class="card svc span-2"><span class="kpi-ico" data-icon="code"></span><h3>Desarrollo web y Odoo</h3><p>Sitio web y motor de reservas con la identidad Tibisay, y desarrollo a la medida sobre Odoo para los módulos de esta plataforma: CRM, inventario, compras, RR. HH. y tableros.</p><div class="tags"><span class="badge nodot b-gold">Odoo</span><span class="badge nodot b-muted">Web</span><span class="badge nodot b-muted">API</span><span class="badge nodot b-muted">Citizen development</span></div></div>
+  <div class="card svc span-2">
+    <h3>Estado de infraestructura por propiedad</h3>
+    <div class="table-wrap mt"><table class="table">
+      <thead><tr><th>Propiedad</th><th>Internet</th><th>Wi-Fi huésped</th><th>Servidor PMS</th><th>CCTV</th></tr></thead>
+      <tbody>
+        <tr data-sede="margarita"><td class="strong">Margarita</td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">142 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">64 cám.</span></td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Maracaibo</td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">118 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">52 cám.</span></td></tr>
+        <tr data-sede="canaima"><td class="strong">Canaima</td><td><span class="badge b-warn">Satelital</span></td><td><span class="badge b-ok">22 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">18 cám.</span></td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Morrocoy</td><td><span class="badge b-warn">Respaldo activo</span></td><td><span class="badge b-ok">48 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">24 cám.</span></td></tr>
+        <tr data-sede="catatumbo"><td class="strong">Catatumbo</td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">40 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">20 cám.</span></td></tr>
+        <tr data-sede="merida"><td class="strong">Mérida</td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">44 AP</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">22 cám.</span></td></tr>
+        <tr data-sede="maturin"><td class="strong">Maturín</td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-warn">2 AP caídos</span></td><td><span class="badge b-ok">OK</span></td><td><span class="badge b-ok">20 cám.</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
-</section>
+</div>
 
-<!-- ============ ESTRUCTURA OPERATIVA ============ -->
-<section class="section section--dark" id="estructura">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Estructura operativa</span>
-      <h2>Cómo trabajamos</h2>
-      <hr class="divider">
-      <p>Un método por etapas para llegar rápido a resultados sin frenar la operación de los hoteles.</p>
-    </div>
+<section class="card mt">
+  <div class="card-h"><div><h2>Estructura operativa</h2><p>Cómo trabajamos con Tibisay</p></div></div>
+  <div class="card-b">
     <div class="flow">
-      <div class="flow__step"><h4>Diagnóstico</h4><p>Levantamiento de procesos, sistemas e infraestructura en cada sede. Priorizamos por impacto.</p></div>
-      <div class="flow__step"><h4>Conector único</h4><p>Una capa de integración con Opera/Prestige y Profit Plus/Saint/a2 que alimenta todos los módulos.</p></div>
-      <div class="flow__step"><h4>Atlas documental</h4><p>Procesos, manuales y políticas de la cadena documentados y accesibles para cada rol.</p></div>
-      <div class="flow__step"><h4>Citizen development</h4><p>Formamos a su equipo para crear formularios, reportes y flujos propios sin depender de nosotros.</p></div>
+      <div class="flow-node"><h3>1 · Diagnóstico</h3><ul><li>Procesos, sistemas e infraestructura por sede</li><li>Priorización por impacto</li></ul></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><h3>2 · Conector único</h3><ul><li>Una capa con Opera/Prestige y Profit Plus/Saint/a2</li></ul></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><h3>3 · Atlas documental</h3><ul><li>Procesos, manuales y políticas por rol</li></ul></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node core"><h3>4 · Citizen development</h3><ul><li>El equipo Tibisay crea sus propios formularios y reportes</li></ul></div>
     </div>
   </div>
 </section>
+</main>
+</div>
 
-<!-- ============ PLAN ============ -->
-<section class="section section--cream">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Hoja de ruta sugerida</span>
-      <h2>De la sede piloto a la cadena</h2>
-      <hr class="divider">
-    </div>
-    <div class="mock">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Plan de implementación <span class="mock__meta">Ajustable en la sesión de trabajo</span></div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Fase</th><th>Alcance</th><th>Sedes</th><th>Duración estimada</th></tr></thead>
-          <tbody>
-            <tr><td><span class="badge badge--gold">Fase 0</span></td><td>Diagnóstico, infraestructura base y conector único</td><td>Todas</td><td>4 semanas</td></tr>
-            <tr><td><span class="badge badge--gold">Fase 1</span></td><td>CRM, WhatsApp, eventos e indicadores</td><td>Margarita (piloto)</td><td>8 semanas</td></tr>
-            <tr><td><span class="badge badge--gold">Fase 2</span></td><td>Operaciones, IMS y auditoría A&amp;B</td><td>Margarita + Maracaibo</td><td>8 semanas</td></tr>
-            <tr><td><span class="badge badge--gold">Fase 3</span></td><td>Gestión Humana y despliegue</td><td>Resto de la cadena</td><td>10 semanas</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ CTA ============ -->
-<section class="cta" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=80')">
-  <div class="container">
-    <span class="eyebrow">Geek Solutions</span>
-    <h2>Hagamos que la tecnología se sienta como hospitalidad</h2>
-    <p>Agendemos la sesión de diagnóstico y recorramos juntos este mockup sobre los procesos reales de Tibisay.</p>
-    <a href="index.html" class="btn">Volver a la propuesta</a>
-  </div>
-</section>
-
-<section class="section section--tight">
-  <div class="container module-nav">
-    <a href="integracion.html"><small>← Anterior</small>Integración</a>
-    <a href="index.html"><small>Volver →</small>Inicio</a>
-  </div>
-</section>
-
-<!-- ============ FOOTER (igual en todas las páginas) ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div>
-        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
-      </div>
-      <div>
-        <h4>Módulos</h4>
-        <ul>
-          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
-          <li><a href="operaciones.html">Gestión Operativa</a></li>
-          <li><a href="rrhh.html">Gestión Humana</a></li>
-          <li><a href="indicadores.html">Indicadores</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>&nbsp;</h4>
-        <ul>
-          <li><a href="inventarios.html">IMS · Inventarios</a></li>
-          <li><a href="integracion.html">Integración</a></li>
-          <li><a href="servicios.html">Servicios</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Sedes</h4>
-        <ul>
-          <li>Margarita · Canaima · Catatumbo</li>
-          <li>Maracaibo · Morrocoy</li>
-          <li>Mérida · Maturín</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
-      <span>Mockup de referencia · datos ilustrativos</span>
-    </div>
-  </div>
-</footer>
-
-<script src="js/main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

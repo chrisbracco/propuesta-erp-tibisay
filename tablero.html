@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tablero directivo · Tibisay ERP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Tablero directivo</div>
+    <h1>Tablero directivo <span class="scope-pill" data-prop-name></span></h1>
+    <p>Septiembre 2026 · mes en curso · fuente Opera/Prestige + POS, corte 06:00 a.m.</p>
+  </div>
+  <div class="actions">
+    <div class="seg"><button>Ayer</button><button class="active">Mes</button><button>Año</button></div>
+    <a class="btn btn-ghost" href="#" data-toast="Exportando tablero a Excel (demo)" data-icon="download">Exportar</a>
+  </div>
+</div>
+
+<div class="grid g-4" id="kpis"></div>
+
+<div class="grid g-2 mt">
+  <section class="card">
+    <div class="card-h"><div><h2>Ocupación por propiedad</h2><p>% del mes · la propiedad seleccionada se resalta</p></div></div>
+    <div class="card-b" id="chartOcc"></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div><h2>RevPAR · últimos 12 meses</h2><p>USD · vs. año anterior</p></div>
+      <div class="legend"><span><i></i>2025–26</span><span><i class="alt line"></i>Año anterior</span></div></div>
+    <div class="card-b" id="chartRev"></div>
+  </section>
+</div>
+
+<div class="grid g-2-1 mt">
+  <section class="card">
+    <div class="card-h"><div><h2>Ingresos F&amp;B por propiedad</h2><p>Miles de USD · restaurantes, bares, room service y banquetes</p></div>
+      <div class="legend"><span><i></i>Sep 2026</span><span><i class="alt"></i>Sep 2025</span></div></div>
+    <div class="card-b" id="chartFb"></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><h2>Mezcla de ingresos</h2></div>
+    <div class="card-b"><div class="donut-wrap"><div id="donut"></div>
+      <ul class="donut-list" id="donutList"></ul></div></div>
+  </section>
+</div>
+
+<section class="card mt">
+  <div class="card-h"><div><h2>Comparativo multisitio</h2><p>Las 7 propiedades · mes en curso</p></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Reporte enviado a dirección (demo)" data-icon="mail">Enviar reporte</a></div>
+  <div class="table-wrap"><table class="table" data-searchable>
+    <thead><tr><th>Propiedad</th><th>PMS</th><th class="num">Hab.</th><th style="min-width:160px">Ocupación</th><th class="num">ADR</th><th class="num">RevPAR</th><th class="num">F&amp;B (miles)</th><th class="num">Presupuesto</th><th>Tendencia</th></tr></thead>
+    <tbody id="multiBody"></tbody>
+    <tfoot id="multiFoot"></tfoot>
+  </table></div>
+</section>
+</main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var D = TIBISAY, P = D.propiedades;
+  var tend = { margarita: 14, canaima: 19, catatumbo: 1, maracaibo: 9, morrocoy: 6, merida: 4, maturin: -3 };
+  var ppto = { margarita: 104, canaima: 96, catatumbo: 102, maracaibo: 101, morrocoy: 103, merida: 98, maturin: 90 };
+  function money(v) { return "$ " + v.toLocaleString("es-VE"); }
+
+  App.onProp(function (p) {
+    var list = p === "todas" ? P : P.filter(function (x) { return x.id === p; });
+    var hab = list.reduce(function (a, x) { return a + x.hab; }, 0);
+    var sold = list.reduce(function (a, x) { return a + x.hab * x.occ / 100; }, 0);
+    var rev = list.reduce(function (a, x) { return a + x.hab * x.occ / 100 * x.adr; }, 0);
+    var fb = list.reduce(function (a, x) { return a + x.fb; }, 0);
+    var occ = sold / hab * 100, adr = rev / sold, revpar = rev / hab;
+
+    document.getElementById("kpis").innerHTML = [
+      ["RevPAR", money(Math.round(revpar)), "▲ 11,4%", "percent", true],
+      ["ADR", money(Math.round(adr)), "▲ 6,8%", "dollar"],
+      ["Ocupación", occ.toFixed(1).replace(".", ",") + "%", "▲ 3,0 pts", "bed"],
+      ["Ingresos F&B", money(fb) + " K", "▲ 8,2%", "utensils"]
+    ].map(function (k) {
+      return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub"><span class="delta up">' + k[2] + "</span>vs. sep. 2025</div></div>";
+    }).join("");
+
+    var hi = p === "todas" ? -1 : P.findIndex(function (x) { return x.id === p; });
+    App.barChart(document.getElementById("chartOcc"), {
+      labels: P.map(function (x) { return x.nombre; }), max: 100, values: true, highlight: hi,
+      fmt: function (v) { return v + "%"; }, series: [{ data: P.map(function (x) { return x.occ; }) }]
+    });
+
+    var serie = D.meses.map(function (_, i) {
+      var r = 0, h = 0;
+      list.forEach(function (x) { r += x.hab * D.ocupacionMensual[x.id][i] / 100 * x.adr; h += x.hab; });
+      return Math.round(r / h);
+    });
+    App.lineChart(document.getElementById("chartRev"), {
+      labels: D.meses, fmt: function (v) { return "$" + v; },
+      series: [
+        { data: serie, color: "#c99d6b", area: true },
+        { data: serie.map(function (v) { return Math.round(v * 0.88); }), color: "#1c2e2e", dash: true }
+      ]
+    });
+
+    App.barChart(document.getElementById("chartFb"), {
+      labels: P.map(function (x) { return x.nombre; }),
+      series: [{ data: P.map(function (x) { return x.fb; }) }, { data: P.map(function (x) { return Math.round(x.fb / 1.082); }), cls: "alt" }]
+    });
+
+    var rooms = Math.round(rev * 30 / 1000), ev = Math.round(fb * 0.33), otros = Math.round((rooms + fb) * 0.035);
+    var tot = rooms + fb + ev + otros;
+    var parts = [["Habitaciones", rooms, "#c99d6b"], ["Alimentos & bebidas", fb, "#1c2e2e"], ["Eventos", ev, "#8f6b3a"], ["Otros", otros, "#e7e2d9"]];
+    App.donut(document.getElementById("donut"), parts.map(function (x) { return { v: x[1], color: x[2] }; }), ["$ " + (tot / 1000).toFixed(2).replace(".", ",") + " M", "ingresos del mes"]);
+    document.getElementById("donutList").innerHTML = parts.map(function (x) {
+      return '<li><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:' + x[2] + '"></i>' + x[0] + "</span><b>" + Math.round(x[1] / tot * 100) + "%</b></li>";
+    }).join("");
+
+    document.getElementById("multiBody").innerHTML = P.slice().sort(function (a, b) { return b.adr * b.occ - a.adr * a.occ; }).map(function (x) {
+      var t = tend[x.id], cls = t > 2 ? "b-ok" : t < 0 ? "b-danger" : "b-warn";
+      var pp = ppto[x.id], pcls = pp >= 100 ? "b-ok" : pp >= 95 ? "b-warn" : "b-danger";
+      return '<tr style="' + (p !== "todas" && p !== x.id ? "opacity:.45" : "") + '"><td class="strong">Tibisay ' + x.nombre + '<span class="sub">' + x.ciudad + "</span></td><td>" + x.pms + '</td><td class="num">' + x.hab +
+        '</td><td><div class="pcell"><div class="progress"><span style="width:' + x.occ + '%"></span></div><b>' + x.occ + '%</b></div></td><td class="num">' + money(x.adr) +
+        '</td><td class="num strong">' + money(Math.round(x.adr * x.occ / 10) / 10) + '</td><td class="num">' + money(x.fb) + '</td><td class="num"><span class="badge nodot ' + pcls + '">' + pp + '%</span></td><td><span class="badge ' + cls + '">' + (t > 0 ? "▲ " : t < 0 ? "▼ " : "") + Math.abs(t) + "%</span></td></tr>";
+    }).join("");
+    var all = P.reduce(function (a, x) { a.h += x.hab; a.s += x.hab * x.occ / 100; a.r += x.hab * x.occ / 100 * x.adr; a.f += x.fb; return a; }, { h: 0, s: 0, r: 0, f: 0 });
+    document.getElementById("multiFoot").innerHTML = '<tr><td>Cadena</td><td></td><td class="num">' + all.h + '</td><td>' + Math.round(all.s / all.h * 100) + '%</td><td class="num">' + money(Math.round(all.r / all.s)) + '</td><td class="num">' + money(Math.round(all.r / all.h)) + '</td><td class="num">' + money(all.f) + '</td><td class="num">101%</td><td></td></tr>';
+  });
+})();
+</script>
+</body>
+</html>

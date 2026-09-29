@@ -3,203 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión Humana · Propuesta ERP Tibisay</title>
-  <meta name="description" content="Módulo de gestión humana: personal por sede, turnos, nómina y reclutamiento para Hoteles Tibisay.">
+  <title>Gestión Humana · Tibisay ERP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-
-<!-- ============ HEADER (igual en todas las páginas) ============ -->
-<header class="header">
-  <div class="container">
-    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-    <nav class="nav" aria-label="Módulos">
-      <a href="index.html">Inicio</a>
-      <a href="crm.html">CRM</a>
-      <a href="operaciones.html">Operaciones</a>
-      <a href="rrhh.html">Gestión Humana</a>
-      <a href="indicadores.html">Indicadores</a>
-      <a href="inventarios.html">Inventarios</a>
-      <a href="integracion.html">Integración</a>
-      <a href="servicios.html">Servicios</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Gestión Humana</div>
+    <h1>Gestión Humana <span class="scope-pill" data-prop-name></span></h1>
+    <p>Personal por sede, turnos rotativos, nómina y reclutamiento de temporada.</p>
   </div>
-</header>
-
-<!-- ============ HERO ============ -->
-<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2000&q=80')">
-  <div class="hero__content">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 03</div>
-    <span class="eyebrow">Gestión Humana</span>
-    <h1>La calidez Tibisay empieza por su gente</h1>
-    <p>Personal, turnos, nómina y reclutamiento de las siete sedes, con la operación hotelera en el centro.</p>
+  <div class="actions">
+    <a class="btn btn-ghost" href="#" data-toast="Exportando plantilla de personal (demo)" data-icon="download">Exportar</a>
+    <a class="btn btn-primary" href="#" data-toast="Nueva vacante publicada (demo)" data-icon="plus">Nueva vacante</a>
   </div>
-</section>
+</div>
 
-<!-- ============ PERSONAL POR SEDE ============ -->
-<section class="section section--white">
-  <div class="container">
-    <div class="grid grid-4">
-      <div class="kpi"><div class="kpi__label">Colaboradores</div><div class="kpi__value">612</div><div class="kpi__delta">7 sedes + oficina central</div></div>
-      <div class="kpi"><div class="kpi__label">Rotación anual</div><div class="kpi__value">18%</div><div class="kpi__delta up">▼ 4 pts vs. 2025</div></div>
-      <div class="kpi"><div class="kpi__label">Ausentismo (mes)</div><div class="kpi__value">3,1%</div><div class="kpi__delta down">▲ 0,4 pts Morrocoy</div></div>
-      <div class="kpi kpi--dark"><div class="kpi__label">Vacantes abiertas</div><div class="kpi__value">23</div><div class="kpi__delta" style="color:#fff">Temporada decembrina</div></div>
-    </div>
+<div class="grid g-4">
+  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Colaboradores</span><span class="kpi-ico" data-icon="users"></span></div><div class="kpi-value">612</div><div class="kpi-sub">7 sedes + oficina central</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Rotación anual</span><span class="kpi-ico" data-icon="refresh"></span></div><div class="kpi-value">18%</div><div class="kpi-sub"><span class="delta up">▼ 4 pts</span>vs. 2025</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Ausentismo del mes</span><span class="kpi-ico" data-icon="clock"></span></div><div class="kpi-value">3,1%</div><div class="kpi-sub"><span class="delta down">▲ 0,4 pts</span>Morrocoy</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Vacantes abiertas</span><span class="kpi-ico" data-icon="briefcase"></span></div><div class="kpi-value">23</div><div class="kpi-sub">temporada decembrina</div></div>
+</div>
 
-    <div class="mock mt-2">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Personal por sede y departamento</div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Sede</th><th class="num">Recepción</th><th class="num">Housekeeping</th><th class="num">A&amp;B</th><th class="num">Mantenimiento</th><th class="num">Ventas/Eventos</th><th class="num">Admin.</th><th class="num">Total</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Margarita</strong></td><td class="num">18</td><td class="num">46</td><td class="num">62</td><td class="num">14</td><td class="num">8</td><td class="num">12</td><td class="num"><strong>160</strong></td></tr>
-            <tr><td><strong>Maracaibo · Del Lago</strong></td><td class="num">16</td><td class="num">38</td><td class="num">48</td><td class="num">12</td><td class="num">7</td><td class="num">10</td><td class="num"><strong>131</strong></td></tr>
-            <tr><td><strong>Morrocoy</strong></td><td class="num">8</td><td class="num">20</td><td class="num">26</td><td class="num">7</td><td class="num">3</td><td class="num">5</td><td class="num"><strong>69</strong></td></tr>
-            <tr><td><strong>Mérida</strong></td><td class="num">8</td><td class="num">18</td><td class="num">22</td><td class="num">6</td><td class="num">3</td><td class="num">5</td><td class="num"><strong>62</strong></td></tr>
-            <tr><td><strong>Catatumbo</strong></td><td class="num">7</td><td class="num">16</td><td class="num">20</td><td class="num">6</td><td class="num">2</td><td class="num">4</td><td class="num"><strong>55</strong></td></tr>
-            <tr><td><strong>Maturín</strong></td><td class="num">7</td><td class="num">15</td><td class="num">18</td><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num"><strong>52</strong></td></tr>
-            <tr><td><strong>Canaima</strong></td><td class="num">5</td><td class="num">12</td><td class="num">15</td><td class="num">5</td><td class="num">1</td><td class="num">3</td><td class="num"><strong>41</strong></td></tr>
-            <tr><td><strong>Oficina central</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">14</td><td class="num">28</td><td class="num"><strong>42</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<section class="card mt" data-tabs>
+  <div class="tabs">
+    <button class="tab active" data-tab="personal">Personal por sede</button>
+    <button class="tab" data-tab="turnos">Turnos rotativos</button>
+    <button class="tab" data-tab="nomina">Nómina</button>
+    <button class="tab" data-tab="recl">Reclutamiento <span class="badge nodot b-gold">23</span></button>
   </div>
-</section>
 
-<!-- ============ TURNOS ============ -->
-<section class="section section--cream">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Turnos</span>
-      <h2>Cuadrantes que se ajustan a la ocupación</h2>
-      <hr class="divider">
-      <p>El sistema sugiere personal por turno según la ocupación proyectada y los eventos del día, y el colaborador ve su horario en el celular.</p>
-    </div>
-    <div class="mock">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Housekeeping Margarita · Semana 40 <span class="mock__meta">Ocupación proyectada 84%</span></div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Colaborador</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Yelitza Marcano</strong></td><td>7–3</td><td>7–3</td><td>7–3</td><td><span class="badge badge--info">Libre</span></td><td>7–3</td><td>7–3</td><td>7–3</td></tr>
-            <tr><td><strong>Rosa González</strong></td><td>7–3</td><td><span class="badge badge--info">Libre</span></td><td>7–3</td><td>7–3</td><td>7–3</td><td>7–3</td><td>7–3</td></tr>
-            <tr><td><strong>Carmen Lárez</strong></td><td>3–11</td><td>3–11</td><td>3–11</td><td>3–11</td><td><span class="badge badge--info">Libre</span></td><td>3–11</td><td>3–11</td></tr>
-            <tr><td><strong>Oriana Patiño</strong></td><td>7–3</td><td>7–3</td><td><span class="badge badge--warn">Vacaciones</span></td><td><span class="badge badge--warn">Vacaciones</span></td><td><span class="badge badge--warn">Vacaciones</span></td><td>7–3</td><td>7–3</td></tr>
-            <tr><td><strong>Refuerzo boda (Gran Salón)</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="badge badge--gold">+4 extras</span></td><td>—</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="tab-panel active" data-panel="personal">
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Sede</th><th class="num">Recepción</th><th class="num">Housekeeping</th><th class="num">A&amp;B</th><th class="num">Mantenim.</th><th class="num">Ventas/Eventos</th><th class="num">Admin.</th><th class="num">Total</th><th style="min-width:130px">Plantilla cubierta</th></tr></thead>
+      <tbody>
+        <tr data-sede="margarita"><td class="strong">Margarita</td><td class="num">18</td><td class="num">46</td><td class="num">62</td><td class="num">14</td><td class="num">8</td><td class="num">12</td><td class="num strong">160</td><td><div class="pcell"><div class="progress"><span style="width:94%"></span></div><b>94%</b></div></td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Maracaibo · Del Lago</td><td class="num">16</td><td class="num">38</td><td class="num">48</td><td class="num">12</td><td class="num">7</td><td class="num">10</td><td class="num strong">131</td><td><div class="pcell"><div class="progress"><span style="width:97%"></span></div><b>97%</b></div></td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Morrocoy</td><td class="num">8</td><td class="num">20</td><td class="num">26</td><td class="num">7</td><td class="num">3</td><td class="num">5</td><td class="num strong">69</td><td><div class="pcell"><div class="progress"><span style="width:88%"></span></div><b>88%</b></div></td></tr>
+        <tr data-sede="merida"><td class="strong">Mérida</td><td class="num">8</td><td class="num">18</td><td class="num">22</td><td class="num">6</td><td class="num">3</td><td class="num">5</td><td class="num strong">62</td><td><div class="pcell"><div class="progress"><span style="width:95%"></span></div><b>95%</b></div></td></tr>
+        <tr data-sede="catatumbo"><td class="strong">Catatumbo</td><td class="num">7</td><td class="num">16</td><td class="num">20</td><td class="num">6</td><td class="num">2</td><td class="num">4</td><td class="num strong">55</td><td><div class="pcell"><div class="progress"><span style="width:96%"></span></div><b>96%</b></div></td></tr>
+        <tr data-sede="maturin"><td class="strong">Maturín</td><td class="num">7</td><td class="num">15</td><td class="num">18</td><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num strong">52</td><td><div class="pcell"><div class="progress"><span style="width:98%"></span></div><b>98%</b></div></td></tr>
+        <tr data-sede="canaima"><td class="strong">Canaima</td><td class="num">5</td><td class="num">12</td><td class="num">15</td><td class="num">5</td><td class="num">1</td><td class="num">3</td><td class="num strong">41</td><td><div class="pcell"><div class="progress"><span style="width:85%"></span></div><b>85%</b></div></td></tr>
+        <tr data-sede="todas"><td class="strong">Oficina central</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">14</td><td class="num">28</td><td class="num strong">42</td><td><div class="pcell"><div class="progress teal"><span style="width:100%"></span></div><b>100%</b></div></td></tr>
+      </tbody>
+    </table></div>
   </div>
-</section>
 
-<!-- ============ NÓMINA + RECLUTAMIENTO ============ -->
-<section class="section section--white">
-  <div class="container grid grid-2">
-    <div>
-      <span class="eyebrow">Nómina</span>
-      <h2>Quincena cerrada sin sobresaltos</h2>
-      <hr class="divider" style="margin-left:0">
-      <p>Horas extra, bono nocturno, propinas y beneficios calculados desde los turnos reales, con la ley venezolana y asientos enviados a Profit Plus, Saint o a2.</p>
-      <div class="mock mt-1">
-        <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Nómina 2.ª quincena septiembre</div>
-        <div class="mock__body">
-          <ul class="meta-list mt-0">
-            <li><span>Colaboradores procesados</span><span>612</span></li>
-            <li><span>Horas extra</span><span>1.284 h</span></li>
-            <li><span>Bono nocturno</span><span>146 colaboradores</span></li>
-            <li><span>Propinas distribuidas (A&amp;B)</span><span>$ 9.320</span></li>
-            <li><span>Aportes IVSS / FAOV / INCES</span><span>Calculados</span></li>
-            <li><span>Asiento contable</span><span><span class="badge badge--ok">Enviado a Profit Plus</span></span></li>
+  <div class="tab-panel" data-panel="turnos">
+    <div class="toolbar">
+      <select class="select select-sm" style="width:auto"><option>Housekeeping</option><option>Recepción</option><option>A&amp;B</option><option>Mantenimiento</option></select>
+      <div class="seg"><button>Sem. 39</button><button class="active">Sem. 40</button><button>Sem. 41</button></div>
+      <span class="small muted" style="margin-left:auto">Sugerido según ocupación proyectada <b>84%</b> y eventos de la semana</span>
+    </div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Colaborador</th><th>Cargo</th><th>Lun 28</th><th>Mar 29</th><th>Mié 30</th><th>Jue 01</th><th>Vie 02</th><th>Sáb 03</th><th>Dom 04</th><th class="num">Horas</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Yelitza Marcano</td><td>Camarera</td><td>A 7–15</td><td>A 7–15</td><td>A 7–15</td><td><span class="badge nodot b-muted">Libre</span></td><td>A 7–15</td><td>A 7–15</td><td>A 7–15</td><td class="num">48</td></tr>
+        <tr><td class="strong">Rosa González</td><td>Camarera</td><td>A 7–15</td><td><span class="badge nodot b-muted">Libre</span></td><td>A 7–15</td><td>A 7–15</td><td>A 7–15</td><td>A 7–15</td><td>A 7–15</td><td class="num">48</td></tr>
+        <tr><td class="strong">Carmen Lárez</td><td>Camarera</td><td>B 15–23</td><td>B 15–23</td><td>B 15–23</td><td>B 15–23</td><td><span class="badge nodot b-muted">Libre</span></td><td>B 15–23</td><td>B 15–23</td><td class="num">48</td></tr>
+        <tr><td class="strong">Oriana Patiño</td><td>Camarera</td><td>A 7–15</td><td>A 7–15</td><td><span class="badge nodot b-warn">Vacaciones</span></td><td><span class="badge nodot b-warn">Vacaciones</span></td><td><span class="badge nodot b-warn">Vacaciones</span></td><td>A 7–15</td><td>A 7–15</td><td class="num">32</td></tr>
+        <tr><td class="strong">Maribel Salas</td><td>Áreas comunes</td><td>C 23–7</td><td>C 23–7</td><td>C 23–7</td><td>C 23–7</td><td>C 23–7</td><td><span class="badge nodot b-muted">Libre</span></td><td><span class="badge nodot b-muted">Libre</span></td><td class="num">40</td></tr>
+        <tr><td class="strong">Refuerzo boda Gran Salón</td><td>Extras (4)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="badge nodot b-gold">B 15–23</span></td><td>—</td><td class="num">32</td></tr>
+      </tbody>
+    </table></div>
+    <div class="card-f">A = mañana 7:00–15:00 · B = tarde 15:00–23:00 · C = noche 23:00–7:00 · Rotación semanal automática con descanso legal garantizado.</div>
+  </div>
+
+  <div class="tab-panel" data-panel="nomina">
+    <div class="card-b">
+      <div class="grid g-2-1">
+        <div>
+          <h3 style="margin-bottom:10px">2.ª quincena de septiembre 2026</h3>
+          <div class="table-wrap" style="border:1px solid var(--border);border-radius:8px"><table class="table">
+            <thead><tr><th>Concepto</th><th class="num">Colaboradores</th><th class="num">Monto (USD)</th></tr></thead>
+            <tbody>
+              <tr><td>Salario base</td><td class="num">612</td><td class="num">$ 96.480</td></tr>
+              <tr><td>Horas extra (1.284 h)</td><td class="num">203</td><td class="num">$ 8.350</td></tr>
+              <tr><td>Bono nocturno</td><td class="num">146</td><td class="num">$ 3.720</td></tr>
+              <tr><td>Bono de alimentación (cestaticket)</td><td class="num">612</td><td class="num">$ 24.480</td></tr>
+              <tr><td>Propinas distribuidas A&amp;B</td><td class="num">214</td><td class="num">$ 9.320</td></tr>
+              <tr><td>Deducciones IVSS / FAOV / RPE</td><td class="num">612</td><td class="num">− $ 5.610</td></tr>
+            </tbody>
+            <tfoot><tr><td>Neto a pagar</td><td></td><td class="num">$ 136.740</td></tr></tfoot>
+          </table></div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:10px">Proceso</h3>
+          <ul class="list" style="border:1px solid var(--border);border-radius:8px">
+            <li><span class="alert-ico b-ok" data-icon="check"></span><div class="grow"><b>Turnos y asistencia importados</b><small>Desde marcaje biométrico · 27/09</small></div></li>
+            <li><span class="alert-ico b-ok" data-icon="check"></span><div class="grow"><b>Cálculo validado</b><small>RR. HH. corporativo · 28/09</small></div></li>
+            <li><span class="alert-ico b-warn" data-icon="clock"></span><div class="grow"><b>Aprobación de dirección</b><small>Pendiente</small></div></li>
+            <li><span class="alert-ico b-muted" data-icon="plug"></span><div class="grow"><b>Asiento a Profit Plus / Saint / a2</b><small>Automático al aprobar</small></div></li>
           </ul>
-          <div class="btn-row mt-1"><span class="btn btn--sm">Emitir recibos</span><span class="btn btn--sm btn--dark">Ver por sede</span></div>
+          <a class="btn btn-primary btn-block mt" href="#" data-toast="Nómina aprobada y asiento enviado al ERP (demo)">Aprobar nómina</a>
         </div>
       </div>
     </div>
-    <div>
-      <span class="eyebrow">Reclutamiento</span>
-      <h2>Listos para temporada alta</h2>
-      <hr class="divider" style="margin-left:0">
-      <p>Vacantes publicadas desde el sistema, candidatos por WhatsApp y expediente digital desde el primer día.</p>
-      <div class="table-wrap mt-1">
-        <table class="table">
-          <thead><tr><th>Vacante</th><th>Sede</th><th class="num">Candidatos</th><th>Etapa</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Mesonero/a bilingüe</strong></td><td>Margarita</td><td class="num">34</td><td><span class="badge badge--info">Entrevistas</span></td></tr>
-            <tr><td><strong>Camarera/o de pisos</strong> ×6</td><td>Margarita</td><td class="num">51</td><td><span class="badge badge--warn">Preselección</span></td></tr>
-            <tr><td><strong>Cocinero/a de línea</strong></td><td>Maracaibo</td><td class="num">18</td><td><span class="badge badge--info">Prueba práctica</span></td></tr>
-            <tr><td><strong>Guía bilingüe</strong></td><td>Canaima</td><td class="num">7</td><td><span class="badge badge--gold">Oferta</span></td></tr>
-            <tr><td><strong>Salvavidas certificado</strong></td><td>Morrocoy</td><td class="num">9</td><td><span class="badge badge--ok">Contratado</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note mt-1"><strong>Onboarding:</strong> cada ingreso recibe su ruta de inducción "Estilo Tibisay" y firma digital de documentos.</div>
-    </div>
+  </div>
+
+  <div class="tab-panel" data-panel="recl">
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Vacante</th><th>Sede</th><th class="num">Puestos</th><th class="num">Candidatos</th><th>Etapa</th><th>Fecha objetivo</th><th>Responsable</th></tr></thead>
+      <tbody>
+        <tr data-sede="margarita"><td class="strong">Mesonero/a bilingüe</td><td>Margarita</td><td class="num">4</td><td class="num">34</td><td><span class="badge b-info">Entrevistas</span></td><td>15/11/2026</td><td>Gabriela M.</td></tr>
+        <tr data-sede="margarita"><td class="strong">Camarera/o de pisos</td><td>Margarita</td><td class="num">6</td><td class="num">51</td><td><span class="badge b-warn">Preselección</span></td><td>01/12/2026</td><td>Gabriela M.</td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Cocinero/a de línea</td><td>Maracaibo</td><td class="num">2</td><td class="num">18</td><td><span class="badge b-info">Prueba práctica</span></td><td>30/10/2026</td><td>Luis F.</td></tr>
+        <tr data-sede="canaima"><td class="strong">Guía bilingüe</td><td>Canaima</td><td class="num">2</td><td class="num">7</td><td><span class="badge b-gold">Oferta</span></td><td>15/10/2026</td><td>Héctor S.</td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Salvavidas certificado</td><td>Morrocoy</td><td class="num">3</td><td class="num">9</td><td><span class="badge b-ok">Contratado</span></td><td>10/10/2026</td><td>Andreína C.</td></tr>
+        <tr data-sede="merida"><td class="strong">Recepcionista nocturno</td><td>Mérida</td><td class="num">1</td><td class="num">12</td><td><span class="badge b-info">Entrevistas</span></td><td>20/10/2026</td><td>José G. R.</td></tr>
+        <tr data-sede="maturin"><td class="strong">Técnico de mantenimiento</td><td>Maturín</td><td class="num">1</td><td class="num">6</td><td><span class="badge b-warn">Preselección</span></td><td>31/10/2026</td><td>Carlos M.</td></tr>
+        <tr data-sede="catatumbo"><td class="strong">Bartender</td><td>Catatumbo</td><td class="num">1</td><td class="num">4</td><td><span class="badge b-muted">Publicada</span></td><td>15/11/2026</td><td>Rosa U.</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
+</main>
+</div>
 
-<section class="section section--dark section--tight">
-  <div class="container grid grid-4">
-    <div class="card"><h3>Expediente digital</h3><p>Contratos, constancias, vacaciones y evaluaciones en un solo lugar.</p></div>
-    <div class="card"><h3>Autoservicio</h3><p>Recibos, solicitudes de vacaciones y constancias de trabajo desde el celular.</p></div>
-    <div class="card"><h3>Formación</h3><p>Planes por cargo: servicio al huésped, idiomas, seguridad alimentaria.</p></div>
-    <div class="card"><h3>Clima laboral</h3><p>Encuestas trimestrales por sede y departamento, con alertas tempranas.</p></div>
-  </div>
-</section>
-
-<section class="section section--tight">
-  <div class="container module-nav">
-    <a href="operaciones.html"><small>← Anterior</small>Gestión Operativa</a>
-    <a href="indicadores.html"><small>Siguiente módulo →</small>Indicadores</a>
-  </div>
-</section>
-
-<!-- ============ FOOTER (igual en todas las páginas) ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div>
-        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
-      </div>
-      <div>
-        <h4>Módulos</h4>
-        <ul>
-          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
-          <li><a href="operaciones.html">Gestión Operativa</a></li>
-          <li><a href="rrhh.html">Gestión Humana</a></li>
-          <li><a href="indicadores.html">Indicadores</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>&nbsp;</h4>
-        <ul>
-          <li><a href="inventarios.html">IMS · Inventarios</a></li>
-          <li><a href="integracion.html">Integración</a></li>
-          <li><a href="servicios.html">Servicios</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Sedes</h4>
-        <ul>
-          <li>Margarita · Canaima · Catatumbo</li>
-          <li>Maracaibo · Morrocoy</li>
-          <li>Mérida · Maturín</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
-      <span>Mockup de referencia · datos ilustrativos</span>
-    </div>
-  </div>
-</footer>
-
-<script src="js/main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

@@ -3,263 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión Operativa · Propuesta ERP Tibisay</title>
-  <meta name="description" content="Módulo de gestión operativa: front desk, housekeeping, mantenimiento y alimentos y bebidas para las siete sedes Tibisay.">
+  <title>Operaciones · Tibisay ERP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-
-<!-- ============ HEADER (igual en todas las páginas) ============ -->
-<header class="header">
-  <div class="container">
-    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-    <nav class="nav" aria-label="Módulos">
-      <a href="index.html">Inicio</a>
-      <a href="crm.html">CRM</a>
-      <a href="operaciones.html">Operaciones</a>
-      <a href="rrhh.html">Gestión Humana</a>
-      <a href="indicadores.html">Indicadores</a>
-      <a href="inventarios.html">Inventarios</a>
-      <a href="integracion.html">Integración</a>
-      <a href="servicios.html">Servicios</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Operaciones</div>
+    <h1>Operaciones · Hotel Tibisay <span data-prop-hotel></span></h1>
+    <p>Front desk, housekeeping, mantenimiento y alimentos &amp; bebidas en tiempo real.</p>
   </div>
-</header>
-
-<!-- ============ HERO ============ -->
-<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=2000&q=80')">
-  <div class="hero__content">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 02</div>
-    <span class="eyebrow">Gestión Operativa</span>
-    <h1>El hotel entero, en tiempo real</h1>
-    <p>Recepción, pisos, mantenimiento y A&amp;B hablando el mismo idioma, desde la tablet del ama de llaves hasta la oficina del gerente.</p>
+  <div class="actions">
+    <a class="btn btn-ghost" href="#" data-toast="Nuevo ticket de mantenimiento (demo)" data-icon="wrench">Reportar falla</a>
+    <a class="btn btn-primary" href="#" data-toast="Check-in exprés iniciado (demo)" data-icon="check">Check-in</a>
   </div>
-</section>
+</div>
 
-<!-- ============ FRONT DESK ============ -->
-<section class="section section--white">
-  <div class="container">
-    <div class="section-head section-head--left">
-      <span class="eyebrow">Front desk · Hotel Tibisay Margarita</span>
-      <h2>Llegadas y salidas de hoy</h2>
-      <hr class="divider">
-    </div>
-    <div class="grid grid-4">
-      <div class="kpi"><div class="kpi__label">Llegadas</div><div class="kpi__value">34</div><div class="kpi__delta">12 ya registradas</div></div>
-      <div class="kpi"><div class="kpi__label">Salidas</div><div class="kpi__value">28</div><div class="kpi__delta">6 con late check-out</div></div>
-      <div class="kpi"><div class="kpi__label">En casa</div><div class="kpi__value">112</div><div class="kpi__delta up">Ocupación 81%</div></div>
-      <div class="kpi kpi--dark"><div class="kpi__label">VIP llegando</div><div class="kpi__value">5</div><div class="kpi__delta" style="color:#fff">2 Platino · 3 Oro</div></div>
-    </div>
+<div class="grid g-4" id="kpis"></div>
 
-    <div class="mock mt-2">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Llegadas · Martes 29/09/2026 <span class="mock__meta">Datos desde Opera</span></div>
-      <div class="mock__body">
-        <div class="mock__toolbar">
-          <input class="mock__search" type="text" placeholder="Buscar huésped, reserva o habitación…">
-          <div class="chips"><span class="chip active">Todas</span><span class="chip">VIP</span><span class="chip">Grupos</span><span class="chip">Pendientes</span></div>
-        </div>
-        <div class="table-wrap">
-          <table class="table">
-            <thead><tr><th>Hora</th><th>Huésped</th><th>Hab.</th><th>Tipo</th><th>Noches</th><th>Nota</th><th>Estado</th></tr></thead>
-            <tbody>
-              <tr><td>11:30</td><td><strong>Valentina Rojas</strong> <span class="badge badge--warn">Platino</span></td><td>512</td><td>Suite Vista Mar</td><td>4</td><td>Traslado desde aeropuerto Santiago Mariño</td><td><span class="badge badge--ok">Registrada</span></td></tr>
-              <tr><td>13:00</td><td><strong>Grupo Seguros Caribe</strong></td><td>—</td><td>18 Superior</td><td>2</td><td>Bloque evento aniversario</td><td><span class="badge badge--info">Asignando</span></td></tr>
-              <tr><td>14:15</td><td><strong>Robert &amp; Linda Hayes</strong> <span class="badge badge--gold">Oro</span></td><td>408</td><td>Junior Suite</td><td>7</td><td>Aniversario · espumante de cortesía</td><td><span class="badge badge--warn">Hab. en inspección</span></td></tr>
-              <tr><td>15:00</td><td><strong>Carlos Villalba</strong></td><td>215</td><td>Superior</td><td>1</td><td>Tarifa corporativa Digitel</td><td><span class="badge badge--alerta">Pendiente pago</span></td></tr>
-              <tr><td>18:40</td><td><strong>María Fernanda Ochoa</strong></td><td>301</td><td>Deluxe</td><td>3</td><td>Cuna en habitación</td><td><span class="badge badge--info">Confirmada</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+<section class="card mt" data-tabs>
+  <div class="tabs">
+    <button class="tab active" data-tab="fd">Front desk</button>
+    <button class="tab" data-tab="hk">Housekeeping</button>
+    <button class="tab" data-tab="mt">Mantenimiento <span class="badge nodot b-danger">9</span></button>
+    <button class="tab" data-tab="ab">A&amp;B y salones</button>
   </div>
-</section>
 
-<!-- ============ HOUSEKEEPING ============ -->
-<section class="section section--cream">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Housekeeping</span>
-      <h2>Estado de habitaciones</h2>
-      <hr class="divider">
-      <p>Las camareras actualizan desde el celular; recepción ve en segundos qué habitación puede entregar.</p>
+  <!-- FRONT DESK -->
+  <div class="tab-panel active" data-panel="fd">
+    <div class="toolbar">
+      <div class="seg"><button class="active">Llegadas</button><button>Salidas</button><button>En casa</button></div>
+      <span class="small muted" style="margin-left:auto">Datos desde <b id="pmsName">Opera</b> · actualizado hace 1 min</span>
     </div>
-    <div class="grid grid-3">
-      <div class="mock span-2">
-        <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Piso 4 y 5 · Margarita <span class="mock__meta">Actualizado 10:42 a.m.</span></div>
-        <div class="mock__body">
-          <div class="rooms">
-            <div class="room room--ocupada"><b>401</b>Ocupada</div>
-            <div class="room room--limpia"><b>402</b>Limpia</div>
-            <div class="room room--sucia"><b>403</b>Sucia</div>
-            <div class="room room--ocupada"><b>404</b>Ocupada</div>
-            <div class="room room--limpia"><b>405</b>Limpia</div>
-            <div class="room room--inspeccion"><b>406</b>Inspección</div>
-            <div class="room room--ocupada"><b>407</b>Ocupada</div>
-            <div class="room room--inspeccion"><b>408</b>Inspección</div>
-            <div class="room room--sucia"><b>409</b>Sucia</div>
-            <div class="room room--fuera"><b>410</b>Fuera serv.</div>
-            <div class="room room--ocupada"><b>501</b>Ocupada</div>
-            <div class="room room--ocupada"><b>502</b>Ocupada</div>
-            <div class="room room--limpia"><b>503</b>Limpia</div>
-            <div class="room room--sucia"><b>504</b>Sucia</div>
-            <div class="room room--ocupada"><b>505</b>Ocupada</div>
-            <div class="room room--limpia"><b>506</b>Limpia</div>
-            <div class="room room--sucia"><b>507</b>Sucia</div>
-            <div class="room room--ocupada"><b>508</b>Ocupada</div>
-            <div class="room room--limpia"><b>509</b>Limpia</div>
-            <div class="room room--ocupada"><b>510</b>Ocupada</div>
-            <div class="room room--inspeccion"><b>511</b>Inspección</div>
-            <div class="room room--limpia"><b>512</b>Limpia</div>
-          </div>
-          <div class="legend"><span><i style="background:var(--ok-bg);border:1px solid #c7dccb"></i>Limpia</span><span><i style="background:var(--alerta-bg);border:1px solid #e7c3bb"></i>Sucia</span><span><i style="background:var(--info-bg);border:1px solid #c4d6da"></i>Ocupada</span><span><i style="background:var(--warn-bg);border:1px solid #ead7ae"></i>Inspección</span><span><i style="background:#e9e6e1"></i>Fuera de servicio</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <h4>Carga por camarera</h4>
-        <div class="bars mt-1">
-          <div class="bar"><span>Yelitza M.</span><div class="bar__track"><div class="bar__fill" style="width:85%"></div></div><span class="bar__val">11/13</span></div>
-          <div class="bar"><span>Rosa G.</span><div class="bar__track"><div class="bar__fill" style="width:62%"></div></div><span class="bar__val">8/13</span></div>
-          <div class="bar"><span>Carmen L.</span><div class="bar__track"><div class="bar__fill" style="width:46%"></div></div><span class="bar__val">6/13</span></div>
-          <div class="bar"><span>Oriana P.</span><div class="bar__track"><div class="bar__fill" style="width:92%"></div></div><span class="bar__val">12/13</span></div>
-        </div>
-        <div class="note mt-2"><strong>Prioridad:</strong> 408 en inspección — llega huésped Oro a las 2:15 p.m.</div>
-      </div>
-    </div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Hora</th><th>Reserva</th><th>Huésped</th><th>Hab.</th><th>Tipo</th><th class="num">Noches</th><th class="num">Tarifa</th><th>Canal</th><th>Estado</th><th></th></tr></thead>
+      <tbody id="arrivals"></tbody>
+    </table></div>
   </div>
-</section>
 
-<!-- ============ MANTENIMIENTO ============ -->
-<section class="section section--white">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Mantenimiento</span>
-      <h2>Tickets que no se pierden</h2>
-      <hr class="divider">
-      <p>Cualquier colaborador reporta con foto; el sistema asigna, mide tiempos y bloquea la habitación si hace falta.</p>
-    </div>
-    <div class="kanban">
-      <div class="kanban__col">
-        <h4>Abiertos <span>5</span></h4>
-        <div class="kanban__card" style="border-left-color:var(--alerta)"><strong>Aire acondicionado no enfría</strong>Hab. 410 · Margarita<small><span class="badge badge--alerta">Urgente</span><span>hace 25 min</span></small></div>
-        <div class="kanban__card"><strong>Filtración en ducha</strong>Hab. 207 · Mérida<small><span class="badge badge--warn">Media</span><span>hace 1 h</span></small></div>
+  <!-- HOUSEKEEPING -->
+  <div class="tab-panel" data-panel="hk">
+    <div class="grid g-2-1" style="gap:0">
+      <div class="card-b" style="border-right:1px solid var(--border)">
+        <div class="between" style="margin-bottom:12px"><h3>Estado de habitaciones</h3>
+          <div class="legend"><span><i style="background:var(--ok-bg)"></i>Libre limpia</span><span><i style="background:var(--info-bg)"></i>Ocupada</span><span><i style="background:var(--danger-bg)"></i>Sucia</span><span><i style="background:var(--warn-bg)"></i>Inspección</span><span><i style="background:#ece9e3"></i>Fuera de serv.</span></div></div>
+        <div class="rooms" id="rooms"></div>
       </div>
-      <div class="kanban__col">
-        <h4>En proceso <span>4</span></h4>
-        <div class="kanban__card"><strong>Bomba de piscina</strong>Áreas comunes · Morrocoy<small><span>Téc. José A.</span><span>2 h 10 min</span></small></div>
-        <div class="kanban__card"><strong>Proyector Sala Guaraguao</strong>Eventos · Margarita<small><span>Téc. Pedro C.</span><span>40 min</span></small></div>
-      </div>
-      <div class="kanban__col">
-        <h4>Esperando repuesto <span>2</span></h4>
-        <div class="kanban__card"><strong>Compresor cava cuarto frío</strong>Cocina · Maracaibo<small><span>OC-2026-1182</span><span>3 días</span></small></div>
-      </div>
-      <div class="kanban__col">
-        <h4>Cerrados hoy <span>11</span></h4>
-        <div class="kanban__card" style="border-left-color:var(--ok)"><strong>Cerradura electrónica</strong>Hab. 118 · Maturín<small><span>Resuelto</span><span>35 min</span></small></div>
-        <div class="kanban__card" style="border-left-color:var(--ok)"><strong>TV sin señal</strong>Hab. 322 · Catatumbo<small><span>Resuelto</span><span>20 min</span></small></div>
-      </div>
-    </div>
-    <div class="grid grid-3 mt-2">
-      <div class="kpi"><div class="kpi__label">Tiempo medio de resolución</div><div class="kpi__value">1 h 48 min</div><div class="kpi__delta up">▼ 32% este mes</div></div>
-      <div class="kpi"><div class="kpi__label">Mantenimiento preventivo</div><div class="kpi__value">92%</div><div class="kpi__delta up">Plan cumplido</div></div>
-      <div class="kpi"><div class="kpi__label">Hab. fuera de servicio (cadena)</div><div class="kpi__value">9</div><div class="kpi__delta down">3 más de 48 h</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ A&B ============ -->
-<section class="section section--cream">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Alimentos &amp; Bebidas</span>
-      <h2>Restaurantes, lounge y salones</h2>
-      <hr class="divider">
-    </div>
-    <div class="grid grid-4">
-      <div class="card-photo" style="min-height:300px;background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80')">
-        <div class="card-photo__body"><span class="tag">Restaurante</span><h3>Cocina de autor</h3><p>68 cubiertos al almuerzo · ticket medio $ 24</p></div>
-      </div>
-      <div class="card-photo" style="min-height:300px;background-image:url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
-        <div class="card-photo__body"><span class="tag">Lounge bar</span><h3>Lounge</h3><p>Happy hour 6–8 p.m. · 42 comandas abiertas</p></div>
-      </div>
-      <div class="card-photo" style="min-height:300px;background-image:url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80')">
-        <div class="card-photo__body"><span class="tag">Eventos</span><h3>Gran Salón</h3><p>Hasta 400 pax · montaje banquete sábado</p></div>
-      </div>
-      <div class="card-photo" style="min-height:300px;background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80')">
-        <div class="card-photo__body"><span class="tag">Pool bar</span><h3>Piscina</h3><p>Servicio a camastros · 19 órdenes hoy</p></div>
-      </div>
-    </div>
-
-    <div class="mock mt-2">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Agenda de salones · Semana 40 <span class="mock__meta">Margarita</span></div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
+      <div>
+        <div class="card-h"><h2>Tareas por camarera</h2></div>
+        <div class="table-wrap"><table class="table">
+          <thead><tr><th>Camarera</th><th>Piso</th><th style="min-width:120px">Avance</th></tr></thead>
           <tbody>
-            <tr><td>Mié 30/09</td><td>Sala Guaraguao</td><td>Desayuno de trabajo Digitel</td><td>Escuela</td><td class="num">35</td><td>BEO-0931</td><td><span class="badge badge--ok">Confirmado</span></td></tr>
-            <tr><td>Jue 01/10</td><td>Sala El Yaque</td><td>Capacitación Laboratorios Leti</td><td>Herradura</td><td class="num">22</td><td>BEO-0934</td><td><span class="badge badge--ok">Confirmado</span></td></tr>
-            <tr><td>Vie 02/10</td><td>Terraza</td><td>Cóctel de bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge badge--warn">Menú por aprobar</span></td></tr>
-            <tr><td>Sáb 03/10</td><td>Gran Salón</td><td>Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge badge--ok">Confirmado</span></td></tr>
-            <tr><td>Dom 04/10</td><td>Jardín frente al mar</td><td>Brunch Club Tibisay</td><td>Buffet</td><td class="num">80</td><td>BEO-0940</td><td><span class="badge badge--info">Tentativo</span></td></tr>
+            <tr><td class="strong">Yelitza Marcano</td><td>1–2</td><td><div class="pcell"><div class="progress"><span style="width:85%"></span></div><b>11/13</b></div></td></tr>
+            <tr><td class="strong">Rosa González</td><td>3</td><td><div class="pcell"><div class="progress"><span style="width:62%"></span></div><b>8/13</b></div></td></tr>
+            <tr><td class="strong">Carmen Lárez</td><td>4</td><td><div class="pcell"><div class="progress"><span style="width:46%"></span></div><b>6/13</b></div></td></tr>
+            <tr><td class="strong">Oriana Patiño</td><td>5</td><td><div class="pcell"><div class="progress"><span style="width:92%"></span></div><b>12/13</b></div></td></tr>
+            <tr><td class="strong">Maribel Salas</td><td>Áreas comunes</td><td><div class="pcell"><div class="progress teal"><span style="width:70%"></span></div><b>7/10</b></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
+        <div class="card-b"><div class="small" style="background:var(--warn-bg);color:var(--warn);padding:10px 12px;border-radius:8px"><b>Prioridad:</b> habitación en inspección con llegada VIP a las 2:15 p.m.</div></div>
       </div>
     </div>
+  </div>
+
+  <!-- MANTENIMIENTO -->
+  <div class="tab-panel" data-panel="mt">
+    <div class="card-b">
+      <div class="kanban">
+        <div class="kcol"><div class="kcol-h">Abiertos <span class="badge nodot b-danger">5</span></div>
+          <div class="kcard" data-sede="margarita" style="border-left:3px solid var(--danger)"><b>A/A no enfría · hab. 410</b>Margarita · habitación bloqueada<div class="between"><span class="badge b-danger">Urgente</span><span>hace 25 min</span></div></div>
+          <div class="kcard" data-sede="merida"><b>Filtración en ducha · hab. 207</b>Mérida<div class="between"><span class="badge b-warn">Media</span><span>hace 1 h</span></div></div>
+          <div class="kcard" data-sede="maturin"><b>Luminaria estacionamiento</b>Maturín<div class="between"><span class="badge b-info">Baja</span><span>hace 3 h</span></div></div>
+        </div>
+        <div class="kcol"><div class="kcol-h">En proceso <span class="badge nodot b-muted">4</span></div>
+          <div class="kcard" data-sede="morrocoy"><b>Bomba de piscina</b>Morrocoy · áreas comunes<div class="between"><span>Téc. José A.</span><span>2 h 10 min</span></div></div>
+          <div class="kcard" data-sede="margarita"><b>Proyector Sala Guaraguao</b>Margarita · eventos<div class="between"><span>Téc. Pedro C.</span><span>40 min</span></div></div>
+          <div class="kcard" data-sede="canaima"><b>Planta eléctrica · servicio 500 h</b>Canaima · preventivo<div class="between"><span>Téc. Ramón T.</span><span>1 h 05 min</span></div></div>
+        </div>
+        <div class="kcol"><div class="kcol-h">Esperando repuesto <span class="badge nodot b-warn">2</span></div>
+          <div class="kcard" data-sede="maracaibo"><b>Compresor cuarto frío</b>Maracaibo · cocina<div class="between"><span>OC-2026-1182</span><span>3 días</span></div></div>
+          <div class="kcard" data-sede="catatumbo"><b>Motor portón eléctrico</b>Catatumbo<div class="between"><span>OC-2026-1176</span><span>5 días</span></div></div>
+        </div>
+        <div class="kcol"><div class="kcol-h">Cerrados hoy <span class="badge nodot b-ok">11</span></div>
+          <div class="kcard" data-sede="maturin"><b>Cerradura electrónica · hab. 118</b>Maturín<div class="between"><span class="badge b-ok">Resuelto</span><span>35 min</span></div></div>
+          <div class="kcard" data-sede="catatumbo"><b>TV sin señal · hab. 322</b>Catatumbo<div class="between"><span class="badge b-ok">Resuelto</span><span>20 min</span></div></div>
+          <div class="kcard" data-sede="margarita"><b>Wi-Fi débil · piso 3</b>Margarita · AP reemplazado<div class="between"><span class="badge b-ok">Resuelto</span><span>50 min</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A&B -->
+  <div class="tab-panel" data-panel="ab">
+    <div class="card-b">
+      <div class="grid g-4">
+        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Restaurante</span><span class="kpi-ico" data-icon="utensils"></span></div><div class="kpi-value">68</div><div class="kpi-sub">cubiertos almuerzo · ticket $ 24</div></div>
+        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Lounge bar</span><span class="kpi-ico" data-icon="star"></span></div><div class="kpi-value">42</div><div class="kpi-sub">comandas abiertas · happy hour 6–8 p.m.</div></div>
+        <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Room service</span><span class="kpi-ico" data-icon="bed"></span></div><div class="kpi-value">19</div><div class="kpi-sub">órdenes · tiempo medio 22 min</div></div>
+        <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Food cost del mes</span><span class="kpi-ico" data-icon="percent"></span></div><div class="kpi-value">31,4%</div><div class="kpi-sub">meta 32%</div></div>
+      </div>
+    </div>
+    <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Agenda de salones · semana 40</h2><p>Gran Salón, salas de reuniones, terraza y jardín</p></div></div>
+    <div class="table-wrap"><table class="table" data-searchable>
+      <thead><tr><th>Fecha</th><th>Espacio</th><th>Evento</th><th>Montaje</th><th class="num">Pax</th><th>BEO</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr data-sede="margarita"><td>Mié 30/09</td><td>Sala Guaraguao</td><td class="strong">Desayuno de trabajo Digitel</td><td>Escuela</td><td class="num">35</td><td>BEO-0931</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="maracaibo"><td>Jue 01/10</td><td>Gran Salón</td><td class="strong">Congreso Ingeniería Petrolera</td><td>Auditorio</td><td class="num">300</td><td>BEO-0926</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="margarita"><td>Jue 01/10</td><td>Sala El Yaque</td><td class="strong">Capacitación Laboratorios Leti</td><td>Herradura</td><td class="num">22</td><td>BEO-0934</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="margarita"><td>Vie 02/10</td><td>Terraza</td><td class="strong">Cóctel bienvenida congreso</td><td>Cóctel</td><td class="num">120</td><td>BEO-0937</td><td><span class="badge b-warn">Menú por aprobar</span></td></tr>
+        <tr data-sede="margarita"><td>Sáb 03/10</td><td>Gran Salón</td><td class="strong">Boda Marcano–Figueroa</td><td>Banquete redondo</td><td class="num">210</td><td>BEO-0929</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="merida"><td>Sáb 03/10</td><td>Salón Sierra Nevada</td><td class="strong">Convención Farmacéutica Andina</td><td>Escuela</td><td class="num">80</td><td>BEO-0941</td><td><span class="badge b-info">Tentativo</span></td></tr>
+        <tr data-sede="canaima"><td>Dom 04/10</td><td>Churuata principal</td><td class="strong">Cena Banco del Sur</td><td>Imperial</td><td class="num">24</td><td>BEO-0944</td><td><span class="badge b-ok">Confirmado</span></td></tr>
+        <tr data-sede="morrocoy"><td>Dom 04/10</td><td>Jardín frente al mar</td><td class="strong">Brunch Club Tibisay</td><td>Buffet</td><td class="num">80</td><td>BEO-0940</td><td><span class="badge b-info">Tentativo</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
+</main>
+</div>
 
-<section class="section section--tight">
-  <div class="container module-nav">
-    <a href="crm.html"><small>← Anterior</small>CRM &amp; Fidelización</a>
-    <a href="rrhh.html"><small>Siguiente módulo →</small>Gestión Humana</a>
-  </div>
-</section>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  var D = TIBISAY;
+  // Generador determinístico para que cada propiedad tenga sus propios datos
+  function rng(seed) { var s = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) % 2147483647; return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; }
+  var nombres = ["Valentina Rojas", "Grupo Seguros Caribe", "Robert & Linda Hayes", "Carlos Villalba", "María Fernanda Ochoa", "Andrés Mendoza", "Daniela Chacón", "Miguel Ángel Parra", "Stefania Russo", "Jesús Alberto Díaz", "Grupo Banco del Sur", "Ana Karina Mora"];
+  var tipos = ["Superior", "Deluxe", "Junior Suite", "Suite Vista", "Superior"];
+  var canales = ["Web directa", "WhatsApp", "Corporativo", "OTA", "Web directa"];
+  var estados = [["Registrada", "b-ok"], ["Confirmada", "b-info"], ["Hab. en inspección", "b-warn"], ["Pendiente pago", "b-danger"], ["Confirmada", "b-info"]];
 
-<!-- ============ FOOTER (igual en todas las páginas) ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div>
-        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
-      </div>
-      <div>
-        <h4>Módulos</h4>
-        <ul>
-          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
-          <li><a href="operaciones.html">Gestión Operativa</a></li>
-          <li><a href="rrhh.html">Gestión Humana</a></li>
-          <li><a href="indicadores.html">Indicadores</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>&nbsp;</h4>
-        <ul>
-          <li><a href="inventarios.html">IMS · Inventarios</a></li>
-          <li><a href="integracion.html">Integración</a></li>
-          <li><a href="servicios.html">Servicios</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Sedes</h4>
-        <ul>
-          <li>Margarita · Canaima · Catatumbo</li>
-          <li>Maracaibo · Morrocoy</li>
-          <li>Mérida · Maturín</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
-      <span>Mockup de referencia · datos ilustrativos</span>
-    </div>
-  </div>
-</footer>
+  App.onProp(function (p) {
+    var prop = D.propiedades.find(function (x) { return x.id === p; }) || D.propiedades[0];
+    var r = rng(prop.id);
+    document.getElementById("pmsName").textContent = prop.pms;
 
-<script src="js/main.js"></script>
+    var enCasa = Math.round(prop.hab * prop.occ / 100);
+    var lleg = Math.round(prop.hab * 0.25), sal = Math.round(prop.hab * 0.2);
+    document.getElementById("kpis").innerHTML = [
+      ["En casa", enCasa, "Ocupación " + prop.occ + "%", "bed", true],
+      ["Llegadas hoy", lleg, Math.round(lleg * 0.35) + " ya registradas", "calendar"],
+      ["Salidas hoy", sal, Math.round(sal * 0.2) + " con late check-out", "logout"],
+      ["Hab. fuera de servicio", Math.max(1, Math.round(prop.hab * 0.02)), "1 con más de 48 h", "wrench"]
+    ].map(function (k) {
+      return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub">' + k[2] + "</div></div>";
+    }).join("");
+
+    var rows = "", min = 600, usadas = {};
+    for (var i = 0; i < 8; i++) {
+      var hab;
+      do { hab = (Math.floor(r() * 4) + 1) * 100 + Math.floor(r() * 20) + 1; } while (usadas[hab]);
+      usadas[hab] = true;
+      min += 30 + Math.floor(r() * 3) * 30;
+      var t = Math.floor(r() * tipos.length), e = estados[Math.floor(r() * estados.length)];
+      var tarifa = Math.round(prop.adr * (0.8 + r() * 0.6));
+      rows += "<tr><td>" + Math.floor(min / 60) + ":" + (min % 60 ? "30" : "00") + '</td><td class="muted">R-' + (48210 + Math.floor(r() * 900)) + '</td><td class="strong">' + nombres[(i + prop.hab) % nombres.length] + "</td><td>" + hab + "</td><td>" + tipos[t] + '</td><td class="num">' + (1 + Math.floor(r() * 6)) + '</td><td class="num">$ ' + tarifa + "</td><td>" + canales[Math.floor(r() * canales.length)] + '</td><td><span class="badge ' + e[1] + '">' + e[0] + '</span></td><td><a class="btn btn-ghost btn-sm" href="#" data-toast="Check-in de la reserva (demo)">Check-in</a></td></tr>';
+    }
+    document.getElementById("arrivals").innerHTML = rows;
+
+    var html = "", floors = Math.ceil(prop.hab / 24), per = Math.min(24, Math.ceil(prop.hab / floors));
+    var st = [["libre", "Libre"], ["ocupada", "Ocupada"], ["sucia", "Sucia"], ["insp", "Inspección"], ["fuera", "Fuera"]];
+    var n = 0;
+    for (var f = 1; f <= floors; f++) for (var k = 1; k <= per && n < prop.hab; k++, n++) {
+      var x = r(), s = x < prop.occ / 100 ? st[1] : x < prop.occ / 100 + 0.1 ? st[2] : x < prop.occ / 100 + 0.16 ? st[3] : x > 0.985 ? st[4] : st[0];
+      html += '<div class="room r-' + s[0] + '" title="Hab. ' + (f * 100 + k) + " · " + s[1] + '"><b>' + (f * 100 + k) + "</b>" + s[1] + "</div>";
+    }
+    document.getElementById("rooms").innerHTML = html;
+  });
+})();
+</script>
 </body>
 </html>

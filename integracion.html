@@ -3,186 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Integración · Propuesta ERP Tibisay</title>
-  <meta name="description" content="Integramos, no reemplazamos: conectores con Opera/Prestige y Profit Plus/Saint/a2, y flujo de datos PMS, ERP y tableros.">
+  <title>Integración · Tibisay ERP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-
-<!-- ============ HEADER (igual en todas las páginas) ============ -->
-<header class="header">
-  <div class="container">
-    <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-    <nav class="nav" aria-label="Módulos">
-      <a href="index.html">Inicio</a>
-      <a href="crm.html">CRM</a>
-      <a href="operaciones.html">Operaciones</a>
-      <a href="rrhh.html">Gestión Humana</a>
-      <a href="indicadores.html">Indicadores</a>
-      <a href="inventarios.html">Inventarios</a>
-      <a href="integracion.html">Integración</a>
-      <a href="servicios.html">Servicios</a>
-    </nav>
-    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+<body class="app">
+<!-- El sidebar y la barra superior los genera js/app.js -->
+<div class="main-wrap">
+<main class="content">
+<div class="page-head">
+  <div>
+    <div class="crumbs"><a href="dashboard.html">Inicio</a> / Integración</div>
+    <h1>Integración <span class="scope-pill" data-prop-name></span></h1>
+    <p>Monitor de conectores con el PMS y el ERP administrativo de cada propiedad.</p>
   </div>
-</header>
-
-<!-- ============ HERO ============ -->
-<section class="hero hero--page" style="background-image:url('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=2000&q=80')">
-  <div class="hero__content">
-    <div class="breadcrumb"><a href="index.html">Inicio</a> · Módulo 06</div>
-    <span class="eyebrow">Integración</span>
-    <h1>Integramos, no reemplazamos</h1>
-    <p>Su PMS y su ERP administrativo siguen haciendo lo que ya hacen bien. Nosotros los conectamos y ponemos la inteligencia encima.</p>
+  <div class="actions">
+    <a class="btn btn-ghost" href="#" data-toast="Ejecutando prueba de todos los conectores (demo)" data-icon="refresh">Probar conectores</a>
   </div>
-</section>
+</div>
 
-<!-- ============ MENSAJE CENTRAL ============ -->
-<section class="section section--white">
-  <div class="container split">
-    <div>
-      <span class="eyebrow">El principio</span>
-      <h2>Cero migraciones traumáticas</h2>
-      <hr class="divider" style="margin-left:0">
-      <p>Cambiar de PMS en plena temporada, reentrenar a recepción y contabilidad, perder históricos... Ese no es el camino. La plataforma se conecta a lo que Tibisay ya usa y lo potencia.</p>
-      <ul class="check-list">
-        <li><strong>Opera / Prestige</strong> sigue siendo el PMS de cada sede.</li>
-        <li><strong>Profit Plus, Saint o a2</strong> siguen llevando la contabilidad y la facturación fiscal.</li>
-        <li>La plataforma agrega CRM, operación, RRHH, inventario e indicadores <strong>encima</strong>.</li>
-        <li>El equipo sigue trabajando como hoy desde el primer día.</li>
-      </ul>
-    </div>
-    <div class="split__img-wrap">
-      <div class="split__img" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80')"></div>
+<div class="banner">
+  <span class="kpi-ico" data-icon="plug"></span>
+  <div style="flex:1">
+    <h2>Integramos, no reemplazamos</h2>
+    <p style="margin:4px 0 0">Opera/Prestige siguen siendo el PMS y Profit Plus/Saint/a2 siguen llevando la contabilidad y la facturación fiscal. La plataforma se conecta a ellos y agrega CRM, operación, RR. HH., inventario e indicadores encima. Sin migraciones ni pérdida de históricos.</p>
+  </div>
+</div>
+
+<div class="grid g-4 mt">
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Conectores activos</span><span class="kpi-ico" data-icon="plug"></span></div><div class="kpi-value">15 / 16</div><div class="kpi-sub">1 reintentando</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Registros sincronizados hoy</span><span class="kpi-ico" data-icon="refresh"></span></div><div class="kpi-value">14.053</div><div class="kpi-sub"><span class="delta up">99,8%</span>sin errores</div></div>
+  <div class="card kpi"><div class="kpi-top"><span class="kpi-label">Latencia media PMS</span><span class="kpi-ico" data-icon="clock"></span></div><div class="kpi-value">42 s</div><div class="kpi-sub">tiempo real / 5 min</div></div>
+  <div class="card kpi dark"><div class="kpi-top"><span class="kpi-label">Sistemas reemplazados</span><span class="kpi-ico" data-icon="shield"></span></div><div class="kpi-value">0</div><div class="kpi-sub">todo sigue operando</div></div>
+</div>
+
+<section class="card mt">
+  <div class="card-h"><div><h2>Flujo de datos</h2><p>PMS → Plataforma Tibisay → ERP → Tableros</p></div></div>
+  <div class="card-b">
+    <div class="flow">
+      <div class="flow-node"><h3>PMS actual</h3><span class="small muted">Opera · Prestige</span><ul><li>Reservas y perfiles</li><li>Ocupación y tarifas</li><li>Cargos a habitación</li><li>Estado de habitaciones</li></ul></div>
+      <div class="flow-arrow">⇄</div>
+      <div class="flow-node core"><h3>Plataforma Tibisay</h3><span class="small">Conector único</span><ul><li>CRM &amp; WhatsApp</li><li>Operaciones &amp; eventos</li><li>Gestión Humana</li><li>IMS y auditoría A&amp;B</li></ul></div>
+      <div class="flow-arrow">⇄</div>
+      <div class="flow-node"><h3>ERP administrativo</h3><span class="small muted">Profit Plus · Saint · a2</span><ul><li>Asientos contables</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><h3>Tableros</h3><span class="small muted">Dirección y gerencias</span><ul><li>RevPAR · ADR · ocupación</li><li>F&amp;B y costos</li><li>Personal y nómina</li></ul></div>
     </div>
   </div>
 </section>
 
-<!-- ============ DIAGRAMA ============ -->
-<section class="section section--cream">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Flujo de datos</span>
-      <h2>PMS → Plataforma → ERP → Tableros</h2>
-      <hr class="divider">
-    </div>
-    <div class="diagram">
-      <div class="node">
-        <h4>PMS actual</h4>
-        <span class="small muted">Opera / Prestige</span>
-        <ul><li>Reservas y huéspedes</li><li>Ocupación y tarifas</li><li>Cargos a habitación</li><li>Estado de habitaciones</li></ul>
-      </div>
-      <div class="arrow">⇄</div>
-      <div class="node node--core">
-        <h4>Plataforma Tibisay</h4>
-        <span class="small">Conector único</span>
-        <ul><li>CRM &amp; WhatsApp</li><li>Operaciones &amp; eventos</li><li>Gestión Humana</li><li>IMS · Inventarios</li><li>Auditoría A&amp;B</li></ul>
-      </div>
-      <div class="arrow">⇄</div>
-      <div class="node">
-        <h4>ERP administrativo</h4>
-        <span class="small muted">Profit Plus / Saint / a2</span>
-        <ul><li>Asientos contables</li><li>Compras y proveedores</li><li>Nómina contabilizada</li><li>Facturación fiscal</li></ul>
-      </div>
-    </div>
-    <div class="text-center mt-2"><div class="arrow" style="transform:none">↓</div></div>
-    <div class="node node--core" style="max-width:520px;margin:12px auto 0">
-      <h4>Tableros directivos</h4>
-      <span class="small">RevPAR · ADR · Ocupación · F&amp;B · Costos · Personal</span>
-    </div>
+<h2 class="mt-lg" style="margin-bottom:12px">Conectores</h2>
+<div class="grid g-3">
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo">OP</span><div style="flex:1"><h3>Oracle Opera PMS</h3><span class="small muted">Reservas, perfiles, folios, housekeeping</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Margarita</span><span class="badge nodot b-muted">Maracaibo</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Tiempo real</b></div><div><small>Registros hoy</small><b>4.694</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 38 s</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Opera (demo)">Ver log</a>
   </div>
-</section>
-
-<!-- ============ CONECTORES ============ -->
-<section class="section section--white">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Conectores</span>
-      <h2>Estado de las integraciones</h2>
-      <hr class="divider">
-    </div>
-    <div class="mock">
-      <div class="mock__bar"><span class="mock__dots"><i></i><i></i><i></i></span> Monitor de conectores <span class="mock__meta">Última revisión 10:45 a.m.</span></div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Conector</th><th>Sistema</th><th>Sedes</th><th>Dirección</th><th>Frecuencia</th><th class="num">Registros hoy</th><th>Estado</th></tr></thead>
-          <tbody>
-            <tr><td><strong>PMS · Reservas y perfiles</strong></td><td>Opera</td><td>Margarita, Maracaibo</td><td>PMS → Plataforma</td><td>Tiempo real</td><td class="num">1.284</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>PMS · Reservas y perfiles</strong></td><td>Prestige</td><td>Canaima, Catatumbo, Morrocoy, Mérida, Maturín</td><td>PMS → Plataforma</td><td>Cada 5 min</td><td class="num">932</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>PMS · Estado de habitaciones</strong></td><td>Opera / Prestige</td><td>7 sedes</td><td>Bidireccional</td><td>Tiempo real</td><td class="num">3.410</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>POS · Consumos A&amp;B</strong></td><td>Puntos de venta</td><td>7 sedes</td><td>POS → Plataforma</td><td>Cada 15 min</td><td class="num">6.872</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>ERP · Asientos contables</strong></td><td>Profit Plus</td><td>Margarita, Maracaibo, Oficina central</td><td>Plataforma → ERP</td><td>Diario 11:00 p.m.</td><td class="num">418</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>ERP · Compras e inventario</strong></td><td>Saint</td><td>Morrocoy, Mérida, Maturín</td><td>Bidireccional</td><td>Cada hora</td><td class="num">264</td><td><span class="badge badge--warn">Reintentando</span></td></tr>
-            <tr><td><strong>ERP · Compras e inventario</strong></td><td>a2</td><td>Canaima, Catatumbo</td><td>Bidireccional</td><td>Cada hora</td><td class="num">131</td><td><span class="badge badge--ok">Activo</span></td></tr>
-            <tr><td><strong>WhatsApp Business API</strong></td><td>Meta</td><td>Cadena</td><td>Bidireccional</td><td>Tiempo real</td><td class="num">742</td><td><span class="badge badge--ok">Activo</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p class="small muted mt-1">La asignación PMS/ERP por sede es ilustrativa; se confirma en el diagnóstico inicial.</p>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo">PR</span><div style="flex:1"><h3>Prestige PMS</h3><span class="small muted">Reservas, perfiles, folios, housekeeping</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Canaima</span><span class="badge nodot b-muted">Catatumbo</span><span class="badge nodot b-muted">Morrocoy</span><span class="badge nodot b-muted">Mérida</span><span class="badge nodot b-muted">Maturín</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 5 min</b></div><div><small>Registros hoy</small><b>2.332</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 2 min</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Prestige (demo)">Ver log</a>
   </div>
-</section>
-
-<!-- ============ BENEFICIOS ============ -->
-<section class="section section--dark">
-  <div class="container grid grid-3">
-    <div class="card"><div class="card__icon">⇄</div><h3>Sin doble digitación</h3><p>Lo que entra en el PMS aparece en la plataforma; lo que se aprueba en la plataforma llega al ERP.</p></div>
-    <div class="card"><div class="card__icon">◷</div><h3>Históricos intactos</h3><p>Años de estancias y contabilidad siguen donde están, y además se aprovechan para el CRM.</p></div>
-    <div class="card"><div class="card__icon">⚑</div><h3>Salida por etapas</h3><p>Arrancamos por una sede piloto y sumamos las demás sin detener la operación.</p></div>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo">POS</span><div style="flex:1"><h3>Puntos de venta A&amp;B</h3><span class="small muted">Comandas, recetas, cierres de caja</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">7 propiedades</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 15 min</b></div><div><small>Registros hoy</small><b>6.872</b></div><div><small>Dirección</small><b>POS → Plataforma</b></div><div><small>Última sync</small><b>hace 6 min</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector POS (demo)">Ver log</a>
   </div>
-</section>
-
-<section class="section section--tight">
-  <div class="container module-nav">
-    <a href="inventarios.html"><small>← Anterior</small>IMS · Inventarios</a>
-    <a href="servicios.html"><small>Siguiente módulo →</small>Servicios</a>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo erp">PP</span><div style="flex:1"><h3>Profit Plus</h3><span class="small muted">Contabilidad, compras, nómina</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Margarita</span><span class="badge nodot b-muted">Maracaibo</span><span class="badge nodot b-muted">Oficina central</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Diario 11 p.m. + OC</b></div><div><small>Asientos hoy</small><b>418</b></div><div><small>Dirección</small><b>Plataforma → ERP</b></div><div><small>Última sync</small><b>ayer 11:02 p.m.</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector Profit Plus (demo)">Ver log</a>
   </div>
-</section>
-
-<!-- ============ FOOTER (igual en todas las páginas) ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div>
-        <a href="index.html" class="logo"><strong>TIBISAY</strong><span>Hoteles · Propuesta ERP</span></a>
-        <p>Propuesta preparada por Geek Solutions para Hoteles Tibisay. Boutique &amp; empresarial, en siete destinos de Venezuela.</p>
-      </div>
-      <div>
-        <h4>Módulos</h4>
-        <ul>
-          <li><a href="crm.html">CRM &amp; Fidelización</a></li>
-          <li><a href="operaciones.html">Gestión Operativa</a></li>
-          <li><a href="rrhh.html">Gestión Humana</a></li>
-          <li><a href="indicadores.html">Indicadores</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>&nbsp;</h4>
-        <ul>
-          <li><a href="inventarios.html">IMS · Inventarios</a></li>
-          <li><a href="integracion.html">Integración</a></li>
-          <li><a href="servicios.html">Servicios</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Sedes</h4>
-        <ul>
-          <li>Margarita · Canaima · Catatumbo</li>
-          <li>Maracaibo · Morrocoy</li>
-          <li>Mérida · Maturín</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2026 Geek Solutions · Propuesta comercial confidencial</span>
-      <span>Mockup de referencia · datos ilustrativos</span>
-    </div>
+  <div class="card conn" style="border-color:#ecd3a8">
+    <div class="conn-h"><span class="conn-logo erp">SA</span><div style="flex:1"><h3>Saint Enterprise</h3><span class="small muted">Compras, inventario, contabilidad</span></div><span class="badge b-warn">Reintentando</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Morrocoy</span><span class="badge nodot b-muted">Mérida</span><span class="badge nodot b-muted">Maturín</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada hora</b></div><div><small>Registros hoy</small><b>264</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b style="color:var(--warn)">09:12 · Morrocoy</b></div></div>
+    <a class="btn btn-primary btn-sm" href="#" data-toast="Reintento manual en cola (demo)">Reintentar ahora</a>
   </div>
-</footer>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo erp">a2</span><div style="flex:1"><h3>a2 Softway</h3><span class="small muted">Compras, inventario, contabilidad</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Canaima</span><span class="badge nodot b-muted">Catatumbo</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada hora</b></div><div><small>Registros hoy</small><b>131</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 22 min</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log del conector a2 (demo)">Ver log</a>
+  </div>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo" style="background:#e5f3ec;color:#2f7d57">WA</span><div style="flex:1"><h3>WhatsApp Business API</h3><span class="small muted">Concierge, cotizaciones, campañas</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">Cadena</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Tiempo real</b></div><div><small>Mensajes hoy</small><b>742</b></div><div><small>Dirección</small><b>Bidireccional</b></div><div><small>Última sync</small><b>hace 5 s</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log de WhatsApp (demo)">Ver log</a>
+  </div>
+  <div class="card conn">
+    <div class="conn-h"><span class="conn-logo" style="background:var(--info-bg);color:var(--info)">BIO</span><div style="flex:1"><h3>Marcaje biométrico</h3><span class="small muted">Asistencia para turnos y nómina</span></div><span class="badge b-ok">Activo</span></div>
+    <div class="tags"><span class="badge nodot b-muted">7 propiedades</span></div>
+    <div class="conn-meta"><div><small>Frecuencia</small><b>Cada 30 min</b></div><div><small>Marcajes hoy</small><b>1.018</b></div><div><small>Dirección</small><b>Equipo → Plataforma</b></div><div><small>Última sync</small><b>hace 12 min</b></div></div>
+    <a class="btn btn-ghost btn-sm" href="#" data-toast="Log biométrico (demo)">Ver log</a>
+  </div>
+  <div class="card conn" style="border-style:dashed;box-shadow:none;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+    <span class="kpi-ico teal" data-icon="plus" style="margin-bottom:10px"></span><h3>Nuevo conector</h3><p class="small muted">Channel manager, pasarela de pago, motor de reservas…</p>
+  </div>
+</div>
+<p class="small muted mt">La asignación PMS/ERP por propiedad es ilustrativa y se confirma en el diagnóstico inicial.</p>
+</main>
+</div>
 
-<script src="js/main.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
