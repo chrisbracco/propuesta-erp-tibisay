@@ -1,6 +1,6 @@
 # propuesta-erp-tibisay
 
-Mockup navegable del Sistema de Gestión Hotelera para Hoteles Tibisay (CRM, operaciones, gestión humana, indicadores, inventarios, integración y panel de IT). UI tipo AppShell estilo suite Sigo con la paleta Tibisay.
+Mockup navegable del Sistema de Gestión Hotelera para Hoteles Tibisay (CRM, operaciones, gestión humana, indicadores, inventarios y panel de IT). UI tipo AppShell estilo suite Sigo con la paleta Tibisay.
 
 ## Cómo usarlo
 
@@ -8,7 +8,7 @@ Abre `index.html` en el navegador. No necesita servidor ni build.
 
 1. **Login** (`index.html`): cualquier usuario y contraseña. Elige la propiedad.
 2. **Inicio** (`dashboard.html`): una métrica protagonista, «Requiere tu acción» y acciones rápidas según la vista; lo demás en acordeones.
-3. **Módulos** (sidebar plegable): `tablero.html`, `crm.html`, `operaciones.html`, `rrhh.html`, `inventarios.html`, `integracion.html`, `it.html`.
+3. **Módulos** (sidebar plegable): `tablero.html`, `crm.html`, `operaciones.html`, `rrhh.html`, `inventarios.html`, `it.html` (con «Conectar servicios» para conexiones puntuales).
 4. El **selector de propiedad** de la barra superior filtra los datos (o "Todas las propiedades"). "Cerrar sesión" está en el menú del usuario.
 5. El **selector de vista** (Gerencia, Front Desk, A&B, RRHH, Almacén, IT) reordena el menú y el inicio: primero los módulos del rol, el resto plegado en «Más módulos».
 

@@ -72,7 +72,6 @@
       <a class="card mod-tile" href="operaciones.html"><span class="kpi-ico" data-icon="bed"></span><div><h3>Operaciones</h3></div></a>
       <a class="card mod-tile" href="rrhh.html"><span class="kpi-ico" data-icon="briefcase"></span><div><h3>Gestión Humana</h3></div></a>
       <a class="card mod-tile" href="inventarios.html"><span class="kpi-ico" data-icon="box"></span><div><h3>IMS · Inventarios</h3></div></a>
-      <a class="card mod-tile" href="integracion.html"><span class="kpi-ico teal" data-icon="plug"></span><div><h3>Integración</h3></div></a>
       <a class="card mod-tile" href="it.html"><span class="kpi-ico teal" data-icon="server"></span><div><h3>Panel de IT</h3></div></a>
       <div class="card mod-tile" style="border-style:dashed;box-shadow:none"><span class="kpi-ico teal" data-icon="plus"></span><div><h3>Próximo módulo</h3></div></div>
     </div></div>
@@ -108,12 +107,11 @@
     { r: ["almacen", "gerencia"], sede: "maracaibo", ic: "truck", c: "b-warn", t: "TR-0351 por aprobar", s: "Maracaibo → Catatumbo · 36 botellas", a: "Aprobar", toast: "TR-0351 aprobada por el gerente de Maracaibo (demo)" },
     { r: ["almacen"], sede: "margarita", ic: "archive", c: "b-info", t: "OC-2026-1188 con recepción parcial", s: "Licores del Caribe · 60% recibido", a: "Recibir", h: "inventarios.html#recibir" },
     { r: ["almacen", "ab"], sede: "catatumbo", ic: "alert", c: "b-warn", t: "Ajuste AJ-0919 pendiente", s: "Solomo de res · −56 kg · requiere contraloría", a: "Revisar", h: "inventarios.html#ajustes" },
-    { r: ["rrhh", "gerencia"], sede: "todas", ic: "clock", c: "b-warn", t: "Nómina 2.ª quincena por aprobar", s: "$ 136.130 · asiento automático al ERP", a: "Revisar", h: "rrhh.html#nomina" },
+    { r: ["rrhh", "gerencia"], sede: "todas", ic: "clock", c: "b-warn", t: "Nómina 2.ª quincena por aprobar", s: "$ 136.130 · asiento contable automático", a: "Revisar", h: "rrhh.html#nomina" },
     { r: ["rrhh"], sede: "todas", ic: "alert", c: "b-danger", t: "Ausencias sin justificar en el turno A", s: "Se notificó a los jefes de departamento", a: "Ver", h: "rrhh.html#asist" },
     { r: ["rrhh"], sede: "margarita", ic: "users", c: "b-info", t: "4 extras para la boda del sábado", s: "Housekeeping · turno B · por publicar", a: "Ver turnos", h: "rrhh.html#turnos" },
     { r: ["rrhh"], sede: "canaima", ic: "briefcase", c: "b-ok", t: "Oferta a 2 guías bilingües", s: "Reclutamiento · inicio 15/10", a: "Ver", h: "rrhh.html#recl" },
-    { r: ["it", "gerencia"], sede: "morrocoy", ic: "plug", c: "b-danger", t: "Conector Saint con error", s: "Morrocoy · sin sincronizar desde 09:12", a: "Ver", h: "integracion.html" },
-    { r: ["it"], sede: "morrocoy", ic: "server", c: "b-danger", t: "Servidor Saint sin respuesta", s: "IT-3318 · crítica · Jorge L.", a: "Ver ticket", h: "it.html#tk" },
+    { r: ["it"], sede: "morrocoy", ic: "server", c: "b-danger", t: "Servidor de contabilidad sin respuesta", s: "Morrocoy · IT-3318 · crítica · Jorge L.", a: "Ver ticket", h: "it.html#tk" },
     { r: ["it", "frontdesk"], sede: "margarita", ic: "alert", c: "b-warn", t: "Impresora fiscal de recepción no imprime", s: "IT-3317 · alta · en curso", a: "Ver", h: "it.html#tk" },
     { r: ["gerencia"], sede: "maturin", ic: "trend", c: "b-warn", t: "Maturín bajo presupuesto", s: "Ocupación 61% vs. 68% presupuestado", a: "Ver", h: "tablero.html" },
     { r: ["gerencia"], sede: "canaima", ic: "star", c: "b-ok", t: "Canaima 92% en diciembre", s: "Sugerencia: subir ADR 8% en nuevas ventas", a: "Ver", h: "tablero.html" }
@@ -126,7 +124,7 @@
     ab: [["Cotizar evento", "crm.html#nueva-cotizacion", "chat"], ["Crear orden de compra", "inventarios.html#nueva-oc", "cart"], ["Registrar merma", "inventarios.html#merma", "archive"], ["Salones de hoy", "operaciones.html#ab", "utensils"]],
     rrhh: [["Registrar marcación", "rrhh.html#marcar", "clock"], ["Turnos de la semana", "rrhh.html#turnos", "calendar"], ["Revisar nómina", "rrhh.html#nomina", "dollar"], ["Nueva vacante", "rrhh.html#nueva-vacante", "plus"]],
     almacen: [["Crear orden de compra", "inventarios.html#nueva-oc", "cart"], ["Recibir mercancía", "inventarios.html#recibir", "truck"], ["Aprobar transferencias", "inventarios.html#transferencias", "check"], ["Nuevo conteo", "inventarios.html#conteo", "archive"]],
-    it: [["Nuevo ticket", "it.html#nuevo-ticket", "plus"], ["Tickets abiertos", "it.html#tk", "wrench"], ["Estado de conexiones", "integracion.html", "plug"], ["Respaldos", "it.html#bk", "archive"]]
+    it: [["Nuevo ticket", "it.html#nuevo-ticket", "plus"], ["Tickets abiertos", "it.html#tk", "wrench"], ["Monitoreo", "it.html#mon", "chart"], ["Respaldos", "it.html#bk", "archive"]]
   };
   var SECS = { gerencia: ["occ", "ev", "act", "mods"], frontdesk: ["ev", "act", "occ", "mods"], ab: ["ev", "act", "occ", "mods"], rrhh: ["act", "mods", "occ", "ev"], almacen: ["act", "mods", "ev", "occ"], it: ["act", "mods", "occ", "ev"] };
 
@@ -138,12 +136,12 @@
       frontdesk: [{ label: "Llegadas pendientes de check-in", value: lleg - reg, unit: "de " + lleg, sub: reg + " ya registradas · próxima 1:00 p.m." },
         [["Salidas hoy", sal, Math.round(sal * 0.3) + " ya salieron"], ["En casa", enCasa, "hab. ocupadas"], ["Hab. sin liberar", Math.max(1, Math.round(9 * f)), "para llegadas", "warn"], ["Late check-out", Math.round(19 * f), "aprobados"]]],
       ab: [{ label: "Food cost del mes", value: "31,4", unit: "%", sub: "meta 32% · beverage cost 21%" },
-        [["Eventos esta semana", Math.max(1, Math.round(6 * f)), "BEO vinculados"], ["Cubiertos almuerzo", Math.round(390 * f), "hoy"], ["Diferencia A&amp;B", $(3480 * f), "consumo vs. salida ERP", "danger"], ["OC por aprobar", Math.max(1, Math.round(2 * f)), "compras A&amp;B"]]],
+        [["Eventos esta semana", Math.max(1, Math.round(6 * f)), "BEO vinculados"], ["Cubiertos almuerzo", Math.round(390 * f), "hoy"], ["Diferencia A&amp;B", $(3480 * f), "consumo vs. salida de almacén", "danger"], ["OC por aprobar", Math.max(1, Math.round(2 * f)), "compras A&amp;B"]]],
       rrhh: [{ label: "Presentes ahora", value: Math.round(548 * f), unit: "de " + Math.round(582 * f), sub: "programados en turnos iniciados · puntualidad 89%" },
         [["Tardanzas", Math.round(46 * f), "promedio 17 min", "warn"], ["Ausencias", Math.max(1, Math.round(19 * f)), "sin justificar", "danger"], ["Vacantes temporada", 23, "38 en entrevistas"], ["Nómina", "Por aprobar", "2.ª quincena sep."]]],
       almacen: [{ label: "Pendientes de tu acción", value: 7, sub: "aprobaciones, recepciones y ajustes" },
         [["Bajo mínimo", Math.max(2, Math.round(9 * f)), "sugerir OC", "warn"], ["OC por recibir", 3, "1 parcial"], ["Transferencias en curso", 3, "1 por aprobar"], ["Ajustes por aprobar", 3, "1 a contraloría"]]],
-      it: [{ label: "Conexiones con error", value: 1, sub: "Saint · Morrocoy · desde 09:12" },
+      it: [{ label: "Incidencias críticas", value: 1, sub: "Servidor de contabilidad · Morrocoy · desde 09:12" },
         [["Disponibilidad 30 d", "99,82%", "meta 99,5%", "ok"], ["Tickets abiertos", 9, "4 alta o crítica", "warn"], ["Respaldos anoche", "6 / 7", "1 falló", "danger"], ["Sedes con incidencias", "5 / 7", "ver matriz"]]]
     };
     return H[r.id];

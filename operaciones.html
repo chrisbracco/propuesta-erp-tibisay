@@ -440,7 +440,7 @@
     if (op === "checkin") { x._reg = true; msg = "Check-in de " + x.g + " · hab. " + n + " · llave emitida"; }
     if (op === "avisar") { x.prio = true; msg = "Aviso enviado a housekeeping: hab. " + n + " con prioridad"; }
     if (op === "late") { x.late = true; msg = "Late check-out hasta las 2:00 p.m. aprobado para la hab. " + n; }
-    if (op === "checkout") { x.hk = "sucia"; x.saldo = 0; msg = "Check-out hab. " + n + ": folio cerrado, factura enviada al ERP y habitación marcada sucia"; }
+    if (op === "checkout") { x.hk = "sucia"; x.saldo = 0; msg = "Check-out hab. " + n + ": folio cerrado, factura fiscal emitida y habitación marcada sucia"; }
     if (op === "insp-ok") { x.hk = "limpia"; msg = "Hab. " + n + " aprobada y liberada a recepción"; }
     if (op === "insp-no") { x.hk = "sucia"; msg = "Hab. " + n + " devuelta a la camarera con observaciones"; }
     if (op === "limpieza") { x.hk = "proceso"; msg = "Hab. " + n + " enviada a limpieza"; }

@@ -60,7 +60,7 @@
   <div class="card-h"><div><h2>Comparativo multisitio</h2></div>
     <a class="btn btn-ghost btn-sm" href="#" data-toast="Reporte enviado a dirección (demo)" data-icon="mail">Enviar reporte</a></div>
   <div class="table-wrap"><table class="table stack-md" data-searchable id="multiTable">
-    <thead><tr><th>Propiedad</th><th>PMS</th><th class="num">Hab.</th><th style="min-width:160px">Ocupación</th><th class="num">ADR</th><th class="num">RevPAR</th><th class="num">F&amp;B (miles)</th><th class="num">Presupuesto</th><th>Tendencia</th></tr></thead>
+    <thead><tr><th>Propiedad</th><th class="num">Hab.</th><th style="min-width:160px">Ocupación</th><th class="num">ADR</th><th class="num">RevPAR</th><th class="num">F&amp;B (miles)</th><th class="num">Presupuesto</th><th>Tendencia</th></tr></thead>
     <tbody id="multiBody"></tbody>
     <tfoot id="multiFoot"></tfoot>
   </table></div>
@@ -143,12 +143,12 @@
     document.getElementById("multiBody").innerHTML = P.slice().sort(function (a, b) { return b.adr * b.occ - a.adr * a.occ; }).map(function (x) {
       var t = tend[x.id], cls = t > 2 ? "b-ok" : t < 0 ? "b-danger" : "b-warn";
       var pp = ppto[x.id], pcls = pp >= 100 ? "b-ok" : pp >= 95 ? "b-warn" : "b-danger";
-      return '<tr style="' + (p !== "todas" && p !== x.id ? "opacity:.45" : "") + '"><td class="strong">Tibisay ' + x.nombre + '<span class="sub">' + x.ciudad + "</span></td><td>" + x.pms + '</td><td class="num">' + x.hab +
+      return '<tr style="' + (p !== "todas" && p !== x.id ? "opacity:.45" : "") + '"><td class="strong">Tibisay ' + x.nombre + '<span class="sub">' + x.ciudad + " · " + x.pms + '</span></td><td class="num">' + x.hab +
         '</td><td><div class="pcell"><div class="progress"><span style="width:' + x.occ + '%"></span></div><b>' + x.occ + '%</b></div></td><td class="num">' + money(x.adr) +
         '</td><td class="num strong">' + money(Math.round(x.adr * x.occ / 10) / 10) + '</td><td class="num">' + money(x.fb) + '</td><td class="num"><span class="badge nodot ' + pcls + '">' + pp + '%</span></td><td><span class="badge ' + cls + '">' + (t > 0 ? "▲ " : t < 0 ? "▼ " : "") + Math.abs(t) + "%</span></td></tr>";
     }).join("");
     var all = P.reduce(function (a, x) { a.h += x.hab; a.s += x.hab * x.occ / 100; a.r += x.hab * x.occ / 100 * x.adr; a.f += x.fb; return a; }, { h: 0, s: 0, r: 0, f: 0 });
-    document.getElementById("multiFoot").innerHTML = '<tr><td>Cadena</td><td></td><td class="num">' + all.h + '</td><td>' + Math.round(all.s / all.h * 100) + '%</td><td class="num">' + money(Math.round(all.r / all.s)) + '</td><td class="num">' + money(Math.round(all.r / all.h)) + '</td><td class="num">' + money(all.f) + '</td><td class="num">101%</td><td></td></tr>';
+    document.getElementById("multiFoot").innerHTML = '<tr><td>Cadena</td><td class="num">' + all.h + '</td><td>' + Math.round(all.s / all.h * 100) + '%</td><td class="num">' + money(Math.round(all.r / all.s)) + '</td><td class="num">' + money(Math.round(all.r / all.h)) + '</td><td class="num">' + money(all.f) + '</td><td class="num">101%</td><td></td></tr>';
   }
 })();
 </script>

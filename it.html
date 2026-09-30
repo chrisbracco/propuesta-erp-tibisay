@@ -19,6 +19,7 @@
     <h1>Panel de IT <span class="scope-pill" data-prop-name></span></h1>
   </div>
   <div class="actions">
+    <a class="btn btn-ghost btn-sm" href="#" id="btnConnect" data-icon="plus" style="align-self:center">Conectar servicios</a>
     <a class="btn btn-ghost" href="#" data-export="#tkTable" data-file="tickets-it" data-icon="download">Exportar tickets</a>
     <a class="btn btn-primary" href="#" id="btnTk" data-hash="nuevo-ticket" data-icon="plus">Nuevo ticket</a>
   </div>
@@ -88,15 +89,15 @@
     <div class="table-wrap"><table class="table" data-searchable>
       <thead><tr><th>Sistema</th><th>Sede</th><th>Última ejecución</th><th>Estado</th><th>Prueba de restauración</th></tr></thead>
       <tbody>
-        <tr data-sede="margarita"><td class="strong">Base de datos Opera PMS<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 02:00 a.m.<span class="sub">18 min · 42 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
-        <tr data-sede="maracaibo"><td class="strong">Base de datos Opera PMS<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Maracaibo</td><td>Hoy 02:00 a.m.<span class="sub">15 min · 36 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
-        <tr data-sede="margarita"><td class="strong">Profit Plus (contabilidad)<span class="sub">Completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 01:00 a.m.<span class="sub">9 min · 11 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>05/09/2026 · OK</td></tr>
-        <tr data-sede="morrocoy"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Morrocoy</td><td>Hoy 01:30 a.m.<span class="sub">— · —</span></td><td><span class="badge b-danger">Falló · servidor sin respuesta</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="merida"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Mérida</td><td>Hoy 01:30 a.m.<span class="sub">7 min · 6 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="maturin"><td class="strong">Saint Enterprise<span class="sub">Completo diario · NAS local + nube</span></td><td>Maturín</td><td>Hoy 01:30 a.m.<span class="sub">6 min · 5 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
-        <tr data-sede="canaima"><td class="strong">a2 Softway<span class="sub">Completo diario · Nube (enlace satelital)</span></td><td>Canaima</td><td>Hoy 01:45 a.m.<span class="sub">31 min · 3 GB</span></td><td><span class="badge b-warn">Lento · enlace saturado</span></td><td>15/08/2026 · OK</td></tr>
-        <tr data-sede="catatumbo"><td class="strong">a2 Softway<span class="sub">Completo diario · NAS local + nube</span></td><td>Catatumbo</td><td>Hoy 01:45 a.m.<span class="sub">8 min · 4 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>15/08/2026 · OK</td></tr>
-        <tr data-sede="todas"><td class="strong">Plataforma Tibisay (CRM, IMS, RR. HH.)<span class="sub">Continuo (réplica) + diario · Nube (2 regiones)</span></td><td>Nube · cadena</td><td>Hoy 03:00 a.m.<span class="sub">4 min · 28 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>20/09/2026 · OK</td></tr>
+        <tr data-sede="margarita"><td class="strong">Reservas y recepción<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 02:00 a.m.<span class="sub">18 min · 42 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="maracaibo"><td class="strong">Reservas y recepción<span class="sub">Incremental c/ 4 h + completo diario · NAS local + nube</span></td><td>Maracaibo</td><td>Hoy 02:00 a.m.<span class="sub">15 min · 36 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>12/09/2026 · OK</td></tr>
+        <tr data-sede="margarita"><td class="strong">Contabilidad<span class="sub">Completo diario · NAS local + nube</span></td><td>Margarita</td><td>Hoy 01:00 a.m.<span class="sub">9 min · 11 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>05/09/2026 · OK</td></tr>
+        <tr data-sede="morrocoy"><td class="strong">Contabilidad y compras<span class="sub">Completo diario · NAS local + nube</span></td><td>Morrocoy</td><td>Hoy 01:30 a.m.<span class="sub">— · —</span></td><td><span class="badge b-danger">Falló · servidor sin respuesta</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="merida"><td class="strong">Contabilidad y compras<span class="sub">Completo diario · NAS local + nube</span></td><td>Mérida</td><td>Hoy 01:30 a.m.<span class="sub">7 min · 6 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="maturin"><td class="strong">Contabilidad y compras<span class="sub">Completo diario · NAS local + nube</span></td><td>Maturín</td><td>Hoy 01:30 a.m.<span class="sub">6 min · 5 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>29/08/2026 · OK</td></tr>
+        <tr data-sede="canaima"><td class="strong">Contabilidad y compras<span class="sub">Completo diario · Nube (enlace satelital)</span></td><td>Canaima</td><td>Hoy 01:45 a.m.<span class="sub">31 min · 3 GB</span></td><td><span class="badge b-warn">Lento · enlace saturado</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="catatumbo"><td class="strong">Contabilidad y compras<span class="sub">Completo diario · NAS local + nube</span></td><td>Catatumbo</td><td>Hoy 01:45 a.m.<span class="sub">8 min · 4 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>15/08/2026 · OK</td></tr>
+        <tr data-sede="todas"><td class="strong">Plataforma Tibisay<span class="sub">Continuo (réplica) + diario · Nube (2 regiones)</span></td><td>Nube · cadena</td><td>Hoy 03:00 a.m.<span class="sub">4 min · 28 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>20/09/2026 · OK</td></tr>
         <tr data-sede="todas"><td class="strong">Servidor de archivos corporativo<span class="sub">Incremental diario · NAS + cinta semanal</span></td><td>Oficina central</td><td>Hoy 00:30 a.m.<span class="sub">22 min · 310 GB</span></td><td><span class="badge b-ok">Correcto</span></td><td>01/09/2026 · OK</td></tr>
       </tbody>
     </table></div>
@@ -119,18 +120,18 @@
   };
   var NOTE = {
     "margarita|3": "Wi-Fi huéspedes · 3 AP del piso 3 con alta carga", "canaima|0": "Satelital principal con pérdida de paquetes 4%", "canaima|3": "Wi-Fi huéspedes lento por enlace saturado", "canaima|8": "Respaldo lento",
-    "catatumbo|7": "Cámara 12 (estacionamiento) sin señal", "morrocoy|5": "Servidor local Saint sin respuesta desde 09:12", "morrocoy|8": "Respaldo de Saint falló", "maturin|1": "Enlace de respaldo en mantenimiento del proveedor"
+    "catatumbo|7": "Cámara 12 (estacionamiento) sin señal", "morrocoy|5": "Servidor de contabilidad sin respuesta desde 09:12", "morrocoy|8": "Respaldo de contabilidad falló", "maturin|1": "Enlace de respaldo en mantenimiento del proveedor"
   };
   var LBL = ["Operativo", "Degradado", "Caído"];
 
   var TK = [
-    ["IT-3318", "morrocoy", "Servidor de Saint no responde", "Servidores", "Contabilidad · Kelly S.", "Crítica", "En curso", "Jorge L.", 92, 60],
+    ["IT-3318", "morrocoy", "Servidor de contabilidad no responde", "Servidores", "Contabilidad · Kelly S.", "Crítica", "En curso", "Jorge L.", 92, 60],
     ["IT-3317", "margarita", "Impresora fiscal de recepción no imprime", "Impresora fiscal", "Recepción · turno A", "Alta", "En curso", "Ricardo P.", 45, 240],
     ["IT-3316", "canaima", "Internet lento en churuatas", "Internet / Wi-Fi", "Gerencia · Héctor S.", "Alta", "Esperando proveedor", "Jorge L.", 190, 240],
     ["IT-3315", "maracaibo", "POS del lounge bar se reinicia", "Punto de venta", "A&B · capitán", "Alta", "Nuevo", "—", 12, 240],
     ["IT-3314", "catatumbo", "Cámara 12 del estacionamiento sin señal", "CCTV", "Seguridad", "Media", "Nuevo", "—", 75, 1440],
     ["IT-3313", "margarita", "Wi-Fi débil en piso 3 (quejas de huéspedes)", "Internet / Wi-Fi", "Recepción", "Media", "En curso", "Ricardo P.", 260, 1440],
-    ["IT-3312", "merida", "Crear usuario Opera/Prestige a recepcionista nueva", "Accesos y usuarios", "RR. HH. · José G. R.", "Media", "Esperando usuario", "Ana M.", 380, 1440],
+    ["IT-3312", "merida", "Crear usuario de recepción a recepcionista nueva", "Accesos y usuarios", "RR. HH. · José G. R.", "Media", "Esperando usuario", "Ana M.", 380, 1440],
     ["IT-3311", "maturin", "Correo de ventas no sincroniza en el teléfono", "Correo", "Ventas · Carlos M.", "Baja", "En curso", "Ana M.", 610, 4320],
     ["IT-3310", "maracaibo", "Proyector de Sala Coquivacoa sin HDMI", "Audiovisual", "Eventos", "Media", "Resuelto", "Ricardo P.", 140, 1440],
     ["IT-3309", "margarita", "Teléfono de la hab. 604 sin tono", "Telefonía", "Housekeeping", "Baja", "Resuelto", "Ricardo P.", 300, 4320],
@@ -160,7 +161,7 @@
     var cards = [
       ["wifi", "Internet y enlaces", sedes.filter(function (h) { return INFRA[h.id][0] === 0; }).length + "/" + sedes.length, "enlaces principales operativos", sedes.some(function (h) { return INFRA[h.id][0] || INFRA[h.id][1]; }) ? "warn" : "ok", "Uso pico hoy " + (p === "canaima" ? "96%" : "71%") + " del ancho de banda"],
       ["wifi", "Wi-Fi (puntos de acceso)", (aps - apsOff) + "/" + aps, "AP en línea · " + Math.round(1840 * fac) + " dispositivos conectados", apsOff ? "warn" : "ok", apsOff ? apsOff + " AP con alta carga o sin respuesta" : "Sin incidencias"],
-      ["server", "Servidores", (srv - srvDown) + "/" + srv, "servidores en línea · CPU media 34%", srvDown ? "danger" : "ok", srvDown ? "Morrocoy · servidor Saint caído" : "Disco más lleno: 71%"],
+      ["server", "Servidores", (srv - srvDown) + "/" + srv, "servidores en línea · CPU media 34%", srvDown ? "danger" : "ok", srvDown ? "Morrocoy · servidor de contabilidad caído" : "Disco más lleno: 71%"],
       ["archive", "Respaldos de anoche", sedes.filter(function (h) { return INFRA[h.id][8] !== 2; }).length + "/" + sedes.length, "sedes con respaldo correcto", srvDown ? "danger" : sedes.some(function (h) { return INFRA[h.id][8] === 1; }) ? "warn" : "ok", srvDown ? "Morrocoy · reintentar tras recuperar servidor" : "Último: hoy 03:00 a.m."]
     ];
     var tks = TK.filter(function (t) { return p === "todas" || t[1] === p; }), open = tks.filter(function (t) { return t[6] !== "Resuelto"; });
@@ -197,7 +198,7 @@
     document.getElementById("tkDonutList").innerHTML = cats.map(function (c) { return '<li><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:' + c[2] + ';margin-right:8px"></i>' + c[0] + "</span><b>" + c[1] + "</b></li>"; }).join("");
 
     // Monitoreo
-    var svcs = [["PMS (Opera / Prestige)", "pms"], ["ERP (Profit Plus / Saint / a2)", "erp"], ["Internet principal", "net"], ["Wi-Fi huéspedes", "wifi"], ["Plataforma Tibisay (nube)", "cloud"]];
+    var svcs = [["Reservas y recepción", "pms"], ["Contabilidad y compras", "erp"], ["Internet principal", "net"], ["Wi-Fi huéspedes", "wifi"], ["Plataforma Tibisay (nube)", "cloud"]];
     document.getElementById("uptime").innerHTML = svcs.map(function (s, k) {
       var bars = "", bad = 0;
       for (var d = 0; d < 30; d++) {
@@ -222,11 +223,11 @@
     document.getElementById("latLegend").innerHTML = lines.map(function (l) { return '<span><i class="line" style="background:' + l.color + '"></i>' + l.name + "</span>"; }).join("");
 
     var AL = [
-      ["danger", "server", "Servidor Saint sin respuesta", "Morrocoy · desde 09:12 · ticket IT-3318", "morrocoy", "hace 1 h 30 min"],
+      ["danger", "server", "Servidor de contabilidad sin respuesta", "Morrocoy · desde 09:12 · ticket IT-3318", "morrocoy", "hace 1 h 30 min"],
       ["warn", "wifi", "Pérdida de paquetes 4% en enlace satelital", "Canaima · proveedor notificado", "canaima", "hace 3 h"],
       ["warn", "wifi", "3 AP del piso 3 con más de 60 clientes", "Margarita · balanceo automático activado", "margarita", "hace 4 h"],
       ["danger", "camera", "Cámara 12 sin señal", "Catatumbo · estacionamiento", "catatumbo", "hace 1 h 15 min"],
-      ["warn", "archive", "Respaldo de a2 tardó 31 min (normal 8)", "Canaima · enlace saturado", "canaima", "hoy 02:16 a.m."],
+      ["warn", "archive", "Respaldo de contabilidad tardó 31 min (normal 8)", "Canaima · enlace saturado", "canaima", "hoy 02:16 a.m."],
       ["ok", "check", "Enlace de respaldo restablecido", "Maturín · mantenimiento del proveedor terminado", "maturin", "hace 20 min"],
       ["ok", "shield", "Parches de seguridad aplicados", "Maracaibo · 38 equipos · sin reinicios pendientes", "maracaibo", "ayer 11:40 p.m."],
       ["ok", "key", "Certificado SSL renovado", "Plataforma Tibisay · vence 29/09/2027", "todas", "ayer 6:00 p.m."]
@@ -276,6 +277,24 @@
       TK.unshift([id, k[0], m.dataset.t, "Infraestructura", "Monitoreo automático", "Alta", "Nuevo", "—", 0, 240, m.dataset.mkt]);
       render(App.prop()); App.toast("Ticket " + id + " creado para " + D.sedeNombre(k[0]) + " · queda en «Nuevos»");
     }
+  });
+  // Conexión puntual: solo si la propiedad necesita enlazar un servicio concreto
+  document.getElementById("btnConnect").addEventListener("click", function (e) {
+    e.preventDefault();
+    var p = App.prop();
+    App.drawer('<div class="drawer-h"><div><h2>Conectar un servicio</h2><p>Para necesidades puntuales de una propiedad</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+      '<div class="drawer-b"><div class="card-b">' +
+      '<div class="field"><label>Servicio</label><select class="select" id="cnS"><option>Motor de reservas web</option><option>Pasarela de pagos</option><option>Canal de ventas (OTA)</option><option>Cerraduras electrónicas</option><option>Otro servicio</option></select></div>' +
+      '<div class="field"><label>Propiedad</label><select class="select" id="cnP">' + D.propiedades.map(function (h) { return "<option" + (h.id === p ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + "</select></div>" +
+      '<div class="field" style="margin:0"><label>Detalle</label><input class="input" id="cnD" placeholder="Proveedor, contacto o lo que se necesita"></div></div></div>' +
+      '<div class="drawer-f"><a class="btn btn-ghost btn-sm" href="#" data-close-drawer>Cancelar</a><a class="btn btn-primary btn-sm" href="#" id="cnGo">Solicitar conexión</a></div>');
+    document.getElementById("cnGo").onclick = function (ev) {
+      ev.preventDefault();
+      var s = document.getElementById("cnS").value, h = document.getElementById("cnP").value, id = nextId(); nTk++;
+      TK.unshift([id, D.propiedades.find(function (x) { return x.nombre === h; }).id, "Conectar servicio: " + s, "Accesos y usuarios", App.session().usuario.split(" ")[0], "Media", "Nuevo", "Ana M.", 0, 1440]);
+      App.closeDrawer(); render(App.prop());
+      App.toast("Solicitud " + id + " creada · el equipo de IT coordina la conexión de " + s.toLowerCase());
+    };
   });
   App.onProp(render);
 })();

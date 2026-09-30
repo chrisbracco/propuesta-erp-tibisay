@@ -46,18 +46,17 @@
     <div class="toolbar">
       <select class="select select-sm" style="width:auto" id="mCat"><option value="">Todas las categorías</option></select>
       <label class="small row" style="gap:6px"><input type="checkbox" id="mLow" style="accent-color:var(--gold)"> Solo bajo mínimo</label>
-      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" id="syncErp" data-icon="refresh">Sincronizar ahora</a>
     </div>
     <div class="table-wrap"><table class="table" data-searchable id="mTable">
       <thead id="mHead"></thead><tbody id="mBody"></tbody>
     </table></div>
-    <div class="pager"><span id="mCount">—</span><span>SKU, descripción, UM y costo vienen del ERP y no se editan aquí</span></div>
+    <div class="pager"><span id="mCount">—</span><span>Catálogo maestro de la cadena</span></div>
   </div>
 
   <!-- ============ COMPRAR Y RECIBIR ============ -->
   <div class="tab-panel" data-panel="compras">
     <div class="toolbar">
-      <div class="steps"><span class="done">Borrador</span><em>→</em><span class="done">Por aprobar</span><em>→</em><span class="done">Aprobada</span><em>→</em><span class="now">Recepción</span><em>→</em><span>Cerrada · ERP</span></div>
+      <div class="steps"><span class="done">Borrador</span><em>→</em><span class="done">Por aprobar</span><em>→</em><span class="done">Aprobada</span><em>→</em><span class="now">Recepción</span><em>→</em><span>Cerrada</span></div>
       <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-hash="recibir" data-wz-open="rec" data-icon="truck">Recibir mercancía</a>
     </div>
     <div class="table-wrap"><table class="table stack-md" data-searchable>
@@ -67,7 +66,7 @@
     <details class="acc flat">
       <summary><span class="grow">Últimas notas de entrada</span></summary>
       <div class="table-wrap"><table class="table stack-md" data-searchable>
-        <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>ERP</th></tr></thead>
+        <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>Contabilidad</th></tr></thead>
         <tbody id="neBody"></tbody>
       </table></div>
     </details>
@@ -116,18 +115,18 @@
       <span class="small muted" style="margin-left:auto">Periodo: 01/09 – 28/09/2026 · corte nocturno automático</span>
     </div>
     <div class="table-wrap"><table class="table" data-searchable>
-      <thead><tr><th style="min-width:190px">Producto</th><th class="num">Consumo teórico</th><th class="num">Salida ERP</th><th class="num">Varianza</th><th class="num">Valorización</th><th>Alerta</th></tr></thead>
+      <thead><tr><th style="min-width:190px">Producto</th><th class="num">Consumo teórico</th><th class="num">Salida de almacén</th><th class="num">Varianza</th><th class="num">Valorización</th><th>Alerta</th></tr></thead>
       <tbody id="audBody"></tbody>
       <tfoot id="audFoot"></tfoot>
     </table></div>
     <details class="acc flat">
       <summary><span class="grow">Cómo se calcula la diferencia</span></summary>
       <div class="acc-b"><div class="flow">
-        <div class="flow-node"><h3>1 · Consumo PMS / POS</h3><ul><li>Platos y tragos vendidos por producto</li><li>Cargos a habitación y banquetes</li></ul></div>
+        <div class="flow-node"><h3>1 · Consumo vendido</h3><ul><li>Platos y tragos vendidos por producto</li><li>Cargos a habitación y banquetes</li></ul></div>
         <div class="flow-arrow">→</div>
         <div class="flow-node"><h3>2 · Receta estándar</h3><ul><li>Venta → gramos / ml / unidades teóricas</li></ul></div>
         <div class="flow-arrow">→</div>
-        <div class="flow-node"><h3>3 · Compra / salida ERP</h3><ul><li>Lo que realmente salió del almacén</li></ul></div>
+        <div class="flow-node"><h3>3 · Salida de almacén</h3><ul><li>Lo que realmente salió del almacén</li></ul></div>
         <div class="flow-arrow">→</div>
         <div class="flow-node core"><h3>4 · Diferencia por producto</h3><ul><li>Valorizada a costo promedio</li><li>Alerta &gt; 3% · crítica &gt; 6%</li></ul></div>
       </div></div>
@@ -153,7 +152,7 @@
   function nom(id) { return D.sedeNombre(id); }
   function curSede() { var p = App.prop(); return p === "todas" ? "margarita" : p; }
 
-  /* ------------------------------------------------------------ Maestro (desde ERP) */
+  /* ------------------------------------------------------------ Maestro de productos */
   // sku, producto, categoría, UM, costo prom., existencia base (hotel de 100 hab.), almacén, receta [unidad POS, factor por unidad POS]
   var P = [
     ["AB-1021", "Ron añejo reserva 0,75 L", "Licores", "bot", 18.40, 60, "Bar", ["tragos 45 ml", 1 / 16]],
@@ -219,7 +218,6 @@
   P.forEach(function (p) { BYSKU[p[0]] = p; });
   OC.forEach(function (o) { o.monto = o.lines.reduce(function (a, l) { return a + l[1] * BYSKU[l[0]][4]; }, 0) + (o.extra ? o.extra[1] : 0); });
   var OCST = { "Borrador": "b-muted", "Por aprobar": "b-warn", "Aprobada": "b-info", "Recepción parcial": "b-gold", "Recibida": "b-ok" };
-  function erpOf(sede) { var h = PROPS.find(function (x) { return x.id === sede; }); return h ? h.erp : "Profit Plus"; }
   var CONT = [
     ["CI-0288", "Cíclico licores", "margarita", "Bar", "29/09", "Yusmary C.", 0.7, 3, -612, "En curso"],
     ["CI-0287", "Cíclico A&B", "maracaibo", "Cocina", "28/09", "Richard H.", 1, 5, -188, "Por aprobar"],
@@ -281,7 +279,7 @@
       if (d && d.classList.contains("prow-detail")) d.hidden = tr.hidden;
       if (!tr.hidden) n++;
     });
-    document.getElementById("mCount").textContent = "Mostrando " + n + " de 1.284 SKU activos en el ERP";
+    document.getElementById("mCount").textContent = "Mostrando " + n + " de 1.284 SKU activos";
     var body = document.getElementById("mBody");
     body._moreOpen = !!q || body._moreOpen;
     App.more(body, 10);
@@ -322,7 +320,7 @@
     document.getElementById("bOc").textContent = pend;
     var ne = list.filter(function (o) { return o.rec > 0; });
     document.getElementById("neBody").innerHTML = ne.map(function (o, i) {
-      return '<tr><td class="strong">NE-' + (4410 - i * 3) + "</td><td>" + ["29/09", "28/09", "26/09", "25/09", "24/09"][i % 5] + "</td><td>" + o.id + '<span class="sub">' + o.prov + "</span></td><td>" + (o.sede === "todas" ? "Margarita · Lencería" : nom(o.sede) + " · " + BYSKU[o.lines[0][0]][6]) + "</td><td>" + (o.rec < 1 ? '<span class="badge b-gold">Parcial</span>' : '<span class="badge b-ok">Total</span>') + '</td><td class="num">' + money(o.monto * (o.rec < 1 ? o.rec : 1)) + '</td><td><span class="badge b-ok">' + erpOf(o.sede === "todas" ? "margarita" : o.sede) + " ✓</span></td></tr>";
+      return '<tr><td class="strong">NE-' + (4410 - i * 3) + "</td><td>" + ["29/09", "28/09", "26/09", "25/09", "24/09"][i % 5] + "</td><td>" + o.id + '<span class="sub">' + o.prov + "</span></td><td>" + (o.sede === "todas" ? "Margarita · Lencería" : nom(o.sede) + " · " + BYSKU[o.lines[0][0]][6]) + "</td><td>" + (o.rec < 1 ? '<span class="badge b-gold">Parcial</span>' : '<span class="badge b-ok">Total</span>') + '</td><td class="num">' + money(o.monto * (o.rec < 1 ? o.rec : 1)) + '</td><td><span class="badge b-ok">' + "Asentada ✓</span></td></tr>";
     }).join("") || '<tr><td colspan="7" class="muted">Sin recepciones recientes</td></tr>';
     App.more(document.getElementById("ocBody"), 8);
   }
@@ -388,7 +386,7 @@
     var fuga = list.reduce(function (a, x) { return a + Math.max(0, x.val); }, 0), compra = list.reduce(function (a, x) { return a + x.erp * x.p[4]; }, 0);
     document.getElementById("bAud").textContent = alertas.length;
     document.getElementById("audKpis").innerHTML = [
-      ["Diferencia valorizada", money(fuga), "a costo promedio del ERP", "danger"],
+      ["Diferencia valorizada", money(fuga), "a costo promedio", "danger"],
       ["Con alerta (> 3%)", alertas.length, crit.length + " críticos (> 6%)", "warn"],
       ["Varianza global", (fuga / compra * 100).toFixed(1).replace(".", ",") + "%", "meta ≤ 2,0% del consumo"],
       ["Productos auditados", list.length, "con receta estándar vinculada"]
@@ -448,7 +446,7 @@
     } else if (x[0] === "aj") {
       var a = AJ.find(function (r) { return r[0] === x[2]; });
       a[9] = x[1] === "aprobar" ? "Aprobado" : "Rechazado";
-      msg = x[1] === "aprobar" ? a[0] + " aprobado · movimiento enviado al ERP" : a[0] + " rechazado · se solicita reconteo";
+      msg = x[1] === "aprobar" ? a[0] + " aprobado · movimiento registrado" : a[0] + " rechazado · se solicita reconteo";
     }
     renderAll(App.prop());
     App.toast(msg + " (demo)");
@@ -535,11 +533,11 @@
           var oc = OC.find(function (x) { return x.id === st.id; }), val = 0, pend = 0, tot = 0, rec = 0;
           st.L.forEach(function (l) { val += l.ahora * l.pr[4]; pend += Math.max(0, l.ped - l.antes - l.ahora); tot += l.ped; rec += Math.min(l.ped, l.antes + l.ahora); });
           st.ratio = tot ? rec / tot : 1; st.val = val;
-          return '<dl class="dl"><dt>Orden</dt><dd>' + oc.id + "</dd><dt>Valor recibido ahora</dt><dd><b>" + money(val) + "</b></dd><dt>Unidades pendientes</dt><dd" + (pend ? ' class="num-warn"' : "") + ">" + num(pend) + "</dd><dt>Avance de la OC</dt><dd>" + Math.round(st.ratio * 100) + "%</dd><dt>Nota de entrada</dt><dd>NE-4412 → " + erpOf(oc.sede === "todas" ? "margarita" : oc.sede) + "</dd></dl>" +
-            '<div class="note mt">' + (pend ? "Lo pendiente queda abierto en la OC para una próxima entrega. Si no llegará, se cierra con ajuste." : "La OC se cierra al 100% y se actualiza el costo promedio en el ERP.") + "</div>";
+          return '<dl class="dl"><dt>Orden</dt><dd>' + oc.id + "</dd><dt>Valor recibido ahora</dt><dd><b>" + money(val) + "</b></dd><dt>Unidades pendientes</dt><dd" + (pend ? ' class="num-warn"' : "") + ">" + num(pend) + "</dd><dt>Avance de la OC</dt><dd>" + Math.round(st.ratio * 100) + "%</dd><dt>Nota de entrada</dt><dd>NE-4412 · asiento contable automático</dd></dl>" +
+            '<div class="note mt">' + (pend ? "Lo pendiente queda abierto en la OC para una próxima entrega. Si no llegará, se cierra con ajuste." : "La OC se cierra al 100% y se actualiza el costo promedio.") + "</div>";
         } }
       ],
-      done: { label: "Registrar recepción", toast: function (st) { return "Recepción registrada en " + st.id + " · NE-4412 enviada al ERP (demo)"; }, fn: function (st) {
+      done: { label: "Registrar recepción", toast: function (st) { return "Recepción registrada en " + st.id + " · nota de entrada NE-4412 generada"; }, fn: function (st) {
         var oc = OC.find(function (x) { return x.id === st.id; });
         oc.rec = Math.min(1, st.ratio); oc.st = oc.rec >= 1 ? "Recibida" : "Recepción parcial";
         renderAll(App.prop());
@@ -601,11 +599,6 @@
       } } });
   };
 
-  document.getElementById("syncErp").addEventListener("click", function (e) {
-    e.preventDefault();
-    var b = this; b.lastChild.textContent = "Sincronizando…";
-    setTimeout(function () { b.lastChild.textContent = "Sincronizar ahora"; document.getElementById("mCount").textContent += " · sincronizado hace un momento"; App.toast("Maestro sincronizado con el ERP · 3 costos promedio actualizados"); }, 1200);
-  });
   document.addEventListener("click", function (e) {
     var g = e.target.closest("[data-go-aj]");
     if (!g) return;
@@ -631,7 +624,7 @@
     var fuga = renderAud(p), pend = renderInbox(p);
     document.getElementById("imsHero").innerHTML = App.hero(
       { label: "Pendientes de tu acción", value: pend, sub: "aprobaciones, despachos, recepciones y ajustes" },
-      [["Bajo mínimo", low, "en la muestra del maestro · pedir", low ? "warn" : ""], ["Diferencia A&amp;B (mes)", money(fuga), "consumo PMS vs. salida ERP", "danger"], ["Valor en inventario", money(valor * 4.5), (p === "todas" ? "7 hoteles · " : "") + sedes.length * 6 + " almacenes"], ["SKU activos (ERP)", p === "todas" ? "1.284" : num(640 + sedes[0].hab * 2), "sincronizado hace 14 min"]]);
+      [["Bajo mínimo", low, "en la muestra del maestro · pedir", low ? "warn" : ""], ["Diferencia A&amp;B (mes)", money(fuga), "consumo vendido vs. salida de almacén", "danger"], ["Valor en inventario", money(valor * 4.5), (p === "todas" ? "7 hoteles · " : "") + sedes.length * 6 + " almacenes"], ["SKU activos", p === "todas" ? "1.284" : num(640 + sedes[0].hab * 2), "catálogo maestro"]]);
   }
   App.onProp(renderAll);
 })();

@@ -95,7 +95,7 @@
         <div><div class="kpi-label">2.ª quincena de septiembre 2026 · neto a pagar</div><div class="kpi-value" style="font-size:32px">$ 136.130</div><div class="kpi-sub">612 colaboradores · 1.284 h extra aprobadas</div></div>
         <div class="row"><a class="btn btn-ghost" href="#" id="btnRecibos">Enviar recibos</a><a class="btn btn-primary" href="#" id="btnNomina" data-icon="check">Aprobar nómina</a></div>
       </div>
-      <div class="steps mt" id="nomSteps"><span class="done">Marcaciones consolidadas · 27/09</span><em>→</em><span class="done">Incidencias justificadas · 28/09</span><em>→</em><span class="done">Cálculo validado · 28/09</span><em>→</em><span class="now">Aprobación de dirección</span><em>→</em><span>Asiento a Profit Plus / Saint / a2</span></div>
+      <div class="steps mt" id="nomSteps"><span class="done">Marcaciones consolidadas · 27/09</span><em>→</em><span class="done">Incidencias justificadas · 28/09</span><em>→</em><span class="done">Cálculo validado · 28/09</span><em>→</em><span class="now">Aprobación de dirección</span><em>→</em><span>Asiento contable</span></div>
     </div>
     <div class="table-wrap" style="border-top:1px solid var(--border)"><table class="table">
       <thead><tr><th>Concepto</th><th class="num">Colaboradores</th><th class="num">Monto (USD)</th></tr></thead>
@@ -312,9 +312,9 @@
   document.getElementById("btnNomina").addEventListener("click", function (e) {
     e.preventDefault();
     var st = document.querySelectorAll("#nomSteps span");
-    st[3].className = "done"; st[3].textContent = "Aprobada por dirección · 29/09"; st[4].className = "done"; st[4].textContent = "Asiento enviado a Profit Plus / Saint / a2";
+    st[3].className = "done"; st[3].textContent = "Aprobada por dirección · 29/09"; st[4].className = "done"; st[4].textContent = "Asiento contable generado";
     this.outerHTML = '<span class="badge b-ok">Nómina aprobada</span>';
-    App.toast("Nómina aprobada · asiento enviado al ERP");
+    App.toast("Nómina aprobada · asiento contable generado");
   });
   document.getElementById("btnRecibos").addEventListener("click", function (e) {
     e.preventDefault();

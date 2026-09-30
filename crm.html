@@ -47,7 +47,6 @@
         <div class="toolbar" id="guestTools">
           <div class="search"><span data-icon="search"></span><input class="input" type="search" id="guestFilter" placeholder="Nombre, empresa o ciudad…"></div>
           <select class="select select-sm" style="width:auto" id="segFilter"><option value="">Todos los segmentos</option><option>Corporativo</option><option>Placer</option><option>Eventos / bodas</option></select>
-          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" id="syncPms" data-icon="refresh">Sincronizar PMS</a>
         </div>
         <div class="table-wrap"><table class="table" data-searchable id="guestTable">
           <thead><tr><th style="min-width:220px">Huésped</th><th>Club</th><th>Estado</th></tr></thead>
@@ -445,7 +444,7 @@
     if (a === "enviar") { q.st = "enviada"; q.env = HOY; q.vence = "13/10/2026"; q.visto = false; q.chat.push(["out", "Hola " + q.ct.split(" ")[0] + ", te comparto la cotización " + q.id + " por " + $(q.total) + " 📄", "ahora · " + yo()]); refreshQ(q.id, "wa"); App.toast("Cotización " + q.id + " enviada por WhatsApp · pasa a «Enviada»"); }
     if (a === "recordar") { q.chat.push(["out", "Hola " + q.ct.split(" ")[0] + ", ¿pudiste revisar la cotización " + q.id + "? Vence el " + q.vence + " 🙌", "ahora · " + yo()]); refreshQ(q.id, "wa"); App.toast("Recordatorio enviado a " + q.ct); }
     if (a === "aprobar") { q.st = "aprobada"; q.aprob = HOY; q.anticipo = 50; q.beo = "BEO-0" + (nBeo++); refreshQ(q.id); App.toast("Cotización aprobada · se generó el " + q.beo); }
-    if (a === "pago") { q.anticipo = 100; refreshQ(q.id); App.toast("Pago del 100% registrado · enviado al ERP"); }
+    if (a === "pago") { q.anticipo = 100; refreshQ(q.id); App.toast("Pago del 100% registrado · asiento contable generado"); }
     if (a === "reabrir") { q.st = "borrador"; delete q.motivo; refreshQ(q.id); App.toast(q.id + " reabierta como borrador"); }
     if (a === "perdida") {
       var id = q.id;
@@ -461,7 +460,7 @@
   });
   document.addEventListener("click", function (e) { if (e.target.closest("[data-back-q]")) { e.preventDefault(); showQ(curQ); } });
 
-  /* ------------------------------------------------------------ Ficha: WhatsApp, reservar, nuevo huésped, sincronizar */
+  /* ------------------------------------------------------------ Ficha: WhatsApp, reservar y nuevo huésped */
   document.getElementById("guestCard").addEventListener("click", function (e) {
     var b = e.target.closest("[data-ga]");
     if (!b) return;
@@ -475,7 +474,7 @@
         return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Propiedad</label><select class="select" id="rSede">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === g.sede ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + '</select></div><div class="field"><label>Llegada</label><input class="input" type="date" id="rF" value="2026-10-16"></div>' +
           '<div class="field" style="margin:0"><label>Noches</label><input class="input" type="number" id="rN" value="3" min="1"></div><div class="field" style="margin:0"><label>Habitación</label><input class="input" id="rH" value="' + g.pref[0].split(",")[0] + '"></div></div>';
       }, read: function (el, st) { st.sede = el.querySelector("#rSede").value; st.f = el.querySelector("#rF").value.split("-").reverse().join("/"); st.n = el.querySelector("#rN").value; st.h = el.querySelector("#rH").value; } }],
-        done: { label: "Crear reserva", toast: function (st) { return "Reserva creada en el PMS para " + g.n + " · llega el " + st.f; }, fn: function (st) {
+        done: { label: "Crear reserva", toast: function (st) { return "Reserva creada para " + g.n + " · llega el " + st.f; }, fn: function (st) {
           g.estado = "Reserva " + st.f; (extraNotes[k] = extraNotes[k] || []).unshift("Reserva creada: " + TIBISAY.sedeNombre(st.sede) + " · " + st.h + " · " + st.n + " noches desde el " + st.f);
           renderGuests(); filterGuests(); show(k);
         } } });
@@ -488,7 +487,7 @@
       return '<div class="field"><label>Nombre y apellido</label><input class="input" id="ngN" value="Laura Castillo"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Ciudad</label><input class="input" id="ngC" value="Caracas"></div><div class="field"><label>Teléfono</label><input class="input" id="ngT" value="+58 414-•••-0000"></div>' +
         '<div class="field" style="margin:0"><label>Segmento</label><select class="select" id="ngS"><option>Placer</option><option>Corporativo</option><option>Eventos / bodas</option></select></div><div class="field" style="margin:0"><label>Propiedad</label><select class="select" id="ngP">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === (p === "todas" ? "margarita" : p) ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + "</select></div></div>";
     }, read: function (el, st) { ["N", "C", "T", "S", "P"].forEach(function (x) { st[x] = el.querySelector("#ng" + x).value; }); } }],
-      done: { label: "Crear perfil", toast: function (st) { return "Perfil de " + st.N + " creado · se envía al PMS"; }, fn: function (st) {
+      done: { label: "Crear perfil", toast: function (st) { return "Perfil de " + st.N + " creado"; }, fn: function (st) {
         var g = { n: st.N || "Huésped nuevo", e: st.C, c: st.C, seg: st.S, sede: st.P, club: "", socio: "—", pts: 0, noches: 0, venc: 0, canje: "—", estado: "Perfil nuevo", tel: st.T, mail: "—", cumple: "—", idioma: "Español", canal: "WhatsApp", nps: 8,
           est: [["29/09/2026", TIBISAY.sedeNombre(st.P), 0, "Perfil creado", 0]], con: [["Sin consumos", 0]], pref: ["Sin preferencias registradas"], notas: [["Perfil creado manualmente. Completar correo y preferencias.", yo(), "29/09/2026"]] };
         var w = g.n.split(/\s+/); g.i = (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : "")).toUpperCase(); g.gasto = 0;
@@ -496,11 +495,6 @@
         var sh = {}; Object.keys(extraNotes).forEach(function (x) { sh[+x + 1] = extraNotes[x]; }); extraNotes = sh;
         renderGuests(); document.getElementById("tabHuespedes").click(); filterGuests(); show(0);
       } } });
-  });
-  document.getElementById("syncPms").addEventListener("click", function (e) {
-    e.preventDefault();
-    var b = this; b.classList.add("is-busy"); b.lastChild.textContent = "Sincronizando…";
-    setTimeout(function () { b.classList.remove("is-busy"); b.lastChild.textContent = "Sincronizar PMS"; document.getElementById("guestCount").textContent += " · sincronizado con el PMS hace un momento"; App.toast("PMS sincronizado · 12 perfiles actualizados, 0 duplicados"); }, 1200);
   });
 
   /* ------------------------------------------------------------ Nueva cotización (pocos campos) */
@@ -548,7 +542,7 @@
       { sel: "#pipeline", titulo: "Pipeline de eventos", texto: "Cada solicitud de evento que llega por WhatsApp se convierte en una tarjeta y avanza por 4 etapas:", lista: ["<b>Borrador:</b> el ejecutivo la está armando", "<b>Enviada:</b> el cliente la recibió (✓✓ = la vio)", "<b>Aprobada:</b> pasa a BEO y anticipo", "<b>Perdida:</b> se guarda el motivo"] },
       { sel: "#drawer", titulo: "Detalle bajo demanda", texto: "Al hacer clic en una tarjeta se abre este panel con la cotización y, en la otra pestaña, la conversación de WhatsApp. Los botones de abajo cambian según la etapa: enviar, recordar, aprobar o registrar el pago.", antes: "#pipeline .kcard" },
       { sel: "#newQuote", titulo: "Nueva cotización en 3 clics", texto: "Solo 5 campos: cliente, tipo, propiedad, fecha e invitados. El resto se completa en el borrador.", antes: "#drawer [data-close-drawer]" },
-      { sel: "#guestTools", titulo: "Busca y filtra huéspedes", texto: "Escribe un nombre, empresa o ciudad, o filtra por segmento. Los perfiles se unifican desde Opera/Prestige: un mismo huésped aparece una sola vez aunque haya ido a varios hoteles.", antes: "#tabHuespedes" },
+      { sel: "#guestTools", titulo: "Busca y filtra huéspedes", texto: "Escribe un nombre, empresa o ciudad, o filtra por segmento. Los perfiles se unifican: un mismo huésped aparece una sola vez aunque haya ido a varios hoteles.", antes: "#tabHuespedes" },
       { sel: "#guestTable", titulo: "Lista de huéspedes", texto: "Solo lo esencial: quién es, su nivel en el Club y si está en casa. Haz clic en una fila para abrir su ficha." },
       { sel: "#guestCard", titulo: "Ficha del huésped con línea de tiempo", texto: "Arriba la próxima acción sugerida. Debajo, toda su actividad en orden: estancias, notas del equipo, canjes y encuestas. Contacto, preferencias y consumos quedan plegados hasta que los necesites." },
       { sel: "#clubTiers", titulo: "Club Tibisay: niveles", texto: "Plata, Oro y Platino. El nivel se calcula automáticamente por noches de los últimos 12 meses y los puntos por consumo en toda la cadena.", antes: "#tabClub" },

@@ -82,7 +82,6 @@
     { href: "operaciones.html", label: "Operaciones", icon: "bed", count: 9 },
     { href: "rrhh.html", label: "Gestión Humana", icon: "briefcase" },
     { href: "inventarios.html", label: "IMS · Inventarios", icon: "box", count: 3 },
-    { href: "integracion.html", label: "Integración", icon: "plug" },
     { href: "it.html", label: "Panel de IT", icon: "server" }
   ];
 
@@ -94,7 +93,7 @@
     { id: "ab", label: "A&B", mods: ["inventarios.html", "crm.html", "operaciones.html"] },
     { id: "rrhh", label: "RRHH", mods: ["rrhh.html"] },
     { id: "almacen", label: "Almacén", mods: ["inventarios.html"] },
-    { id: "it", label: "IT", mods: ["it.html", "integracion.html"] }
+    { id: "it", label: "IT", mods: ["it.html"] }
   ];
   var roleListeners = [];
   function role() {
