@@ -159,11 +159,15 @@
       '<div class="top-right">' +
         '<div class="role-select" title="Vista por rol (demo): reordena el menú y el inicio"><label for="roleSelect">Vista</label><select class="select" id="roleSelect" aria-label="Vista por rol">' + ropts + "</select></div>" +
         '<div class="prop-select">' + icon("building") + '<select class="select" id="propSelect" aria-label="Propiedad">' + opts + "</select></div>" +
-        '<button class="icon-btn" type="button" data-toast="3 notificaciones nuevas: 2 alertas A&B, 1 ticket urgente" aria-label="Notificaciones">' + icon("bell") + '<span class="dot-notif"></span></button>' +
+        '<div class="notif-wrap"><button class="icon-btn" type="button" id="notifBtn" aria-label="Notificaciones">' + icon("bell") + '<span class="dot-notif" id="notifDot"></span></button>' +
+          '<div class="menu notif-menu" id="notifMenu"><div class="between" style="padding:6px 10px 8px"><b class="small">Notificaciones</b><a href="#" class="small" id="notifRead">Marcar como leídas</a></div>' +
+          '<a href="inventarios.html#aud">' + icon("box") + '<span><b>23 botellas sin venta registrada</b><small>A&amp;B · Margarita · hace 12 min</small></span></a>' +
+          '<a href="inventarios.html#compras">' + icon("cart") + '<span><b>OC-2026-1190 por aprobar</b><small>A&amp;B · Maracaibo · hace 40 min</small></span></a>' +
+          '<a href="operaciones.html#mt">' + icon("wrench") + '<span><b>Ticket urgente: A/A hab. 410</b><small>Mantenimiento · Margarita · hace 25 min</small></span></a></div></div>' +
         '<div class="user-chip" id="userChip"><div class="avatar">' + initials(s.usuario) + '</div>' +
           '<div class="who"><b>' + s.usuario + '</b><small id="whoRole">' + role().label.replace("&", "&amp;") + "</small></div>" +
           '<div class="menu" id="userMenu"><a href="dashboard.html">' + icon("home") + "Mi inicio</a>" +
-          '<a href="#" data-toast="Perfil de usuario (demo)">' + icon("users") + "Mi perfil</a>" +
+          '<a href="#" id="profileLink">' + icon("users") + "Mi perfil</a>" +
           '<a href="#" id="logout">' + icon("logout") + "Cerrar sesión</a></div>" +
         "</div>" +
       "</div>";
@@ -181,8 +185,25 @@
     // Menú de usuario
     var chip = document.getElementById("userChip");
     var menu = document.getElementById("userMenu");
-    chip.addEventListener("click", function (e) { e.stopPropagation(); menu.classList.toggle("open"); });
-    document.addEventListener("click", function () { menu.classList.remove("open"); });
+    var nmenu = document.getElementById("notifMenu");
+    chip.addEventListener("click", function (e) { e.stopPropagation(); nmenu.classList.remove("open"); menu.classList.toggle("open"); });
+    document.getElementById("notifBtn").addEventListener("click", function (e) { e.stopPropagation(); menu.classList.remove("open"); nmenu.classList.toggle("open"); });
+    document.getElementById("notifRead").addEventListener("click", function (e) {
+      e.preventDefault(); e.stopPropagation();
+      document.getElementById("notifDot").remove();
+      nmenu.querySelectorAll("a[href]:not(#notifRead)").forEach(function (a) { a.style.opacity = ".6"; });
+      toast("Notificaciones marcadas como leídas");
+    });
+    document.addEventListener("click", function () { menu.classList.remove("open"); nmenu.classList.remove("open"); });
+    document.getElementById("profileLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      var ss = session();
+      drawer('<div class="drawer-h"><div><h2>' + ss.usuario + "</h2><p>Mi perfil</p></div>" + '<button class="icon-btn" data-close-drawer aria-label="Cerrar">' + icon("x") + "</button></div>" +
+        '<div class="drawer-b"><div class="card-b"><div class="row" style="margin-bottom:16px"><span class="avatar" style="width:52px;height:52px;font-size:17px">' + initials(ss.usuario) + "</span><div><b>" + ss.usuario + '</b><div class="small muted">' + role().label + "</div></div></div>" +
+        '<dl class="dl"><dt>Vista</dt><dd>' + role().label + "</dd><dt>Propiedad</dt><dd>" + D.sedeNombre(prop()) + "</dd><dt>Sesión iniciada</dt><dd>" + (ss.inicio ? new Date(ss.inicio).toLocaleString("es-VE") : "—") + "</dd><dt>Idioma</dt><dd>Español</dd></dl></div></div>" +
+        '<div class="drawer-f"><a class="btn btn-ghost btn-sm" href="#" id="logout2">' + icon("logout") + "Cerrar sesión</a></div>");
+      document.getElementById("logout2").onclick = function (ev) { ev.preventDefault(); document.getElementById("logout").click(); };
+    });
     document.getElementById("logout").addEventListener("click", function (e) {
       e.preventDefault();
       try { localStorage.removeItem(KEY); } catch (err) {}
@@ -289,12 +310,46 @@
       if (o) { e.preventDefault(); document.getElementById(o.dataset.modal).classList.add("open"); }
       if (e.target.closest("[data-close]") || e.target.classList.contains("modal-back")) closeModals();
       if (e.target.closest("[data-close-drawer]") || e.target.classList.contains("drawer-back")) closeDrawer();
+      var ex = e.target.closest("[data-export]");
+      if (ex) { e.preventDefault(); exportCSV(document.querySelector(ex.dataset.export), ex.dataset.file); }
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeModals(); closeDrawer(); } });
     // Al abrir un acordeón se redibujan sus gráficos con el ancho real
     document.addEventListener("toggle", function (e) { if (e.target.open) redraw(); }, true);
   }
   function closeModals() { document.querySelectorAll(".modal-back").forEach(function (m) { m.classList.remove("open"); }); }
+
+  /* ------------------------------------------------------------ Exportar tabla a CSV */
+  // [data-export="#selectorTabla"] descarga las filas visibles de la tabla como CSV (Excel)
+  function exportCSV(table, name) {
+    if (!table) return;
+    var rows = [].slice.call(table.querySelectorAll("thead tr, tbody tr, tfoot tr")).filter(function (tr) { return !tr.hidden && tr.style.display !== "none" && !tr.classList.contains("prow-detail"); });
+    var csv = rows.map(function (tr) {
+      return [].map.call(tr.cells, function (td) { return '"' + td.innerText.replace(/\s+/g, " ").trim().replace(/"/g, '""') + '"'; }).join(";");
+    }).join("\r\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+    a.download = (name || "tibisay") + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    toast("Descargado " + a.download + " · " + (rows.length - 1) + " filas");
+  }
+
+  // Etiqueta cada celda con el encabezado de su columna: en móvil las tablas se apilan como fichas
+  function labelTables() {
+    document.querySelectorAll("table.table, table.shifts").forEach(function (t) {
+      var hs = [].map.call(t.querySelectorAll("thead th"), function (th) { return th.textContent.trim(); });
+      if (!hs.length) return;
+      t.querySelectorAll("tbody tr, tfoot tr").forEach(function (tr) {
+        var i = 0;
+        [].forEach.call(tr.cells, function (td) {
+          if (!td.hasAttribute("data-label")) td.setAttribute("data-label", td.colSpan > 1 ? "" : hs[i] || "");
+          i += td.colSpan || 1;
+        });
+      });
+    });
+  }
+  var lt;
+  new MutationObserver(function () { cancelAnimationFrame(lt); lt = requestAnimationFrame(labelTables); }).observe(document.documentElement, { childList: true, subtree: true });
 
   /* ------------------------------------------------------------ Drawer lateral */
   function drawer(html) {
@@ -495,7 +550,7 @@
 
   /* ------------------------------------------------------------ Arranque */
   window.App = { icon: icon, logo: logo, prop: prop, onProp: onProp, toast: toast, barChart: barChart, lineChart: lineChart, donut: donut, session: session,
-    role: role, onRole: onRole, roles: ROLES, drawer: drawer, closeDrawer: closeDrawer, wizard: wizard, more: more, hero: hero, redraw: redraw };
+    role: role, onRole: onRole, roles: ROLES, drawer: drawer, closeDrawer: closeDrawer, wizard: wizard, more: more, hero: hero, redraw: redraw, exportCSV: exportCSV };
 
   document.addEventListener("DOMContentLoaded", function () {
     var isApp = document.body.classList.contains("app");

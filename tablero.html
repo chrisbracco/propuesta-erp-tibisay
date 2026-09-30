@@ -19,8 +19,8 @@
     <h1>Tablero directivo <span class="scope-pill" data-prop-name></span></h1>
   </div>
   <div class="actions">
-    <div class="seg"><button>Ayer</button><button class="active">Mes</button><button>Año</button></div>
-    <a class="btn btn-ghost" href="#" data-toast="Exportando tablero a Excel (demo)" data-icon="download">Exportar</a>
+    <div class="seg" id="perSeg"><button data-per="dia">Ayer</button><button class="active" data-per="mes">Mes</button><button data-per="anio">Año</button></div>
+    <a class="btn btn-ghost" href="#" data-export="#multiTable" data-file="tablero-multisitio" data-icon="download">Exportar</a>
   </div>
 </div>
 
@@ -59,7 +59,7 @@
 <section class="card mt">
   <div class="card-h"><div><h2>Comparativo multisitio</h2></div>
     <a class="btn btn-ghost btn-sm" href="#" data-toast="Reporte enviado a dirección (demo)" data-icon="mail">Enviar reporte</a></div>
-  <div class="table-wrap"><table class="table" data-searchable>
+  <div class="table-wrap"><table class="table stack-md" data-searchable id="multiTable">
     <thead><tr><th>Propiedad</th><th>PMS</th><th class="num">Hab.</th><th style="min-width:160px">Ocupación</th><th class="num">ADR</th><th class="num">RevPAR</th><th class="num">F&amp;B (miles)</th><th class="num">Presupuesto</th><th>Tendencia</th></tr></thead>
     <tbody id="multiBody"></tbody>
     <tfoot id="multiFoot"></tfoot>
@@ -77,7 +77,21 @@
   var ppto = { margarita: 104, canaima: 96, catatumbo: 102, maracaibo: 101, morrocoy: 103, merida: 98, maturin: 90 };
   function money(v) { return "$ " + v.toLocaleString("es-VE"); }
 
-  App.onProp(function (p) {
+  // Periodo: ayer, mes en curso o año acumulado (ajusta ocupación, tarifa y montos)
+  var PER = {
+    dia: { occ: 3, adr: 1.04, fb: 1 / 30, vs: "vs. mismo día 2025", d: ["▲ 9,1%", "▲ 4,2%", "▲ 2,1 pts", "▲ 5,6%"], lbl: "Ayer · 28/09" },
+    mes: { occ: 0, adr: 1, fb: 1, vs: "vs. sep. 2025", d: ["▲ 11,4%", "▲ 6,8%", "▲ 3,0 pts", "▲ 8,2%"], lbl: "Mes en curso" },
+    anio: { occ: -4, adr: 0.96, fb: 11.4, vs: "vs. 2025 acumulado", d: ["▲ 13,9%", "▲ 7,5%", "▲ 4,1 pts", "▲ 10,3%"], lbl: "Año 2026 acumulado" }
+  };
+  var per = "mes";
+  function view(x) { var q = PER[per]; return { id: x.id, nombre: x.nombre, ciudad: x.ciudad, pms: x.pms, hab: x.hab, occ: Math.max(30, Math.min(98, x.occ + q.occ)), adr: Math.round(x.adr * q.adr), fb: Math.round(x.fb * q.fb) }; }
+  document.querySelectorAll("#perSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { per = b.dataset.per; render(App.prop()); App.toast("Tablero: " + PER[per].lbl); });
+  });
+  function money0(v) { return money(Math.round(v)); }
+  App.onProp(render);
+  function render(p) {
+    var P = TIBISAY.propiedades.map(view), q = PER[per];
     var list = p === "todas" ? P : P.filter(function (x) { return x.id === p; });
     var hab = list.reduce(function (a, x) { return a + x.hab; }, 0);
     var sold = list.reduce(function (a, x) { return a + x.hab * x.occ / 100; }, 0);
@@ -89,9 +103,9 @@
       ["RevPAR", money(Math.round(revpar)), "▲ 11,4%", "percent", true],
       ["ADR", money(Math.round(adr)), "▲ 6,8%", "dollar"],
       ["Ocupación", occ.toFixed(1).replace(".", ",") + "%", "▲ 3,0 pts", "bed"],
-      ["Ingresos F&B", money(fb) + " K", "▲ 8,2%", "utensils"]
-    ].map(function (k) {
-      return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub"><span class="delta up">' + k[2] + "</span>vs. sep. 2025</div></div>";
+      ["Ingresos F&B", money0(fb) + " K", "▲ 8,2%", "utensils"]
+    ].map(function (k, i) {
+      return '<div class="card kpi' + (k[4] ? " dark" : "") + '"><div class="kpi-top"><span class="kpi-label">' + k[0] + '</span><span class="kpi-ico">' + App.icon(k[3]) + '</span></div><div class="kpi-value">' + k[1] + '</div><div class="kpi-sub"><span class="delta up">' + q.d[i] + "</span>" + q.vs + "</div></div>";
     }).join("");
 
     var hi = p === "todas" ? -1 : P.findIndex(function (x) { return x.id === p; });
@@ -135,7 +149,7 @@
     }).join("");
     var all = P.reduce(function (a, x) { a.h += x.hab; a.s += x.hab * x.occ / 100; a.r += x.hab * x.occ / 100 * x.adr; a.f += x.fb; return a; }, { h: 0, s: 0, r: 0, f: 0 });
     document.getElementById("multiFoot").innerHTML = '<tr><td>Cadena</td><td></td><td class="num">' + all.h + '</td><td>' + Math.round(all.s / all.h * 100) + '%</td><td class="num">' + money(Math.round(all.r / all.s)) + '</td><td class="num">' + money(Math.round(all.r / all.h)) + '</td><td class="num">' + money(all.f) + '</td><td class="num">101%</td><td></td></tr>';
-  });
+  }
 })();
 </script>
 </body>

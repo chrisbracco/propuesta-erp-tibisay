@@ -31,7 +31,7 @@
     <div class="bigsearch" id="imsSearch"><span data-icon="search"></span><input class="input" type="search" id="mFilter" placeholder="Buscar en el maestro: SKU o producto (p. ej. «ron», «AB-1602»)…" autocomplete="off"></div>
 </div>
 
-<div class="grid g-2-1 mt" style="align-items:start">
+<div class="grid ims-grid mt" style="align-items:start">
 <section class="card" data-tabs>
   <div class="tabs">
     <button class="tab active" data-tab="productos">Productos</button>
@@ -46,7 +46,7 @@
     <div class="toolbar">
       <select class="select select-sm" style="width:auto" id="mCat"><option value="">Todas las categorías</option></select>
       <label class="small row" style="gap:6px"><input type="checkbox" id="mLow" style="accent-color:var(--gold)"> Solo bajo mínimo</label>
-      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Sincronización con el ERP en cola (demo)" data-icon="refresh">Sincronizar ahora</a>
+      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" id="syncErp" data-icon="refresh">Sincronizar ahora</a>
     </div>
     <div class="table-wrap"><table class="table" data-searchable id="mTable">
       <thead id="mHead"></thead><tbody id="mBody"></tbody>
@@ -60,13 +60,13 @@
       <div class="steps"><span class="done">Borrador</span><em>→</em><span class="done">Por aprobar</span><em>→</em><span class="done">Aprobada</span><em>→</em><span class="now">Recepción</span><em>→</em><span>Cerrada · ERP</span></div>
       <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-hash="recibir" data-wz-open="rec" data-icon="truck">Recibir mercancía</a>
     </div>
-    <div class="table-wrap"><table class="table" data-searchable>
+    <div class="table-wrap"><table class="table stack-md" data-searchable>
       <thead><tr><th>OC</th><th>Propiedad</th><th class="num">Monto</th><th style="min-width:130px">Recibido</th><th>Estado</th><th></th></tr></thead>
       <tbody id="ocBody"></tbody>
     </table></div>
     <details class="acc flat">
       <summary><span class="grow">Últimas notas de entrada</span></summary>
-      <div class="table-wrap"><table class="table" data-searchable>
+      <div class="table-wrap"><table class="table stack-md" data-searchable>
         <thead><tr><th>Nota de entrada</th><th>Fecha</th><th>OC</th><th>Almacén</th><th>Tipo</th><th class="num">Monto</th><th>ERP</th></tr></thead>
         <tbody id="neBody"></tbody>
       </table></div>
@@ -93,13 +93,13 @@
       <div class="seg" id="ajSeg"><button class="active" data-v="">Todos</button><button data-v="Pendiente">Pendientes</button><button data-v="Aprobado">Aprobados</button><button data-v="Rechazado">Rechazados</button></div>
       <div class="row" style="margin-left:auto"><a class="btn btn-ghost btn-sm" href="#" data-hash="conteo" data-wz-open="ct" data-icon="archive">Nuevo conteo</a><a class="btn btn-ghost btn-sm" href="#" data-wz-open="aj" data-icon="plus">Merma / ajuste</a></div>
     </div>
-    <div class="table-wrap"><table class="table" data-searchable>
+    <div class="table-wrap"><table class="table stack-md" data-searchable>
       <thead><tr><th>Ajuste</th><th>Producto</th><th class="num">Cantidad</th><th class="num">Valor</th><th>Motivo</th><th>Estado</th><th></th></tr></thead>
       <tbody id="ajBody"></tbody>
     </table></div>
     <details class="acc flat">
       <summary><span class="grow">Conteos de inventario</span></summary>
-      <div class="table-wrap"><table class="table" data-searchable>
+      <div class="table-wrap"><table class="table stack-md" data-searchable>
         <thead><tr><th>Conteo</th><th>Almacén</th><th>Responsable</th><th style="min-width:130px">Avance</th><th class="num">Diferencia</th><th>Estado</th></tr></thead>
         <tbody id="cBody"></tbody>
       </table></div>
@@ -335,7 +335,7 @@
       if (t[7] === "Solicitada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-act="tr:aprobar:' + t[0] + '">Aprobar</a>'; }
       else if (t[7] === "Aprobada") { pend++; act = '<a class="btn btn-ghost btn-sm" href="#" data-act="tr:despachar:' + t[0] + '">Despachar</a>'; }
       else if (t[7] === "Despachada") { pend++; act = '<a class="btn btn-primary btn-sm" href="#" data-act="tr:recibir:' + t[0] + '">Recibir</a>'; }
-      else if (t[7] === "Recibida con diferencia") act = '<a class="small" href="#" data-toast="Faltaron 2 kg · ajuste AJ-0917 generado (demo)">Ver ajuste</a>';
+      else if (t[7] === "Recibida con diferencia") act = '<a class="small" href="#" data-go-aj="AJ-0917">Ver ajuste AJ-0917</a>';
       return '<tr><td class="strong">' + t[0] + '<span class="sub">' + t[1] + " · por " + t[8] + "</span></td><td>" + nom(t[2]) + " → " + nom(t[3]) + '<span class="sub">' + t[6] + '</span></td><td class="small">' + t[4] + '</td><td class="num">' + money(t[5]) + '</td><td><span class="badge ' + TRST[t[7]] + '">' + t[7] + '</span></td><td class="right">' + act + "</td></tr>";
     }).join("") || '<tr><td colspan="6" class="muted">Sin transferencias para esta propiedad</td></tr>';
     document.getElementById("bTr").textContent = pend;
@@ -352,7 +352,7 @@
     document.getElementById("ajBody").innerHTML = as.map(function (a) {
       var pr = BYSKU[a[2]], val = a[5] * pr[4];
       if (a[9] === "Pendiente") pend++;
-      return '<tr data-st="' + a[9] + '"><td class="strong">' + a[0] + '<span class="sub">' + a[1] + " · " + nom(a[3]) + " · " + a[4] + "</span></td><td>" + pr[1] + '<span class="sub">' + pr[0] + '</span></td><td class="num ' + (a[5] < 0 ? "num-danger" : "num-ok") + '">' + (a[5] > 0 ? "+" : "") + num(a[5], a[5] % 1 ? 1 : 0) + " " + pr[3] + '</td><td class="num">' + money(val) + "</td><td>" + a[6] + '<span class="sub">solicita ' + a[7] + " · aprueba " + a[8] + '</span></td><td><span class="badge ' + AJST[a[9]] + '">' + a[9] + '</span></td><td class="right" style="white-space:nowrap">' +
+      return '<tr data-st="' + a[9] + '"><td class="strong">' + a[0] + '<span class="sub">' + a[1] + " · " + nom(a[3]) + " · " + a[4] + "</span></td><td>" + pr[1] + '<span class="sub">' + pr[0] + '</span></td><td class="num ' + (a[5] < 0 ? "num-danger" : "num-ok") + '">' + (a[5] > 0 ? "+" : "") + num(a[5], a[5] % 1 ? 1 : 0) + " " + pr[3] + '</td><td class="num">' + money(val) + "</td><td>" + a[6] + '<span class="sub">solicita ' + a[7] + " · aprueba " + a[8] + '</span></td><td><span class="badge ' + AJST[a[9]] + '">' + a[9] + '</span></td><td class="right">' +
         (a[9] === "Pendiente" ? '<a class="btn btn-primary btn-sm" href="#" data-act="aj:aprobar:' + a[0] + '">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-act="aj:rechazar:' + a[0] + '">Rechazar</a>' : "") + "</td></tr>";
     }).join("") || '<tr><td colspan="7" class="muted">Sin ajustes</td></tr>';
     document.getElementById("bAj").textContent = pend;
@@ -594,9 +594,26 @@
   WZ.ct = function () {
     App.wizard({ title: "Nuevo conteo de inventario", steps: [{ t: "Conteo", html: function () {
       return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Tipo</label><select class="select"><option>Cíclico A&amp;B</option><option>Cíclico licores</option><option>Cíclico lencería</option><option>General mensual</option></select></div><div class="field"><label>Almacén</label><select class="select">' + ALM.map(function (a) { return "<option>" + nom(curSede()) + " · " + a + "</option>"; }).join("") + '</select></div><div class="field"><label>Fecha</label><input class="input" type="date" value="2026-09-30"></div><div class="field"><label>Responsable</label><input class="input" value="Yusmary C."></div></div>';
-    } }], done: { label: "Programar conteo", toast: "Conteo CI-0290 programado · se notificó al responsable (demo)" } });
+    }, read: function (el, st) { var sel = el.querySelectorAll("select"), inp = el.querySelectorAll("input"); st.t = sel[0].value; st.a = sel[1].value.split(" · ")[1]; st.f = inp[0].value.split("-").reverse().slice(0, 2).join("/"); st.r = inp[1].value; } }],
+      done: { label: "Programar conteo", toast: function (st) { return "Conteo CI-0" + (290 + CONT.length - 8) + " programado · se notificó a " + st.r; }, fn: function (st) {
+        CONT.unshift(["CI-0" + (290 + CONT.length - 8), st.t, curSede(), st.a, st.f, st.r, 0, 0, 0, "Programado"]);
+        renderAll(App.prop()); document.querySelector('.tab[data-tab="ajustes"]').click(); document.querySelector('[data-panel="ajustes"] details').open = true;
+      } } });
   };
 
+  document.getElementById("syncErp").addEventListener("click", function (e) {
+    e.preventDefault();
+    var b = this; b.lastChild.textContent = "Sincronizando…";
+    setTimeout(function () { b.lastChild.textContent = "Sincronizar ahora"; document.getElementById("mCount").textContent += " · sincronizado hace un momento"; App.toast("Maestro sincronizado con el ERP · 3 costos promedio actualizados"); }, 1200);
+  });
+  document.addEventListener("click", function (e) {
+    var g = e.target.closest("[data-go-aj]");
+    if (!g) return;
+    e.preventDefault();
+    document.querySelector('.tab[data-tab="ajustes"]').click();
+    var gs = document.getElementById("globalSearch"); gs.value = g.dataset.goAj; gs.dispatchEvent(new Event("input"));
+    App.toast("Mostrando " + g.dataset.goAj + " · borra la búsqueda para ver todos");
+  });
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-wz-open]");
     if (!b) return;

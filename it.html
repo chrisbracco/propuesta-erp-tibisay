@@ -19,7 +19,7 @@
     <h1>Panel de IT <span class="scope-pill" data-prop-name></span></h1>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-toast="Reporte mensual de IT exportado en PDF (demo)" data-icon="download">Reporte mensual</a>
+    <a class="btn btn-ghost" href="#" data-export="#tkTable" data-file="tickets-it" data-icon="download">Exportar tickets</a>
     <a class="btn btn-primary" href="#" id="btnTk" data-hash="nuevo-ticket" data-icon="plus">Nuevo ticket</a>
   </div>
 </div>
@@ -40,7 +40,7 @@
     <ul class="list inbox" id="incList"></ul>
     <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Estado por sede</h2></div>
       <div class="legend"><span><span class="status-dot ok"></span> Operativo</span><span><span class="status-dot warn"></span> Degradado</span><span><span class="status-dot danger"></span> Caído</span></div></div>
-    <div class="table-wrap"><table class="table matrix">
+    <div class="table-wrap"><table class="table matrix stack-md">
       <thead><tr><th>Sede</th><th>Internet ppal.</th><th>Internet resp.</th><th>LAN</th><th>Wi-Fi huésp.</th><th>Wi-Fi oper.</th><th>Servidor</th><th>Telefonía</th><th>CCTV</th><th>Respaldo</th></tr></thead>
       <tbody id="matrix"></tbody>
     </table></div>
@@ -52,7 +52,7 @@
       <div class="seg" id="tkSeg"><button class="active" data-v="">Abiertos</button><button data-v="Nuevo">Nuevos</button><button data-v="En curso">En curso</button><button data-v="Esperando usuario">En espera</button><button data-v="Resuelto">Resueltos hoy</button></div>
       <span class="small muted" style="margin-left:auto">SLA · crítica 1 h · alta 4 h · media 1 día · baja 3 días</span>
     </div>
-    <div class="table-wrap"><table class="table" data-searchable>
+    <div class="table-wrap"><table class="table" data-searchable id="tkTable">
       <thead><tr><th style="min-width:240px">Asunto</th><th>Sede</th><th>Prioridad</th><th>Estado</th><th>SLA</th></tr></thead>
       <tbody id="tkBody"></tbody>
     </table></div>
@@ -175,9 +175,9 @@
       cards.map(function (c) { return [c[1], c[2], c[5], c[4] === "ok" ? "" : c[4]]; }));
     var tkBy = { "5": "IT-3318", "7": "IT-3314", "0": "IT-3316", "3": "IT-3313" };
     document.getElementById("incList").innerHTML = inc.map(function (x) {
-      var tk = tkBy[x.i] && TK.find(function (t) { return t[0] === tkBy[x.i] && t[1] === x.h.id; });
+      var tk = TK.find(function (t) { return t[10] === x.h.id + "|" + x.i; }) || (tkBy[x.i] && TK.find(function (t) { return t[0] === tkBy[x.i] && t[1] === x.h.id; }));
       return '<li><span class="alert-ico b-' + (x.v === 2 ? "danger" : "warn") + '">' + App.icon(x.i === 5 ? "server" : x.i === 7 ? "camera" : x.i === 8 ? "archive" : "wifi") + '</span><div class="grow"><b>' + x.t + "</b><small>" + x.h.nombre + " · " + COMP[x.i] + " · " + LBL[x.v].toLowerCase() + "</small></div>" +
-        (tk ? '<a class="btn btn-ghost btn-sm" href="#" data-open-tk>Ver ' + tk[0] + "</a>" : '<a class="btn btn-ghost btn-sm" href="#" data-toast="Ticket creado para ' + x.h.nombre + " · " + COMP[x.i] + ' (demo)">Crear ticket</a>') + "</li>";
+        (tk ? '<a class="btn btn-ghost btn-sm" href="#" data-open-tk>Ver ' + tk[0] + "</a>" : '<a class="btn btn-ghost btn-sm" href="#" data-mkt="' + x.h.id + "|" + x.i + '" data-t="' + x.t + '">Crear ticket</a>') + "</li>";
     }).join("") || '<li><span class="alert-ico b-ok">' + App.icon("check") + '</span><div class="grow"><b>Todo operativo</b><small>Sin incidencias en esta sede</small></div></li>';
     App.more(document.getElementById("incList"), 4);
 
@@ -186,7 +186,7 @@
     document.getElementById("tkBody").innerHTML = tks.map(function (t) {
       var late = t[6] !== "Resuelto" && t[6] !== "Esperando proveedor" && t[6] !== "Esperando usuario" && t[8] > t[9];
       var sla = t[6] === "Resuelto" ? '<span class="sem ok">Cumplido</span>' : t[6].indexOf("Esperando") === 0 ? '<span class="sem muted">Pausado</span>' : late ? '<span class="sem danger">Vencido</span>' : '<span class="sem ok">En tiempo</span>';
-      return '<tr data-st="' + t[6] + '"><td class="strong">' + t[2] + '<span class="sub">' + t[0] + " · " + t[3] + " · " + t[4] + "</span></td><td>" + D.sedeNombre(t[1]) + '</td><td><span class="badge ' + PR[t[5]] + '">' + t[5] + '</span></td><td><span class="badge nodot ' + TST[t[6]] + '">' + t[6] + '</span><span class="sub">' + (t[7] === "—" ? '<a href="#" data-toast="' + t[0] + ' asignado a ' + TECH[t[0].charCodeAt(6) % 3] + ' (demo)">Asignar</a>' : t[7]) + "</span></td><td>" + sla + '<span class="sub">' + ago(t[8]) + "</span></td></tr>";
+      return '<tr data-st="' + t[6] + '"><td class="strong">' + t[2] + '<span class="sub">' + t[0] + " · " + t[3] + " · " + t[4] + "</span></td><td>" + D.sedeNombre(t[1]) + '</td><td><span class="badge ' + PR[t[5]] + '">' + t[5] + '</span></td><td><span class="badge nodot ' + TST[t[6]] + '">' + t[6] + '</span><span class="sub">' + (t[7] === "—" ? '<a href="#" data-assign="' + t[0] + '">Asignar</a>' : t[7]) + "</span></td><td>" + sla + '<span class="sub">' + ago(t[8]) + "</span></td></tr>";
     }).join("") || '<tr><td colspan="5" class="muted">Sin tickets para esta sede</td></tr>';
     filterTk();
 
@@ -253,10 +253,30 @@
       return '<div class="field"><label>Asunto</label><input class="input" placeholder="Ej.: la impresora fiscal no imprime"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Sede</label><select class="select">' + D.propiedades.map(function (h) { return "<option" + (h.id === p ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + '</select></div>' +
         '<div class="field"><label>Categoría</label><select class="select"><option>Internet / Wi-Fi</option><option>Punto de venta</option><option>Impresora fiscal</option><option>Accesos y usuarios</option><option>Servidores</option><option>CCTV</option><option>Telefonía</option></select></div></div>' +
         '<div class="field" style="margin:0"><label>Prioridad</label><div class="seg" style="display:flex"><button type="button">Baja</button><button type="button" class="active">Media</button><button type="button">Alta</button><button type="button">Crítica</button></div></div>';
-    }, after: function (el) { el.querySelector(".seg").onclick = function (ev) { var b = ev.target.closest("button"); if (b) el.querySelectorAll(".seg button").forEach(function (x) { x.classList.toggle("active", x === b); }); }; } }],
-      done: { label: "Crear ticket", toast: "Ticket IT-3319 creado y asignado a Ricardo P. (demo)" } });
+    }, after: function (el) { el.querySelector(".seg").onclick = function (ev) { var b = ev.target.closest("button"); if (b) el.querySelectorAll(".seg button").forEach(function (x) { x.classList.toggle("active", x === b); }); }; }, read: function (el, st) { var sel = el.querySelectorAll("select"); st.a = el.querySelector("input").value || "Solicitud de soporte"; st.s = D.propiedades.find(function (h) { return h.nombre === sel[0].value; }).id; st.c = sel[1].value; st.p = el.querySelector(".seg .active").textContent; } }],
+      done: { label: "Crear ticket", toast: function (st) { return "Ticket " + nextId() + " creado · " + st.p + " · asignado a Ricardo P."; }, fn: function (st) {
+        TK.unshift([nextId(), st.s, st.a, st.c, App.session().usuario.split(" ")[0], st.p, "Nuevo", "Ricardo P.", 0, SLA_MIN[st.p]]); nTk++;
+        render(App.prop()); document.querySelector('.tab[data-tab="tk"]').click();
+      } } });
   });
 
+  var nTk = 3319, SLA_MIN = { "Crítica": 60, "Alta": 240, "Media": 1440, "Baja": 4320 };
+  function nextId() { return "IT-" + nTk; }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-assign]"), m = e.target.closest("[data-mkt]");
+    if (a) {
+      e.preventDefault();
+      var t = TK.find(function (x) { return x[0] === a.dataset.assign; });
+      t[7] = TECH[t[0].charCodeAt(6) % 3]; if (t[6] === "Nuevo") t[6] = "En curso";
+      render(App.prop()); App.toast(t[0] + " asignado a " + t[7] + " · pasa a «En curso»");
+    }
+    if (m) {
+      e.preventDefault();
+      var k = m.dataset.mkt.split("|"), id = nextId(); nTk++;
+      TK.unshift([id, k[0], m.dataset.t, "Infraestructura", "Monitoreo automático", "Alta", "Nuevo", "—", 0, 240, m.dataset.mkt]);
+      render(App.prop()); App.toast("Ticket " + id + " creado para " + D.sedeNombre(k[0]) + " · queda en «Nuevos»");
+    }
+  });
   App.onProp(render);
 })();
 </script>

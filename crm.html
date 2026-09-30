@@ -19,7 +19,7 @@
     <h1>CRM &amp; Huéspedes <span class="scope-pill" data-prop-name></span></h1>
   </div>
   <div class="actions">
-    <a class="btn btn-ghost" href="#" data-toast="Nuevo huésped (demo)" data-icon="plus">Nuevo huésped</a>
+    <a class="btn btn-ghost" href="#" id="newGuest" data-icon="plus">Nuevo huésped</a>
     <a class="btn btn-primary" href="#" id="newQuote" data-hash="nueva-cotizacion" data-icon="chat">Nueva cotización</a>
   </div>
 </div>
@@ -47,7 +47,7 @@
         <div class="toolbar" id="guestTools">
           <div class="search"><span data-icon="search"></span><input class="input" type="search" id="guestFilter" placeholder="Nombre, empresa o ciudad…"></div>
           <select class="select select-sm" style="width:auto" id="segFilter"><option value="">Todos los segmentos</option><option>Corporativo</option><option>Placer</option><option>Eventos / bodas</option></select>
-          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Importando perfiles desde el PMS (demo)" data-icon="refresh">Sincronizar PMS</a>
+          <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" id="syncPms" data-icon="refresh">Sincronizar PMS</a>
         </div>
         <div class="table-wrap"><table class="table" data-searchable id="guestTable">
           <thead><tr><th style="min-width:220px">Huésped</th><th>Club</th><th>Estado</th></tr></thead>
@@ -70,13 +70,13 @@
     </div>
     <div class="card-h" style="border-top:1px solid var(--border)"><div><h2>Miembros</h2></div>
       <div class="seg" id="tierSeg"><button class="active" data-v="">Todos</button><button data-v="Platino">Platino</button><button data-v="Oro">Oro</button><button data-v="Plata">Plata</button></div></div>
-    <div class="table-wrap"><table class="table" data-searchable id="memberTable">
+    <div class="table-wrap"><table class="table stack-md" data-searchable id="memberTable">
       <thead><tr><th>Miembro</th><th>Nivel</th><th class="num">Puntos</th><th style="min-width:190px">Avance al siguiente nivel</th><th class="num">Ptos. por vencer</th></tr></thead>
       <tbody></tbody>
     </table></div>
     <details class="acc flat">
       <summary><span class="grow">Campañas</span></summary>
-      <div class="table-wrap"><table class="table" data-searchable>
+      <div class="table-wrap"><table class="table stack-md" data-searchable>
         <thead><tr><th>Campaña</th><th>Segmento</th><th>Canal</th><th class="num">Enviados</th><th class="num">Apertura</th><th class="num">Reservas</th><th class="num">Ingreso</th><th>Estado</th></tr></thead>
         <tbody>
           <tr data-sede="canaima"><td class="strong">Temporada de Tepuyes · puntos dobles</td><td>Oro + Platino</td><td>WhatsApp</td><td class="num">1.108</td><td class="num">71%</td><td class="num">64</td><td class="num">$ 38.200</td><td><span class="badge b-ok">Activa</span></td></tr>
@@ -231,11 +231,12 @@
   });
 
   var tb = document.querySelector("#guestTable tbody");
-  tb.innerHTML = G.map(function (g, k) {
-    return '<tr data-sede="' + g.sede + '" data-g="' + k + '" data-seg="' + g.seg + '" style="cursor:pointer"><td><div class="cell-user"><span class="avatar avatar-sm' + (k % 2 ? " avatar-gold" : "") + '">' + g.i + '</span><div class="strong">' + g.n + '<span class="sub">' + g.e.split(" · ").pop() + " · " + g.seg + "</span></div></div></td>" +
+  function renderGuests() { tb.innerHTML = G.map(function (g, k) {
+    return '<tr data-sede="' + g.sede + '" data-g="' + k + '" data-seg="' + g.seg + '" style="cursor:pointer' + (App.prop() !== "todas" && App.prop() !== g.sede ? ";display:none" : "") + '"><td><div class="cell-user"><span class="avatar avatar-sm' + (k % 2 ? " avatar-gold" : "") + '">' + g.i + '</span><div class="strong">' + g.n + '<span class="sub">' + g.e.split(" · ").pop() + " · " + g.seg + "</span></div></div></td>" +
       '<td><span class="badge ' + CLUB[g.club] + '">' + (g.club || "Sin afiliar") + "</span></td>" +
       "<td>" + (g.casa ? '<span class="badge b-ok">' + g.estado + "</span>" : '<span class="small">' + g.estado + '</span>') + '<span class="sub">' + TIBISAY.sedeNombre(g.sede) + "</span></td></tr>";
-  }).join("");
+  }).join(""); }
+  renderGuests();
 
   function d2n(d) { var x = d.split("/"); return +(x[2] + x[1] + x[0]); }
   var cur = 0, extraNotes = {};
@@ -257,14 +258,14 @@
       '<div class="row" style="flex-wrap:wrap;gap:6px"><span class="badge ' + CLUB[g.club] + '">' + (g.club ? "Club " + g.club + " · " + pts(g.pts) + " pts" : "Sin afiliar al Club") + '</span><span class="badge b-muted">' + g.seg + '</span><span class="badge ' + (g.nps >= 9 ? "b-ok" : g.nps >= 7 ? "b-warn" : "b-danger") + '">NPS ' + g.nps + "</span></div>" +
       '<div class="mini-kpis" id="p360Kpis"><div><small>Estancias</small><b>' + g.est.length + "</b></div><div><small>Noches 12 m</small><b>" + g.noches + "</b></div><div><small>Gasto total</small><b>" + $(g.gasto) + "</b></div></div>" +
       '<div class="note mt"><b class="small">Próxima acción</b><br>' + g.notas[0][0] + "<small>" + g.notas[0][1] + " · " + g.notas[0][2] + "</small></div>" +
-      '<div class="row" style="margin:10px 0 16px"><a class="btn btn-primary btn-sm" href="#" data-toast="Abriendo chat de WhatsApp con ' + g.n + ' (demo)" data-wa>' + App.icon("chat") + "WhatsApp</a>" +
-      '<a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva para ' + g.n + ' (demo)">' + App.icon("calendar") + "Reservar</a></div>" +
+      '<div class="row" style="margin:10px 0 16px"><a class="btn btn-primary btn-sm" href="#" data-ga="wa">' + App.icon("chat") + "WhatsApp</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#" data-ga="res">' + App.icon("calendar") + "Reservar</a></div>" +
       '<h3 style="margin-bottom:8px">Actividad</h3>' +
       '<div class="row" style="margin-bottom:12px"><input class="input input-sm" id="noteIn" placeholder="Agregar nota para el equipo…"><button class="btn btn-ghost btn-sm" id="noteAdd">Guardar</button></div>' +
       '<ul class="tline" id="p360Tl">' + ev.map(function (e) { return '<li class="' + e.c + '"><b>' + e.t + "</b><small>" + e.d + " · " + e.s + "</small></li>"; }).join("") + "</ul>" +
       '<details class="acc flat mt"><summary><span class="grow">Contacto</span></summary><div class="acc-b"><dl class="dl"><dt>Teléfono</dt><dd>' + g.tel + "</dd><dt>Correo</dt><dd>" + g.mail + "</dd><dt>Ciudad</dt><dd>" + g.c + "</dd><dt>Cumpleaños</dt><dd>" + g.cumple + "</dd><dt>Idioma</dt><dd>" + g.idioma + "</dd><dt>Canal preferido</dt><dd>" + g.canal + "</dd>" + (g.socio !== "—" ? "<dt>N.º socio</dt><dd>" + g.socio + "</dd>" : "") + "</dl></div></details>" +
       '<details class="acc flat"><summary><span class="grow">Preferencias <span class="muted">· ' + g.pref.length + "</span></span></summary>" + '<div class="acc-b">' + '<ul class="tl">' + g.pref.map(function (x) { return "<li><div>" + App.icon("check") + " " + x + "</div></li>"; }).join("") + "</ul></div></details>" +
-      '<details class="acc flat" style="border-bottom-width:1px"><summary><span class="grow">Consumos por área <span class="muted">· ' + $(sum) + "</span></span></summary>" + '<div class="acc-b">' + g.con.map(function (c) { var p = Math.round(c[1] / sum * 100); return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") + "</div></details>";
+      '<details class="acc flat" style="border-bottom-width:1px"><summary><span class="grow">Consumos por área <span class="muted">· ' + $(sum) + "</span></span></summary>" + '<div class="acc-b">' + g.con.map(function (c) { var p = sum ? Math.round(c[1] / sum * 100) : 0; return '<div style="margin-bottom:10px"><div class="between small"><span>' + c[0] + "</span><b>" + $(c[1]) + '</b></div><div class="progress"><span style="width:' + p + '%"></span></div></div>'; }).join("") + "</div></details>";
     App.more(document.getElementById("p360Tl"), 5);
   }
   document.getElementById("guestCard").addEventListener("click", function (e) {
@@ -401,10 +402,10 @@
     }).join("") + (q.st === "borrador" ? '<div class="msg out" style="opacity:.6;border:1px dashed var(--gold)">📄 Cotización ' + q.id + " lista para enviar…<small>borrador</small></div>" : "");
     var steps = [["Solicitud WhatsApp", true], ["Borrador", true], ["Enviada", q.st !== "borrador"], [q.st === "perdida" ? "Perdida" : "Aprobada", q.st === "aprobada" || q.st === "perdida"]];
     var acts = {
-      borrador: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Salón bloqueado tentativamente 72 h (demo)">Bloquear salón 72 h</a><a class="btn btn-primary btn-sm" href="#" data-toast="Cotización ' + q.id + ' enviada por WhatsApp a ' + q.ct + ' (demo)">' + App.icon("chat") + "Enviar por WhatsApp</a>",
-      enviada: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Recordatorio enviado por WhatsApp (demo)">Enviar recordatorio</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Marcada como perdida: indique el motivo (demo)">Marcar perdida</a><a class="btn btn-primary btn-sm" href="#" data-toast="Cotización aprobada · se generó el BEO (demo)">' + App.icon("check") + "Marcar aprobada</a>",
-      aprobada: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Abriendo ' + q.beo + ' (demo)">Ver ' + q.beo + '</a><a class="btn btn-primary btn-sm" href="#" data-toast="Registro de pago enviado al ERP (demo)">' + App.icon("dollar") + "Registrar pago</a>",
-      perdida: '<a class="btn btn-ghost btn-sm" href="#" data-toast="Cotización reabierta como borrador (demo)">Reabrir</a>'
+      borrador: (q.bloqueo ? '<span class="small muted" style="margin-right:auto">Salón bloqueado hasta ' + q.bloqueo + "</span>" : '<a class="btn btn-ghost btn-sm" href="#" data-qa="bloquear">Bloquear salón 72 h</a>') + '<a class="btn btn-primary btn-sm" href="#" data-qa="enviar">' + App.icon("chat") + "Enviar por WhatsApp</a>",
+      enviada: '<a class="btn btn-ghost btn-sm" href="#" data-qa="recordar">Enviar recordatorio</a><a class="btn btn-ghost btn-sm" href="#" data-qa="perdida">Marcar perdida</a><a class="btn btn-primary btn-sm" href="#" data-qa="aprobar">' + App.icon("check") + "Marcar aprobada</a>",
+      aprobada: '<a class="btn btn-ghost btn-sm" href="#" data-qa="beo">Ver ' + q.beo + "</a>" + (q.anticipo < 100 ? '<a class="btn btn-primary btn-sm" href="#" data-qa="pago">' + App.icon("dollar") + "Registrar pago</a>" : '<span class="badge b-ok">Pagada 100%</span>'),
+      perdida: '<a class="btn btn-ghost btn-sm" href="#" data-qa="reabrir">Reabrir</a>'
     };
     var info = q.st === "enviada" ? "Enviada el " + q.env + " · " + (q.visto ? "vista por el cliente ✓✓" : "aún no la abre") + " · vence " + q.vence
       : q.st === "aprobada" ? "Aprobada el " + q.aprob + " · anticipo " + q.anticipo + "% recibido · " + q.beo + " generado"
@@ -429,6 +430,77 @@
   document.getElementById("pipeline").addEventListener("click", function (e) {
     var k = e.target.closest("[data-q]");
     if (k) showQ(k.dataset.q);
+  });
+
+  /* ------------------------------------------------------------ Acciones de la cotización: cambian su etapa */
+  var HOY = "29/09/2026", nBeo = 960;
+  function yo() { return App.session().usuario.split(" ")[0]; }
+  function refreshQ(id, tab) { renderPipe(App.prop()); showQ(id); if (tab) { var t = document.querySelector('#qTabs [data-qt="' + tab + '"]'); if (t) t.click(); } }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-qa]");
+    if (!b) return;
+    e.preventDefault();
+    var q = Q.find(function (x) { return x.id === curQ; }), a = b.dataset.qa;
+    if (a === "bloquear") { q.bloqueo = "02/10/2026"; refreshQ(q.id); App.toast(q.esp + " bloqueado tentativamente hasta el 02/10"); }
+    if (a === "enviar") { q.st = "enviada"; q.env = HOY; q.vence = "13/10/2026"; q.visto = false; q.chat.push(["out", "Hola " + q.ct.split(" ")[0] + ", te comparto la cotización " + q.id + " por " + $(q.total) + " 📄", "ahora · " + yo()]); refreshQ(q.id, "wa"); App.toast("Cotización " + q.id + " enviada por WhatsApp · pasa a «Enviada»"); }
+    if (a === "recordar") { q.chat.push(["out", "Hola " + q.ct.split(" ")[0] + ", ¿pudiste revisar la cotización " + q.id + "? Vence el " + q.vence + " 🙌", "ahora · " + yo()]); refreshQ(q.id, "wa"); App.toast("Recordatorio enviado a " + q.ct); }
+    if (a === "aprobar") { q.st = "aprobada"; q.aprob = HOY; q.anticipo = 50; q.beo = "BEO-0" + (nBeo++); refreshQ(q.id); App.toast("Cotización aprobada · se generó el " + q.beo); }
+    if (a === "pago") { q.anticipo = 100; refreshQ(q.id); App.toast("Pago del 100% registrado · enviado al ERP"); }
+    if (a === "reabrir") { q.st = "borrador"; delete q.motivo; refreshQ(q.id); App.toast(q.id + " reabierta como borrador"); }
+    if (a === "perdida") {
+      var id = q.id;
+      App.wizard({ title: "Marcar como perdida", steps: [{ t: "Motivo", html: function () { return '<div class="field" style="margin:0"><label>Motivo</label><select class="select" id="qMot"><option>Precio</option><option>Fecha no disponible</option><option>Eligió otra sede o proveedor</option><option>El evento se canceló</option><option>Sin respuesta del cliente</option></select></div>'; },
+        read: function (el, st) { st.m = el.querySelector("#qMot").value; } }],
+        done: { label: "Marcar perdida", toast: function (st) { return id + " marcada como perdida · motivo: " + st.m; }, fn: function (st) { q.st = "perdida"; q.motivo = st.m; refreshQ(id); } } });
+    }
+    if (a === "beo") {
+      App.drawer('<div class="drawer-h"><div><h2>' + q.beo + " · " + q.ev + "</h2><p>" + q.fecha + " · " + q.esp + " · " + q.pax + ' pax</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+        '<div class="drawer-b"><div class="card-b"><dl class="dl"><dt>Cliente</dt><dd>' + q.cli + "</dd><dt>Contacto</dt><dd>" + q.ct + "</dd><dt>Ejecutivo</dt><dd>" + q.ej + "</dd><dt>Anticipo</dt><dd>" + q.anticipo + '%</dd></dl><h3 class="mt">Servicios</h3><ul class="tl">' +
+        items(q).map(function (i) { return "<li><div>" + i[0] + "</div><span>" + i[1] + "</span></li>"; }).join("") + '</ul></div></div><div class="drawer-f"><a class="btn btn-ghost btn-sm" href="#" data-back-q>Volver a la cotización</a></div>');
+    }
+  });
+  document.addEventListener("click", function (e) { if (e.target.closest("[data-back-q]")) { e.preventDefault(); showQ(curQ); } });
+
+  /* ------------------------------------------------------------ Ficha: WhatsApp, reservar, nuevo huésped, sincronizar */
+  document.getElementById("guestCard").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-ga]");
+    if (!b) return;
+    e.preventDefault();
+    var g = G[cur], k = cur;
+    if (b.dataset.ga === "wa") {
+      App.wizard({ title: "WhatsApp a " + g.n, steps: [{ t: "Mensaje", html: function () { return '<div class="field" style="margin:0"><label>Mensaje</label><input class="input" id="waTxt" value="Hola ' + g.n.split(" ")[0] + ', te saluda el equipo de Hoteles Tibisay 😊"></div>'; }, read: function (el, st) { st.t = el.querySelector("#waTxt").value; } }],
+        done: { label: "Enviar", toast: "Mensaje enviado por WhatsApp · quedó en la actividad", fn: function (st) { (extraNotes[k] = extraNotes[k] || []).unshift("WhatsApp enviado: «" + st.t + "»"); show(k); } } });
+    } else {
+      App.wizard({ title: "Nueva reserva · " + g.n, steps: [{ t: "Reserva", html: function () {
+        return '<div class="grid g-2" style="gap:0 12px"><div class="field"><label>Propiedad</label><select class="select" id="rSede">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === g.sede ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + '</select></div><div class="field"><label>Llegada</label><input class="input" type="date" id="rF" value="2026-10-16"></div>' +
+          '<div class="field" style="margin:0"><label>Noches</label><input class="input" type="number" id="rN" value="3" min="1"></div><div class="field" style="margin:0"><label>Habitación</label><input class="input" id="rH" value="' + g.pref[0].split(",")[0] + '"></div></div>';
+      }, read: function (el, st) { st.sede = el.querySelector("#rSede").value; st.f = el.querySelector("#rF").value.split("-").reverse().join("/"); st.n = el.querySelector("#rN").value; st.h = el.querySelector("#rH").value; } }],
+        done: { label: "Crear reserva", toast: function (st) { return "Reserva creada en el PMS para " + g.n + " · llega el " + st.f; }, fn: function (st) {
+          g.estado = "Reserva " + st.f; (extraNotes[k] = extraNotes[k] || []).unshift("Reserva creada: " + TIBISAY.sedeNombre(st.sede) + " · " + st.h + " · " + st.n + " noches desde el " + st.f);
+          renderGuests(); filterGuests(); show(k);
+        } } });
+    }
+  });
+  document.getElementById("newGuest").addEventListener("click", function (e) {
+    e.preventDefault();
+    var p = App.prop();
+    App.wizard({ title: "Nuevo huésped", steps: [{ t: "Datos", html: function () {
+      return '<div class="field"><label>Nombre y apellido</label><input class="input" id="ngN" value="Laura Castillo"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Ciudad</label><input class="input" id="ngC" value="Caracas"></div><div class="field"><label>Teléfono</label><input class="input" id="ngT" value="+58 414-•••-0000"></div>' +
+        '<div class="field" style="margin:0"><label>Segmento</label><select class="select" id="ngS"><option>Placer</option><option>Corporativo</option><option>Eventos / bodas</option></select></div><div class="field" style="margin:0"><label>Propiedad</label><select class="select" id="ngP">' + TIBISAY.propiedades.map(function (h) { return '<option value="' + h.id + '"' + (h.id === (p === "todas" ? "margarita" : p) ? " selected" : "") + ">" + h.nombre + "</option>"; }).join("") + "</select></div></div>";
+    }, read: function (el, st) { ["N", "C", "T", "S", "P"].forEach(function (x) { st[x] = el.querySelector("#ng" + x).value; }); } }],
+      done: { label: "Crear perfil", toast: function (st) { return "Perfil de " + st.N + " creado · se envía al PMS"; }, fn: function (st) {
+        var g = { n: st.N || "Huésped nuevo", e: st.C, c: st.C, seg: st.S, sede: st.P, club: "", socio: "—", pts: 0, noches: 0, venc: 0, canje: "—", estado: "Perfil nuevo", tel: st.T, mail: "—", cumple: "—", idioma: "Español", canal: "WhatsApp", nps: 8,
+          est: [["29/09/2026", TIBISAY.sedeNombre(st.P), 0, "Perfil creado", 0]], con: [["Sin consumos", 0]], pref: ["Sin preferencias registradas"], notas: [["Perfil creado manualmente. Completar correo y preferencias.", yo(), "29/09/2026"]] };
+        var w = g.n.split(/\s+/); g.i = (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : "")).toUpperCase(); g.gasto = 0;
+        G.unshift(g);
+        var sh = {}; Object.keys(extraNotes).forEach(function (x) { sh[+x + 1] = extraNotes[x]; }); extraNotes = sh;
+        renderGuests(); document.getElementById("tabHuespedes").click(); filterGuests(); show(0);
+      } } });
+  });
+  document.getElementById("syncPms").addEventListener("click", function (e) {
+    e.preventDefault();
+    var b = this; b.classList.add("is-busy"); b.lastChild.textContent = "Sincronizando…";
+    setTimeout(function () { b.classList.remove("is-busy"); b.lastChild.textContent = "Sincronizar PMS"; document.getElementById("guestCount").textContent += " · sincronizado con el PMS hace un momento"; App.toast("PMS sincronizado · 12 perfiles actualizados, 0 duplicados"); }, 1200);
   });
 
   /* ------------------------------------------------------------ Nueva cotización (pocos campos) */

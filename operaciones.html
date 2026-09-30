@@ -85,7 +85,7 @@
     <div class="card-b" style="padding-bottom:0"><div class="stat-row" id="abKpis"></div></div>
     <div class="grid g-2" style="gap:0">
       <div style="border-right:1px solid var(--border)">
-        <div class="card-h"><div><h2>Reservas de restaurante · hoy</h2><p id="restName">—</p></div><a class="btn btn-ghost btn-sm" href="#" data-toast="Nueva reserva de mesa (demo)">+ Mesa</a></div>
+        <div class="card-h"><div><h2>Reservas de restaurante · hoy</h2><p id="restName">—</p></div><a class="btn btn-ghost btn-sm" href="#" id="btnMesa">+ Mesa</a></div>
         <div class="table-wrap"><table class="table" data-searchable>
           <thead><tr><th>Hora</th><th>Nombre</th><th class="num">Pax</th><th>Nota</th></tr></thead>
           <tbody id="restBody"></tbody>
@@ -194,10 +194,10 @@
     var st = x._st, lista = x.hk === "limpia";
     var order = ["reserva", "checkin", "estancia", "checkout"], idx = st === "reserva" ? (lista ? 1 : 0) : st === "estancia" ? 2 : st === "checkout" ? 3 : 4;
     var lbl = ["Reserva", "Check-in", "Estancia", "Check-out"];
-    var act = st === "reserva" ? (lista ? '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Check-in de ' + x.g + " · hab. " + x.n + ' · llave emitida (demo)">' + App.icon("key") + "Hacer check-in</a>" : '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Hab. ' + x.n + ' aún no está lista: aviso enviado a housekeeping (demo)">Avisar a housekeeping</a>')
-      : st === "checkout" ? '<a class="btn btn-ghost btn-sm" href="#" data-toast="Late check-out hasta las 2:00 p.m. aprobado (demo)">Late check-out</a><a class="btn btn-primary btn-sm" href="#" data-close-drawer data-toast="Check-out hab. ' + x.n + ': folio cerrado, factura fiscal enviada al ERP y habitación marcada sucia (demo)">Hacer check-out</a>'
-      : st === "fuera" ? '<a class="btn btn-ghost btn-sm" href="#" data-toast="Factura fiscal reenviada por correo a ' + x.g + ' (demo)">Reenviar factura</a>'
-      : '<a class="btn btn-ghost btn-sm" href="#" data-toast="Cargo a la habitación ' + x.n + ' registrado (demo)">Cargar consumo</a><a class="btn btn-primary btn-sm" href="crm.html#huespedes">Ver ficha 360</a>';
+    var act = st === "reserva" ? (lista ? '<a class="btn btn-primary btn-sm" href="#" data-op="checkin" data-n="' + x.n + '">' + App.icon("key") + "Hacer check-in</a>" : x.prio ? '<span class="small muted">Aviso enviado a housekeeping · prioridad alta</span>' : '<a class="btn btn-primary btn-sm" href="#" data-op="avisar" data-n="' + x.n + '">Avisar a housekeeping</a>')
+      : st === "checkout" ? (x.late ? '<span class="small muted" style="margin-right:auto">Late check-out 2:00 p.m.</span>' : '<a class="btn btn-ghost btn-sm" href="#" data-op="late" data-n="' + x.n + '">Late check-out</a>') + '<a class="btn btn-primary btn-sm" href="#" data-op="checkout" data-n="' + x.n + '">Hacer check-out</a>'
+      : st === "fuera" ? '<a class="btn btn-ghost btn-sm" href="#" data-toast="Factura fiscal reenviada por correo a ' + x.g + '">Reenviar factura</a>'
+      : '<a class="btn btn-ghost btn-sm" href="#" data-op="cargo" data-n="' + x.n + '">Cargar consumo</a><a class="btn btn-primary btn-sm" href="crm.html#huespedes">Ver ficha 360</a>';
     App.drawer('<div class="drawer-h"><div><h2>' + x.g + "</h2><p>Hab. " + x.n + " · " + x.tipo + " · " + x.res + '</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
       '<div class="drawer-b"><div class="card-b"><div class="jstep">' + lbl.map(function (l, k) { return '<span class="' + (k < idx ? "done" : k === idx ? "now" : "") + '">' + l + "</span>"; }).join("") + "</div>" +
       '<dl class="dl"><dt>' + (st === "reserva" ? "Llegada estimada" : st === "checkout" ? "Salida" : st === "fuera" ? "Check-out" : "Estancia") + "</dt><dd>" + (st === "reserva" ? hhmm(x.hora) : st === "checkout" ? "Hoy 12:00 m." : st === "fuera" ? "Hecho hoy" : x.noches + " noche(s) restantes") + "</dd><dt>Noches</dt><dd>" + x.noches + "</dd><dt>Tarifa</dt><dd>" + $(x.tarifa) + "</dd><dt>Canal</dt><dd>" + x.canal + "</dd><dt>Folio</dt><dd>" + (x.canal === "Corporativo" ? "Crédito empresa" : "Particular") + "</dd><dt>Saldo</dt><dd" + (x.saldo ? ' class="num-warn"' : "") + ">" + $(x.saldo) + "</dd><dt>Limpieza</dt><dd>" + HK[x.hk][0] + "</dd></dl></div></div>" +
@@ -206,7 +206,6 @@
 
   function renderHoy(prop) {
     var rs = data.rooms, r = rng(prop.id + "tl");
-    rs.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; }).forEach(function (x, i) { x._reg = i < 3; });
     rs.forEach(function (x, i) { x._st = stage(x, i); });
     var hrs = "";
     for (var h = 6; h < 24; h += 2) hrs += "<span>" + h + ":00</span>";
@@ -218,11 +217,11 @@
     lleg.forEach(function (x) { (byH[x.hora] = byH[x.hora] || []).push(x); });
     var L = Object.keys(byH).map(function (k) { var g = byH[k]; return '<div class="dl-item lleg pt" style="left:' + X(+k) + '" data-room="' + g[0].n + '" title="' + g.map(function (x) { return x.g + " · hab. " + x.n; }).join("\n") + '">' + g.length + "</div>"; }).join("");
     var S = '<div class="dl-item sal" style="left:' + X(7 * 60) + ";width:" + W(7 * 60, 12 * 60) + '" data-room="' + (sal[0] ? sal[0].n : "") + '">' + sal.length + " salidas · hasta 12:00</div>" +
-      '<div class="dl-item sal pt" style="left:' + X(14 * 60) + '" title="Late check-out">' + Math.max(1, Math.round(sal.length * 0.15)) + "</div>";
+      '<div class="dl-item sal pt" style="left:' + X(14 * 60) + '" data-room="' + (sal[0] ? sal[0].n : "") + '" title="Late check-out">' + Math.max(1, Math.round(sal.length * 0.15)) + "</div>";
     var ab = AB[prop.id], E = "";
     ab.venues.forEach(function (v, i) {
       var e = eventos[(i * 3 + prop.hab) % eventos.length], t = e[2].split("–").map(function (z) { var q = z.split(":"); return +q[0] * 60 + +q[1]; });
-      if (i < 3) E += '<div class="dl-item ev" style="left:' + X(t[0]) + ";width:" + W(t[0], t[1]) + '" data-toast="' + e[0] + " · " + v[0] + " · " + e[1] + ' (demo)" title="' + v[0] + '">' + e[0] + " · " + v[0] + "</div>";
+      if (i < 3) E += '<div class="dl-item ev" style="left:' + X(t[0]) + ";width:" + W(t[0], t[1]) + '" data-tab-go="ab" title="' + v[0] + '">' + e[0] + " · " + v[0] + "</div>";
     });
     var Rr = '<div class="dl-item rest" style="left:' + X(12 * 60) + ";width:" + W(12 * 60, 15 * 60) + '" data-tab-go="ab">Almuerzo · ' + Math.round(prop.fb * 0.32) + " cub.</div>" +
       '<div class="dl-item rest" style="left:' + X(19 * 60) + ";width:" + W(19 * 60, 23 * 60) + '" data-tab-go="ab">Cena · ' + Math.round(prop.fb * 0.24) + " reservas</div>";
@@ -237,7 +236,7 @@
       '<div style="position:relative">' +
       lane("key", "Llegadas", lleg.length + " hoy", L) + lane("logout", "Salidas", sal.length + " hoy", S) + lane("calendar", "Eventos y salones", Math.min(3, ab.venues.length) + " montajes", E) +
       lane("utensils", "Restaurante", ab.rest, Rr) + lane("bed", "Housekeeping", "2 turnos", HKl) + lane("wrench", "Mantenimiento", "urgentes y altas", M) +
-      '<div style="position:absolute;top:0;bottom:0;left:130px;right:0;pointer-events:none"><div class="dl-now" data-t="Ahora 10:42" style="left:' + X(NOW) + '"></div></div></div>';
+      '<div class="dl-now-wrap"><div class="dl-now" data-t="Ahora 10:42" style="left:' + X(NOW) + '"></div></div></div>';
 
     // Journey
     var cols = [
@@ -260,16 +259,21 @@
     document.querySelectorAll("#journey ul").forEach(function (ul) { App.more(ul, 4); });
   }
 
-  function render(prop) {
-    data = build(prop);
-    var rs = data.rooms, r = data.r;
+  var cur;
+  function render(prop, keep) {
+    cur = prop;
+    if (!keep || !data || data.pid !== prop.id) {
+      data = build(prop); data.pid = prop.id; data.extraT = []; data.extraRest = [];
+      data.rooms.filter(function (x) { return x.fd === "llegada"; }).sort(function (a, b) { return a.hora - b.hora; }).forEach(function (x, i) { x._reg = i < 3; });
+    }
+    var rs = data.rooms, r = rng(prop.id + "ops");
     var c = function (fn) { return rs.filter(fn).length; };
     var ocup = c(function (x) { return x.fd === "ocupada" || x.fd === "salida"; });
     var lleg = c(function (x) { return x.fd === "llegada"; }), sal = c(function (x) { return x.fd === "salida"; }), fuera = c(function (x) { return x.fd === "fuera"; });
     var listas = c(function (x) { return x.fd === "vacia" && x.hk === "limpia"; });
     var sinLib = c(function (x) { return x.fd === "llegada" && x.hk !== "limpia"; });
     document.getElementById("opsHero").innerHTML = App.hero(
-      { label: "Llegadas pendientes de check-in", value: lleg - Math.min(3, lleg), unit: "de " + lleg, sub: Math.min(3, lleg) + " ya registradas · " + sinLib + " sin habitación lista" },
+      { label: "Llegadas pendientes de check-in", value: lleg - c(function (x) { return x.fd === "llegada" && x._reg; }), unit: "de " + lleg, sub: c(function (x) { return x.fd === "llegada" && x._reg; }) + " ya registradas · " + sinLib + " sin habitación lista" },
       [["En casa", ocup + " hab.", "ocupación " + Math.round(ocup / prop.hab * 100) + "%"], ["Salidas hoy", sal, c(function (x) { return x.fd === "salida" && x.hk !== "ocupada"; }) + " con check-out hecho"], ["Disponibles para venta", listas, fuera + " fuera de servicio", "ok"], ["Hab. sin liberar", sinLib, "para llegadas de hoy", sinLib ? "warn" : ""]]);
 
     // Rack por piso
@@ -278,7 +282,7 @@
       var fl = rs.filter(function (x) { return x.f === f; });
       var occF = fl.filter(function (x) { return x.fd === "ocupada" || x.fd === "salida"; }).length;
       rack += '<div class="floor"><div class="floor-l">Piso ' + f + "<small>" + occF + "/" + fl.length + ' ocup.</small></div><div class="rooms">' + fl.map(function (x) {
-        return '<div class="room ' + roomCls(x) + '" title="Hab. ' + x.n + " · " + x.tipo + " · " + FD[x.fd] + " · limpieza: " + HK[x.hk][0] + '"><b>' + x.n + "</b>" + FDS[x.fd] + '<span class="hk">' + HKS[x.hk] + "</span></div>";
+        return '<div class="room ' + roomCls(x) + '" data-rack="' + x.n + '" style="cursor:pointer" title="Hab. ' + x.n + " · " + x.tipo + " · " + FD[x.fd] + " · limpieza: " + HK[x.hk][0] + '"><b>' + x.n + "</b>" + FDS[x.fd] + '<span class="hk">' + HKS[x.hk] + "</span></div>";
       }).join("") + "</div></div>";
     }
     document.getElementById("rack").innerHTML = rack;
@@ -309,7 +313,7 @@
     document.getElementById("inspBody").innerHTML = rs.filter(function (x) { return x.hk === "insp"; }).slice(0, 8).map(function (x, i) {
       var vip = x.fd === "llegada";
       return '<tr data-vip="' + (vip ? 1 : 0) + '"><td class="strong">' + x.n + '<span class="sub">' + x.tipo + "</span></td><td>" + camareras[i % nM] + '<span class="sub">terminó ' + hhmm(8 * 60 + 5 + i * 11) + "</span></td><td>" + (vip ? '<span class="badge b-danger">Prioridad</span> ' + x.g + " · " + hhmm(x.hora) : '<span class="muted">—</span>') +
-        '</td><td class="right" style="white-space:nowrap"><a class="btn btn-primary btn-sm" href="#" data-toast="Hab. ' + x.n + ' aprobada y liberada a recepción (demo)">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-toast="Hab. ' + x.n + ' devuelta a la camarera con observaciones (demo)">Rechazar</a></td></tr>';
+        '</td><td class="right" style="white-space:nowrap"><a class="btn btn-primary btn-sm" href="#" data-op="insp-ok" data-n="' + x.n + '">Aprobar</a> <a class="btn btn-ghost btn-sm" href="#" data-op="insp-no" data-n="' + x.n + '">Rechazar</a></td></tr>';
     }).join("") || '<tr><td colspan="4" class="muted">Sin habitaciones por inspeccionar</td></tr>';
     var ib = document.getElementById("inspBody");
     [].slice.call(ib.rows).sort(function (a, b) { return b.dataset.vip - a.dataset.vip; }).forEach(function (tr) { ib.appendChild(tr); });
@@ -332,6 +336,7 @@
       if (fl[1] === "Refrigeración" && st === "Abierto") st = "Esperando repuesto";
       return { id: "MT-" + (6120 + i * 3 + Math.floor(r() * 3)), loc: fl[3] ? "Hab. " + hab + (fl[2] === "Urgente" ? " · bloqueada" : "") : areas[fl[1]] || "Áreas comunes", f: fl[0], cat: fl[1], p: fl[2], st: st, tec: st === "Abierto" ? "—" : pick(r, tecnicos), min: min, oc: st === "Esperando repuesto" ? "OC-2026-" + (1170 + Math.floor(r() * 20)) : "" };
     });
+    tickets = data.extraT.concat(tickets);
     data.tickets = tickets;
     tickets.sort(function (a, b) { return ["Urgente", "Alta", "Media", "Baja"].indexOf(a.p) - ["Urgente", "Alta", "Media", "Baja"].indexOf(b.p); });
     var abiertos = tickets.filter(function (t) { return t.st !== "Resuelto"; });
@@ -368,7 +373,7 @@
       var hues = r() < 0.65;
       rr += "<tr><td>" + hhmm(h) + '</td><td class="strong">' + (hues ? rm.g : pick(r, ["Fam. Rodríguez", "Sr. Castillo", "Grupo Digitel", "Sra. Hernández", "Fam. Suárez"])) + '<span class="sub">Mesa ' + (i < 4 ? "S" : "T") + (1 + Math.floor(r() * 18)) + " · " + (hues ? "Hab. " + rm.n : "Externo") + '</span></td><td class="num">' + (2 + Math.floor(r() * 5)) + '</td><td class="small">' + notas[i] + "</td></tr>";
     }
-    document.getElementById("restBody").innerHTML = rr;
+    document.getElementById("restBody").innerHTML = data.extraRest.join("") + rr;
     document.getElementById("venues").innerHTML = ab.venues.map(function (v, i) {
       var n = i === 0 ? 2 : Math.floor(r() * 3), used = {}, sl = [];
       for (var k = 0; k < n; k++) { var e = pick(r, eventos); if (!used[e[0]]) { used[e[0]] = 1; sl.push(e); } }
@@ -400,18 +405,80 @@
   });
   document.getElementById("btnWalkin").addEventListener("click", function (e) {
     e.preventDefault();
+    var pre = this.dataset.pre || ""; delete this.dataset.pre;
     var libres = data.rooms.filter(function (r) { return r.fd === "vacia" && r.hk === "limpia"; });
     App.wizard({ title: "Walk-in", sub: libres.length + " habitaciones vacías y listas", steps: [{ t: "Datos", html: function () {
-      return '<div class="field"><label>Huésped</label><input class="input" value="Huésped sin reserva"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Noches</label><input class="input" type="number" value="1" min="1"></div>' +
-        '<div class="field"><label>Habitación sugerida</label><select class="select">' + libres.slice(0, 8).map(function (r) { return "<option>" + r.n + " · " + r.tipo + " · " + $(r.tarifa) + "</option>"; }).join("") + "</select></div></div>";
-    } }], done: { label: "Registrar y emitir llave", toast: "Walk-in registrado en el PMS · llave emitida (demo)" } });
+      return '<div class="field"><label>Huésped</label><input class="input" id="wiN" value="Huésped sin reserva"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Noches</label><input class="input" type="number" id="wiNo" value="1" min="1"></div>' +
+        '<div class="field"><label>Habitación sugerida</label><select class="select" id="wiR">' + libres.slice(0, 8).map(function (r) { return '<option value="' + r.n + '"' + (+pre === r.n ? " selected" : "") + ">" + r.n + " · " + r.tipo + " · " + $(r.tarifa) + "</option>"; }).join("") + "</select></div></div>";
+    }, read: function (el, st) { st.g = el.querySelector("#wiN").value || "Huésped sin reserva"; st.n = +el.querySelector("#wiR").value; st.no = +el.querySelector("#wiNo").value || 1; } }],
+      done: { label: "Registrar y emitir llave", toast: function (st) { return "Walk-in registrado · " + st.g + " en la hab. " + st.n + " · llave emitida"; }, fn: function (st) {
+        var x = data.rooms.find(function (r) { return r.n === st.n; });
+        if (x) { x.fd = "ocupada"; x.g = st.g; x.noches = st.no; x.res = "R-" + (49000 + st.n); x.canal = "Walk-in"; }
+        render(cur, true);
+      } } });
   });
   document.getElementById("btnFalla").addEventListener("click", function (e) {
     e.preventDefault();
+    var falla = this.dataset.pre || ""; delete this.dataset.pre;
     App.wizard({ title: "Reportar falla", steps: [{ t: "Falla", html: function () {
-      return '<div class="field"><label>Ubicación</label><input class="input" value="Hab. 410"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Categoría</label><select class="select"><option>Climatización</option><option>Plomería</option><option>Electricidad</option><option>Cerrajería</option><option>Electrónica</option></select></div>' +
-        '<div class="field"><label>Prioridad</label><select class="select"><option>Urgente</option><option selected>Alta</option><option>Media</option><option>Baja</option></select></div></div><div class="field"><label>Qué pasa</label><input class="input" placeholder="Ej.: el A/A no enfría"></div>';
-    } }], done: { label: "Crear ticket", toast: "Ticket MT-6160 creado y asignado a José A. Rivas (demo)" } });
+      return '<div class="field"><label>Ubicación</label><input class="input" id="flU" value="' + (falla || "Hab. 410") + '"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Categoría</label><select class="select" id="flC"><option>Climatización</option><option>Plomería</option><option>Electricidad</option><option>Cerrajería</option><option>Electrónica</option></select></div>' +
+        '<div class="field"><label>Prioridad</label><select class="select" id="flP"><option>Urgente</option><option selected>Alta</option><option>Media</option><option>Baja</option></select></div></div><div class="field"><label>Qué pasa</label><input class="input" id="flF" placeholder="Ej.: el A/A no enfría"></div>';
+    }, read: function (el, st) { st.u = el.querySelector("#flU").value; st.c = el.querySelector("#flC").value; st.p = el.querySelector("#flP").value; st.f = el.querySelector("#flF").value || "Falla reportada por recepción"; } }],
+      done: { label: "Crear ticket", toast: function (st) { return "Ticket MT-" + (6160 + data.extraT.length) + " creado · " + st.p + " · asignado a José A. Rivas"; }, fn: function (st) {
+        data.extraT.unshift({ id: "MT-" + (6160 + data.extraT.length), loc: st.u, f: st.f, cat: st.c, p: st.p, st: "Asignado", tec: "José A. Rivas", min: 1, oc: "" });
+        render(cur, true);
+        document.querySelector('.tab[data-tab="mt"]').click();
+      } } });
+  });
+
+  // Acciones de recepción y housekeeping: cambian el estado de la habitación y se refleja en todo el tablero
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-op]");
+    if (!b) return;
+    e.preventDefault();
+    var n = +b.dataset.n, x = data.rooms.find(function (r) { return r.n === n; }), op = b.dataset.op, msg = "";
+    if (op === "checkin") { x._reg = true; msg = "Check-in de " + x.g + " · hab. " + n + " · llave emitida"; }
+    if (op === "avisar") { x.prio = true; msg = "Aviso enviado a housekeeping: hab. " + n + " con prioridad"; }
+    if (op === "late") { x.late = true; msg = "Late check-out hasta las 2:00 p.m. aprobado para la hab. " + n; }
+    if (op === "checkout") { x.hk = "sucia"; x.saldo = 0; msg = "Check-out hab. " + n + ": folio cerrado, factura enviada al ERP y habitación marcada sucia"; }
+    if (op === "insp-ok") { x.hk = "limpia"; msg = "Hab. " + n + " aprobada y liberada a recepción"; }
+    if (op === "insp-no") { x.hk = "sucia"; msg = "Hab. " + n + " devuelta a la camarera con observaciones"; }
+    if (op === "limpieza") { x.hk = "proceso"; msg = "Hab. " + n + " enviada a limpieza"; }
+    if (op === "cargo") {
+      App.wizard({ title: "Cargar consumo · hab. " + n, steps: [{ t: "Cargo", html: function () { return '<div class="grid g-2" style="gap:0 12px"><div class="field" style="margin:0"><label>Punto de venta</label><select class="select"><option>Restaurante</option><option>Lounge bar</option><option>Room service</option><option>Spa</option><option>Lavandería</option></select></div><div class="field" style="margin:0"><label>Monto (USD)</label><input class="input" type="number" id="cgM" value="45" min="1"></div></div>'; }, read: function (el, st) { st.m = Math.max(1, +el.querySelector("#cgM").value || 1); } }],
+        done: { label: "Cargar a la habitación", toast: function (st) { return "Cargo de " + $(st.m) + " registrado en el folio de la hab. " + n; }, fn: function (st) { x.saldo += st.m; guestDrawer(n); } } });
+      return;
+    }
+    render(cur, true);
+    if (op === "checkin" || op === "checkout" || op === "late" || op === "avisar") guestDrawer(n);
+    App.toast(msg);
+  });
+  // Rack: clic en una habitación → huésped o acciones de la habitación
+  document.getElementById("rack").addEventListener("click", function (e) {
+    var el = e.target.closest("[data-rack]");
+    if (!el) return;
+    var n = +el.dataset.rack, x = data.rooms.find(function (r) { return r.n === n; });
+    if (x._st) { guestDrawer(n); return; }
+    var act = x.fd === "fuera" ? '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-pre-falla="Hab. ' + n + '">Reportar falla</a>'
+      : x.hk === "limpia" ? '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-pre-walkin="' + n + '">Asignar walk-in</a>'
+      : x.hk === "proceso" ? '<span class="small muted">Camarera limpiando ahora</span>' : '<a class="btn btn-primary btn-sm" href="#" data-close-drawer data-op="limpieza" data-n="' + n + '">Enviar a limpieza</a>';
+    App.drawer('<div class="drawer-h"><div><h2>Habitación ' + n + "</h2><p>" + x.tipo + " · piso " + x.f + '</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+      '<div class="drawer-b"><div class="card-b"><dl class="dl"><dt>Estado</dt><dd>' + FD[x.fd] + "</dd><dt>Limpieza</dt><dd>" + HK[x.hk][0] + "</dd><dt>Tarifa rack</dt><dd>" + $(x.tarifa) + '</dd></dl></div></div><div class="drawer-f">' + act + "</div>");
+  });
+  document.addEventListener("click", function (e) {
+    var w = e.target.closest("[data-pre-walkin]"), f = e.target.closest("[data-pre-falla]");
+    if (w) { e.preventDefault(); var bw = document.getElementById("btnWalkin"); bw.dataset.pre = w.dataset.preWalkin; bw.click(); }
+    if (f) { e.preventDefault(); var bf = document.getElementById("btnFalla"); bf.dataset.pre = f.dataset.preFalla; bf.click(); }
+  });
+  document.getElementById("btnMesa").addEventListener("click", function (e) {
+    e.preventDefault();
+    App.wizard({ title: "Nueva reserva de mesa", sub: AB[cur.id].rest, steps: [{ t: "Mesa", html: function () {
+      return '<div class="field"><label>Nombre</label><input class="input" id="msN" value="Sr. y Sra. Pérez"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Hora</label><input class="input" type="time" id="msH" value="20:30"></div><div class="field"><label>Personas</label><input class="input" type="number" id="msP" value="2" min="1"></div></div><div class="field" style="margin:0"><label>Nota</label><input class="input" id="msO" placeholder="Aniversario, alergias…"></div>';
+    }, read: function (el, st) { st.n = el.querySelector("#msN").value || "Reserva"; st.h = el.querySelector("#msH").value; st.p = el.querySelector("#msP").value; st.o = el.querySelector("#msO").value || "—"; } }],
+      done: { label: "Reservar mesa", toast: function (st) { return "Mesa reservada para " + st.n + " a las " + st.h; }, fn: function (st) {
+        data.extraRest.unshift('<tr style="background:var(--gold-soft)"><td>' + st.h + '</td><td class="strong">' + st.n + '<span class="sub">Nueva · Mesa por asignar</span></td><td class="num">' + st.p + '</td><td class="small">' + st.o + "</td></tr>");
+        render(cur, true);
+      } } });
   });
 
   App.onProp(function (p) {

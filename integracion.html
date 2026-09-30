@@ -41,7 +41,7 @@
   </div>
   <div class="tab-panel active" data-panel="conn"><div id="connList"></div></div>
   <div class="tab-panel" data-panel="hotel">
-    <div class="table-wrap"><table class="table matrix">
+    <div class="table-wrap"><table class="table matrix stack-md">
       <thead><tr><th>Hotel</th><th>PMS</th><th>ERP</th><th>Puntos de venta</th><th>Biométrico</th><th>Última sincronización</th></tr></thead>
       <tbody id="matrix"></tbody>
     </table></div>
@@ -103,7 +103,7 @@
       '<div class="between small muted" style="margin-bottom:4px"><span>Últimas 24 h</span><span>' + c.freq + " · " + c.dir + '</span></div><div class="spark">' + spark(c) + "</div>" +
       '<div style="margin-top:12px"><b class="small">Errores recientes</b>' +
       (c.err.length ? c.err.map(function (e) { return '<div class="cx-err"><b>' + e[0] + "</b> · " + e[1] + "</div>"; }).join("") : '<div class="small" style="color:var(--ok);margin-top:4px">' + App.icon("check").replace('class="ico ', 'style="width:14px;height:14px;vertical-align:-2px" class="ico ') + " Sin errores hoy</div>") + "</div></div>" +
-      '<div class="cx-foot"><a class="btn ' + (c.st === "err" ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + (c.st === "err" ? "Reintentar ahora" : "Reintentar") + '</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Historial detallado de ' + c.name + ' (demo)">Ver detalle</a></div></div>';
+      '<div class="cx-foot"><a class="btn ' + (c.st === "err" ? "btn-primary" : "btn-ghost") + ' btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + (c.st === "err" ? "Reintentar ahora" : "Reintentar") + '</a><a class="btn btn-ghost btn-sm" href="#" data-hist="' + c.id + '">Ver detalle</a></div></div>';
   }
   var GRP = { gPms: "Sistemas hoteleros (PMS) · reservas, huéspedes, habitaciones y cargos", gErp: "Sistemas administrativos (ERP) · contabilidad, compras, inventario, nómina y facturación", gOtros: "Otras conexiones · puntos de venta, WhatsApp y relojes biométricos" };
   function row(c) {
@@ -112,7 +112,7 @@
     return '<details class="acc flat cx-line" data-sedes="' + c.sedes.join(" ") + '"><summary><div class="cx-row" style="flex:1"><span class="conn-logo' + (c.erp ? " erp" : "") + '">' + c.logo + '</span><div style="min-width:0"><b>' + c.name + '</b><div class="small muted">' + sedes + '</div></div><div class="small muted cx-hide">' + c.freq + '</div><div class="small cx-hide">' + c.last + '</div><span class="row small" style="gap:6px;white-space:nowrap"><span class="status-dot ' + dot + '"></span>' + s[2].split(" · ")[0] + "</span></div></summary>" +
       '<div class="acc-b"><div class="small muted" style="margin-bottom:10px">' + c.trae + " · " + c.dir + " · " + n(c.reg) + ' registros hoy</div><div class="between small muted" style="margin-bottom:4px"><span>Últimas 24 h</span><span>' + c.freq + '</span></div><div class="spark">' + spark(c) + "</div>" +
       (c.err.length ? c.err.map(function (e) { return '<div class="cx-err"><b>' + e[0] + "</b> · " + e[1] + "</div>"; }).join("") : '<div class="small" style="color:var(--ok);margin-top:8px">Sin errores hoy</div>') +
-      '<div class="row mt"><a class="btn btn-ghost btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + 'Reintentar</a><a class="btn btn-ghost btn-sm" href="#" data-toast="Historial detallado de ' + c.name + ' (demo)">Ver detalle</a></div></div></details>';
+      '<div class="row mt"><a class="btn btn-ghost btn-sm" href="#" data-retry="' + c.id + '">' + App.icon("refresh") + 'Reintentar</a><a class="btn btn-ghost btn-sm" href="#" data-hist="' + c.id + '">Ver detalle</a></div></div></details>';
   }
   function draw() {
     var p = App.prop(), vis = C.filter(function (c) { return p === "todas" || c.sedes.indexOf("todas") >= 0 || c.sedes.indexOf(p) >= 0; });
@@ -172,7 +172,26 @@
   });
   document.getElementById("testAll").addEventListener("click", function (e) {
     e.preventDefault();
-    App.toast("Probando las " + C.length + " conexiones… " + C.filter(function (c) { return c.st === "err"; }).length + " con error");
+    var bad = C.filter(function (c) { return c.st === "err"; });
+    C.forEach(function (c) { c._prev = c.st; c.st = "sync"; c.last = "probando…"; });
+    draw();
+    App.toast("Probando las " + C.length + " conexiones…");
+    setTimeout(function () {
+      C.forEach(function (c) { c.st = "ok"; c.last = "hace 1 s"; if (c._prev === "err") { c.reg += 38; c.err = [["10:43", "Conexión restablecida · 38 registros en cola sincronizados"]]; } });
+      draw();
+      App.toast(C.length + " conexiones probadas · " + (bad.length ? bad.length + " restablecida" + (bad.length > 1 ? "s" : "") + " (" + bad.map(function (c) { return c.name; }).join(", ") + ")" : "todas responden"));
+    }, 2000);
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-hist]");
+    if (!b) return;
+    e.preventDefault();
+    var c = C.find(function (x) { return x.id === b.dataset.hist; }), h = [];
+    for (var i = 0; i < 8; i++) { var hr = 10 - i; h.push([("0" + hr).slice(-2) + ":" + (i ? "00" : "40"), c.st === "err" && i < 2 ? "Error · sin respuesta" : "Sincronización correcta", Math.round(c.reg / 10 * (1 - i * 0.05))]); }
+    App.drawer('<div class="drawer-h"><div><h2>' + c.name + "</h2><p>" + c.freq + " · " + c.dir + '</p></div><button class="icon-btn" data-close-drawer aria-label="Cerrar">' + App.icon("x") + "</button></div>" +
+      '<div class="drawer-b"><div class="card-b"><div class="spark" style="height:40px;margin-bottom:12px">' + spark(c) + '</div><table class="table"><thead><tr><th>Hora</th><th>Resultado</th><th class="num">Registros</th></tr></thead><tbody>' +
+      h.map(function (x) { return "<tr><td>" + x[0] + '</td><td><span class="badge ' + (x[1].indexOf("Error") === 0 ? "b-danger" : "b-ok") + '">' + x[1] + '</span></td><td class="num">' + n(x[2]) + "</td></tr>"; }).join("") +
+      "</tbody></table>" + c.err.map(function (x) { return '<div class="cx-err"><b>' + x[0] + "</b> · " + x[1] + "</div>"; }).join("") + '</div></div><div class="drawer-f"><a class="btn btn-primary btn-sm" href="#" data-close-drawer data-retry="' + c.id + '">' + App.icon("refresh") + "Reintentar</a></div>");
   });
 
   App.onProp(function () { draw(); });

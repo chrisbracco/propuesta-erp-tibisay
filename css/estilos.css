@@ -485,7 +485,7 @@ p { margin: 0 0 1em; }
 /* --------------------------------------------------------------------------
    Tablas y badges
    -------------------------------------------------------------------------- */
-.table-wrap { overflow-x: auto; }
+.table-wrap { overflow: visible; }
 .table { width: 100%; border-collapse: collapse; font-size: .84rem; }
 .table th {
   text-align: left;
@@ -835,4 +835,16 @@ p { margin: 0 0 1em; }
   .split__img::after { display: none; }
   .module-nav { flex-direction: column; }
   .module-nav a:last-child { text-align: left; }
+}
+
+/* Sin scroll lateral dentro de recuadros: en móvil la tabla se apila como fichas */
+@media (max-width: 760px) {
+  .table thead { display: none; }
+  .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+  .table tr { padding: 10px 14px; border-bottom: 1px solid var(--borde); }
+  .table td { border: 0; padding: 3px 0 3px 42%; position: relative; text-align: right; min-width: 0 !important; }
+  .table td::before { content: attr(data-label); position: absolute; left: 0; top: 4px; width: 40%; text-align: left; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--titulos); }
+  .table td:first-child { padding-left: 0; text-align: left; }
+  .table td:first-child::before { display: none; }
+  .table td .progress { margin-left: auto; max-width: 140px; }
 }

@@ -158,7 +158,7 @@
     document.getElementById("roleCta").innerHTML = '<a class="btn btn-primary" href="' + q[0][1] + '">' + App.icon(q[0][2]) + q[0][0] + "</a>";
     document.getElementById("quick").innerHTML = q.map(function (x) { return '<a href="' + x[1] + '"><span class="kpi-ico">' + App.icon(x[2]) + "</span>" + x[0] + '<span style="margin-left:auto;color:var(--text-3)">' + App.icon("arrow") + "</span></a>"; }).join("");
 
-    var vis = A.filter(function (x) { return p === "todas" || x.sede === "todas" || x.sede === p; });
+    var vis = A.filter(function (x) { return (p === "todas" || x.sede === "todas" || x.sede === p) && !DONE[x.t]; });
     var mine = vis.filter(function (x) { return x.r.indexOf(r.id) >= 0; }), other = vis.filter(function (x) { return x.r.indexOf(r.id) < 0; });
     function li(x, o) {
       var act = x.h ? '<a class="btn btn-ghost btn-sm" href="' + x.h + '">' + x.a + "</a>" : '<a class="btn ' + (o ? "btn-ghost" : "btn-primary") + ' btn-sm" href="#" data-toast="' + x.toast + '">' + x.a + "</a>";
@@ -195,6 +195,18 @@
       ]
     });
   }
+
+  // Acción directa desde la bandeja: el pendiente queda resuelto y baja el contador
+  var DONE = {};
+  document.getElementById("inbox").addEventListener("click", function (e) {
+    var b = e.target.closest("a[data-toast]");
+    if (!b) return;
+    var li = b.closest("li"), t = li.querySelector("b").textContent;
+    DONE[t] = 1;
+    b.outerHTML = '<span class="badge b-ok">Hecho</span>';
+    li.style.opacity = ".55";
+    var c = document.getElementById("inboxCount"); c.textContent = Math.max(0, +c.textContent - (li.querySelector(".tag") ? 0 : 1));
+  });
 
   App.onProp(function () { if (document.getElementById("roleSelect")) render(); });
   document.addEventListener("DOMContentLoaded", function () { App.onRole(render); });

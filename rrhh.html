@@ -31,7 +31,7 @@
     <button class="tab" data-tab="turnos">Turnos de la semana</button>
     <button class="tab" data-tab="personal">Personal por sede</button>
     <button class="tab" data-tab="nomina">Nómina</button>
-    <button class="tab" data-tab="recl">Reclutamiento <span class="badge nodot b-gold">23</span></button>
+    <button class="tab" data-tab="recl">Reclutamiento <span class="badge nodot b-gold" id="reclCount">23</span></button>
   </div>
 
   <!-- ============ ASISTENCIA ============ -->
@@ -39,16 +39,16 @@
     <div class="toolbar">
       <div class="seg" id="stSeg"><button class="active" data-v="">Todos</button><button data-v="danger">Ausencia</button><button data-v="warn">Tardanza</button><button data-v="ok">A tiempo</button><button data-v="muted">Permiso / pendiente</button></div>
       <select class="select select-sm" style="width:auto" id="depSel"><option value="">Todos los departamentos</option><option>Recepción</option><option>Housekeeping</option><option>A&amp;B</option><option>Cocina</option><option>Mantenimiento</option><option>Administración</option><option>Seguridad</option></select>
-      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Exportando reporte de asistencia del día a Excel (demo)" data-icon="download">Exportar</a>
+      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-export="#marcTable" data-file="asistencia-hoy" data-icon="download">Exportar</a>
     </div>
-    <div class="table-wrap"><table class="table" data-searchable>
+    <div class="table-wrap"><table class="table" data-searchable id="marcTable">
       <thead><tr><th style="min-width:220px">Colaborador</th><th>Turno</th><th>Entrada</th><th>Estado</th></tr></thead>
       <tbody id="marcBody"></tbody>
     </table></div>
     <div class="pager"><span id="marcCount">—</span><span>Biométricos sincronizados hace 3 min · tolerancia 5 min</span></div>
     <details class="acc flat" id="sedeAcc">
       <summary><span class="grow">Semáforo por sede</span></summary>
-      <div class="table-wrap"><table class="table">
+      <div class="table-wrap"><table class="table stack-md">
         <thead><tr><th>Sede</th><th class="num">Programados</th><th class="num">A tiempo</th><th class="num">Tardanza</th><th class="num">Ausencia</th><th style="min-width:180px">Puntualidad</th><th>Semáforo</th></tr></thead>
         <tbody id="sedeBody"></tbody>
       </table></div>
@@ -59,9 +59,9 @@
   <div class="tab-panel" data-panel="turnos">
     <div class="toolbar">
       <select class="select select-sm" style="width:auto" id="turnDep"><option>Housekeeping</option><option>Recepción</option><option>A&amp;B</option><option>Mantenimiento</option><option>Seguridad</option></select>
-      <div class="seg"><button>‹ Sem. 39</button><button class="active">Sem. 40 · 28/09–04/10</button><button>Sem. 41 ›</button></div>
+      <div class="seg" id="weekSeg"><button data-w="-1">‹ Anterior</button><button class="active" data-w="0" id="weekLbl">Sem. 40 · 28/09–04/10</button><button data-w="1">Siguiente ›</button></div>
       <span class="small muted" id="turnHint">—</span>
-      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" data-toast="Turnos publicados · cada colaborador recibe su horario por WhatsApp (demo)" data-icon="mail">Publicar turnos</a>
+      <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="#" id="btnPub" data-icon="mail">Publicar turnos</a>
     </div>
     <div class="table-wrap"><table class="shifts" id="shiftGrid">
       <thead><tr><th style="padding-left:16px">Colaborador</th><th>Lun 28</th><th class="today">Mar 29 · hoy</th><th>Mié 30</th><th>Jue 01</th><th>Vie 02</th><th>Sáb 03</th><th>Dom 04</th><th class="right" style="padding-right:16px">Horas</th></tr></thead>
@@ -73,7 +73,7 @@
 
   <!-- ============ PERSONAL ============ -->
   <div class="tab-panel" data-panel="personal">
-    <div class="table-wrap"><table class="table" data-searchable>
+    <div class="table-wrap"><table class="table stack-md" data-searchable>
       <thead><tr><th>Sede</th><th class="num">Recepción</th><th class="num">Housekeeping</th><th class="num">A&amp;B</th><th class="num">Mantenim.</th><th class="num">Ventas/Eventos</th><th class="num">Admin.</th><th class="num">Total</th><th style="min-width:130px">Plantilla cubierta</th></tr></thead>
       <tbody>
         <tr data-sede="margarita"><td class="strong">Margarita</td><td class="num">18</td><td class="num">46</td><td class="num">62</td><td class="num">14</td><td class="num">8</td><td class="num">12</td><td class="num strong">160</td><td><div class="pcell"><div class="progress"><span style="width:94%"></span></div><b>94%</b></div></td></tr>
@@ -93,9 +93,9 @@
     <div class="card-b">
       <div class="between" style="flex-wrap:wrap;align-items:flex-start;gap:16px">
         <div><div class="kpi-label">2.ª quincena de septiembre 2026 · neto a pagar</div><div class="kpi-value" style="font-size:32px">$ 136.130</div><div class="kpi-sub">612 colaboradores · 1.284 h extra aprobadas</div></div>
-        <div class="row"><a class="btn btn-ghost" href="#" data-toast="Recibos de pago enviados por WhatsApp y correo (demo)">Enviar recibos</a><a class="btn btn-primary" href="#" data-toast="Nómina aprobada y asiento enviado al ERP (demo)" data-icon="check">Aprobar nómina</a></div>
+        <div class="row"><a class="btn btn-ghost" href="#" id="btnRecibos">Enviar recibos</a><a class="btn btn-primary" href="#" id="btnNomina" data-icon="check">Aprobar nómina</a></div>
       </div>
-      <div class="steps mt"><span class="done">Marcaciones consolidadas · 27/09</span><em>→</em><span class="done">Incidencias justificadas · 28/09</span><em>→</em><span class="done">Cálculo validado · 28/09</span><em>→</em><span class="now">Aprobación de dirección</span><em>→</em><span>Asiento a Profit Plus / Saint / a2</span></div>
+      <div class="steps mt" id="nomSteps"><span class="done">Marcaciones consolidadas · 27/09</span><em>→</em><span class="done">Incidencias justificadas · 28/09</span><em>→</em><span class="done">Cálculo validado · 28/09</span><em>→</em><span class="now">Aprobación de dirección</span><em>→</em><span>Asiento a Profit Plus / Saint / a2</span></div>
     </div>
     <div class="table-wrap" style="border-top:1px solid var(--border)"><table class="table">
       <thead><tr><th>Concepto</th><th class="num">Colaboradores</th><th class="num">Monto (USD)</th></tr></thead>
@@ -131,14 +131,14 @@
   <div class="tab-panel" data-panel="recl">
     <div class="card-b">
       <div class="between" style="flex-wrap:wrap;margin-bottom:12px"><div><h2>Temporada alta · diciembre 2026 a carnaval 2027</h2><p class="small muted" style="margin:2px 0 0">Ocupación proyectada 84% dic · 91% carnaval</p></div>
-        <a class="btn btn-ghost btn-sm" href="#" data-hash="nueva-vacante" data-toast="Vacante publicada en portal de empleo y redes (demo)" data-icon="plus">Nueva vacante</a></div>
+        <a class="btn btn-ghost btn-sm" href="#" data-hash="nueva-vacante" data-icon="plus">Nueva vacante</a></div>
       <div class="steps">
         <span class="done">Publicada · 23</span><em>→</em><span class="done">Preselección · 142</span><em>→</em><span class="now">Entrevistas · 38</span><em>→</em><span>Prueba práctica · 11</span><em>→</em><span>Oferta · 6</span><em>→</em><span>Contratados · 9</span>
       </div>
     </div>
     <div class="table-wrap"><table class="table" data-searchable>
       <thead><tr><th>Vacante</th><th>Sede</th><th class="num">Puestos</th><th>Etapa</th><th>Inicio</th></tr></thead>
-      <tbody>
+      <tbody id="reclBody">
         <tr data-sede="margarita"><td class="strong">Mesonero/a bilingüe<span class="sub">Temporada (4 meses)</span></td><td>Margarita</td><td class="num">4<span class="sub">34 candidatos</span></td><td><span class="badge b-info">Entrevistas</span></td><td>15/11/2026<span class="sub">Gabriela M.</span></td></tr>
         <tr data-sede="margarita"><td class="strong">Camarera/o de pisos<span class="sub">Temporada (4 meses)</span></td><td>Margarita</td><td class="num">6<span class="sub">51 candidatos</span></td><td><span class="badge b-warn">Preselección</span></td><td>01/12/2026<span class="sub">Gabriela M.</span></td></tr>
         <tr data-sede="margarita"><td class="strong">Animador/a recreación<span class="sub">Temporada (3 meses)</span></td><td>Margarita</td><td class="num">2<span class="sub">15 candidatos</span></td><td><span class="badge b-info">Prueba práctica</span></td><td>15/12/2026<span class="sub">Gabriela M.</span></td></tr>
@@ -191,6 +191,7 @@
   var POR_SEDE = {};
   D.propiedades.forEach(function (p) { POR_SEDE[p.id] = staff(p.id, Math.max(14, Math.round(p.hab / 5))); });
 
+  var NOTIF = {}, WEEK = 0;
   var SEM = { ok: "A tiempo", warn: "Tardanza", danger: "Ausencia", muted: "Permiso / pendiente" };
 
   function render(p) {
@@ -228,7 +229,7 @@
       var ini = x.n.split(" ").slice(0, 2).map(function (w) { return w[0]; }).join("");
       return '<tr data-st="' + x.st + '" data-dep="' + x.dep + '"><td><div class="cell-user"><span class="avatar avatar-sm' + (x.st === "ok" ? "" : " avatar-gold") + '">' + ini + '</span><div class="strong">' + x.n + '<span class="sub">' + x.cargo + " · " + x.dep + (p === "todas" ? " · " + D.sedeNombre(x.sede) : "") + "</span></div></div></td>" +
         '<td><span class="shift ' + (x.t === "ADM" ? "B" : x.t) + '" style="display:inline-block;min-width:0">' + (x.t === "ADM" ? "Adm." : x.t) + "</span> " + (x.t === "C" ? "11:00 p.m. (ayer)" : hhmm(x.prog[0])) + '<span class="sub">sale ' + hhmm(x.prog[1]) + (x.t === "C" && x.sal != null ? " · marcó " + hhmm(x.sal) : "") + "</span></td>" +
-        "<td>" + en + '<span class="sub">' + (x.ent != null ? x.medio : "&nbsp;") + "</span></td><td>" + badge + (x.st === "danger" ? ' <a class="small" href="#" data-toast="Notificación enviada al supervisor y al colaborador por WhatsApp (demo)">Notificar</a>' : "") + "</td></tr>";
+        "<td>" + en + '<span class="sub">' + (x.ent != null ? x.medio : "&nbsp;") + "</span></td><td>" + badge + (x.st === "danger" ? (NOTIF[x.n] ? ' <span class="small num-ok">Notificado ✓</span>' : ' <a class="small" href="#" data-notify="' + x.n + '">Notificar</a>') : "") + "</td></tr>";
     }).join("");
     filterMarc();
 
@@ -247,7 +248,7 @@
 
   function renderTurnos(p) {
     var sede = p === "todas" ? "margarita" : p, dep = document.getElementById("turnDep").value;
-    var r = rng(sede + dep), n = dep === "Housekeeping" ? 8 : dep === "Seguridad" ? 4 : 6;
+    var r = rng(sede + dep + (WEEK ? "w" + WEEK : "")), n = dep === "Housekeeping" ? 8 : dep === "Seguridad" ? 4 : 6;
     var prop = D.propiedades.find(function (x) { return x.id === sede; });
     var cargos = { Housekeeping: ["Camarera de pisos", "Camarera de pisos", "Supervisora", "Áreas comunes"], "Recepción": ["Recepcionista", "Recepcionista", "Auditor nocturno"], "A&B": ["Mesonero", "Bartender", "Cocinero"], Mantenimiento: ["Técnico", "Técnico A/A"], Seguridad: ["Vigilante"] };
     var HOR = { A: "7:00–15:00", B: "15:00–23:00", C: "23:00–7:00" };
@@ -256,7 +257,7 @@
       var base = ["A", "B", "C"][i % 3], libre = Math.floor(r() * 7), vac = r() < 0.12 ? Math.floor(r() * 5) : -1, h = 0, cells = "";
       var nm = pick(r, nom) + " " + pick(r, ape), cg = pick(r, cargos[dep]);
       for (var d = 0; d < 7; d++) {
-        var t = base, td = d === 1 ? ' class="today"' : "";
+        var t = base, td = d === 1 && !WEEK ? ' class="today"' : "";
         if (d === libre) { cells += "<td" + td + '><span class="shift off">Libre</span></td>'; continue; }
         if (vac >= 0 && d >= vac && d < vac + 3) { cells += "<td" + td + '><span class="shift vac">Vacaciones</span></td>'; continue; }
         if (d === 6 && base === "C") t = "A"; // rotación de semana
@@ -266,11 +267,75 @@
       }
       rows += '<tr><td><div class="cell-user"><span class="avatar avatar-sm' + (i % 2 ? " avatar-gold" : "") + '">' + nm.split(" ").map(function (w) { return w[0]; }).join("") + '</span><div class="strong">' + nm + '<span class="sub">' + cg + "</span></div></div></td>" + cells + '<td class="right strong" style="padding-right:16px">' + h + " h</td></tr>";
     }
-    if (dep === "Housekeeping" && sede === "margarita") rows += '<tr><td><div class="cell-user"><span class="avatar avatar-sm" style="background:var(--info-bg);color:var(--info)">+4</span><div class="strong">Refuerzo boda Gran Salón<span class="sub">Extras (4)</span></div></div></td><td></td><td class="today"></td><td></td><td></td><td></td><td><span class="shift extra">B · extras<small>15:00–23:00</small></span></td><td></td><td class="right strong" style="padding-right:16px">32 h</td></tr>';
+    if (dep === "Housekeeping" && sede === "margarita" && !WEEK) rows += '<tr><td><div class="cell-user"><span class="avatar avatar-sm" style="background:var(--info-bg);color:var(--info)">+4</span><div class="strong">Refuerzo boda Gran Salón<span class="sub">Extras (4)</span></div></div></td><td></td><td class="today"></td><td></td><td></td><td></td><td><span class="shift extra">B · extras<small>15:00–23:00</small></span></td><td></td><td class="right strong" style="padding-right:16px">32 h</td></tr>';
     document.getElementById("turnBody").innerHTML = rows;
     document.getElementById("turnFoot").innerHTML = '<tr><td class="small muted">Cobertura A / B / C</td>' + cob.map(function (c, d) { return '<td class="small' + (d === 1 ? " today" : "") + '">' + c.join(" · ") + '<div class="cov"><i style="background:' + (c[0] ? "var(--gold)" : "var(--danger)") + '"></i><i style="background:' + (c[1] ? "var(--champagne)" : "var(--danger)") + '"></i><i style="background:' + (c[2] ? "var(--teal)" : "var(--danger)") + '"></i></div></td>'; }).join("") + "<td></td></tr>";
     document.getElementById("turnHint").innerHTML = "Hotel <b>" + prop.nombre + "</b> · sugerido para ocupación proyectada <b>" + Math.min(95, prop.occ + 6) + "%</b>";
   }
+  function weekHead() {
+    var DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], base = new Date(2026, 8, 28 + WEEK * 7);
+    var ths = document.querySelectorAll("#shiftGrid thead th");
+    for (var d = 0; d < 7; d++) {
+      var f = new Date(base); f.setDate(base.getDate() + d);
+      ths[d + 1].textContent = DIAS[d] + " " + ("0" + f.getDate()).slice(-2) + (d === 1 && !WEEK ? " · hoy" : "");
+      ths[d + 1].classList.toggle("today", d === 1 && !WEEK);
+    }
+    var fin = new Date(base); fin.setDate(base.getDate() + 6);
+    function dm(x) { return ("0" + x.getDate()).slice(-2) + "/" + ("0" + (x.getMonth() + 1)).slice(-2); }
+    document.getElementById("weekLbl").textContent = "Sem. " + (40 + WEEK) + " · " + dm(base) + "–" + dm(fin);
+    document.querySelectorAll("#turnBody td[data-label]").forEach(function (td) { td.removeAttribute("data-label"); });
+    var pub = document.getElementById("btnPub"); pub.lastChild.textContent = "Publicar turnos"; pub.classList.remove("is-done");
+  }
+  document.querySelectorAll("#weekSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var w = +b.dataset.w;
+      WEEK = w ? WEEK + w : 0;
+      setTimeout(function () { document.querySelectorAll("#weekSeg button").forEach(function (x) { x.classList.toggle("active", x.id === "weekLbl"); }); });
+      weekHead(); renderTurnos(App.prop());
+      App.toast("Turnos de la semana " + (40 + WEEK));
+    });
+  });
+  document.getElementById("btnPub").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (this.classList.contains("is-done")) { App.toast("Los turnos de esta semana ya se publicaron"); return; }
+    this.classList.add("is-done"); this.lastChild.textContent = "Publicados ✓";
+    App.toast("Turnos de la semana " + (40 + WEEK) + " publicados · cada colaborador recibe su horario por WhatsApp");
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-notify]");
+    if (!b) return;
+    e.preventDefault();
+    NOTIF[b.dataset.notify] = 1;
+    App.toast("Notificación enviada al supervisor y a " + b.dataset.notify + " por WhatsApp");
+    b.outerHTML = '<span class="small num-ok">Notificado ✓</span>';
+  });
+  document.getElementById("btnNomina").addEventListener("click", function (e) {
+    e.preventDefault();
+    var st = document.querySelectorAll("#nomSteps span");
+    st[3].className = "done"; st[3].textContent = "Aprobada por dirección · 29/09"; st[4].className = "done"; st[4].textContent = "Asiento enviado a Profit Plus / Saint / a2";
+    this.outerHTML = '<span class="badge b-ok">Nómina aprobada</span>';
+    App.toast("Nómina aprobada · asiento enviado al ERP");
+  });
+  document.getElementById("btnRecibos").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (document.getElementById("btnNomina")) { App.toast("Primero aprueba la nómina: los recibos salen con el cálculo aprobado"); return; }
+    this.outerHTML = '<span class="small num-ok">612 recibos enviados ✓</span>';
+    App.toast("612 recibos de pago enviados por WhatsApp y correo");
+  });
+  document.querySelector('[data-hash="nueva-vacante"]').addEventListener("click", function (e) {
+    e.preventDefault();
+    App.wizard({ title: "Nueva vacante", steps: [{ t: "Vacante", html: function () {
+      return '<div class="field"><label>Cargo</label><input class="input" id="vcC" value="Recepcionista bilingüe"></div><div class="grid g-2" style="gap:0 12px"><div class="field"><label>Sede</label><select class="select" id="vcS">' + D.propiedades.map(function (h) { return '<option value="' + h.id + '">' + h.nombre + "</option>"; }).join("") + '</select></div><div class="field"><label>Puestos</label><input class="input" type="number" id="vcP" value="2" min="1"></div>' +
+        '<div class="field" style="margin:0"><label>Tipo</label><select class="select" id="vcT"><option>Temporada (4 meses)</option><option>Fijo</option></select></div><div class="field" style="margin:0"><label>Inicio</label><input class="input" type="date" id="vcI" value="2026-11-15"></div></div>';
+    }, read: function (el, st) { st.c = el.querySelector("#vcC").value || "Vacante"; st.s = el.querySelector("#vcS").value; st.p = el.querySelector("#vcP").value; st.t = el.querySelector("#vcT").value; st.i = el.querySelector("#vcI").value.split("-").reverse().join("/"); } }],
+      done: { label: "Publicar vacante", toast: function (st) { return "Vacante «" + st.c + "» publicada en el portal de empleo y redes"; }, fn: function (st) {
+        var tb = document.getElementById("reclBody");
+        tb.insertAdjacentHTML("afterbegin", '<tr data-sede="' + st.s + '" style="background:var(--gold-soft)"><td class="strong">' + st.c + '<span class="sub">' + st.t + "</span></td><td>" + D.sedeNombre(st.s) + '</td><td class="num">' + st.p + '<span class="sub">0 candidatos</span></td><td><span class="badge b-muted">Publicada</span></td><td>' + st.i + '<span class="sub">' + App.session().usuario.split(" ")[0] + "</span></td></tr>");
+        var c = document.getElementById("reclCount"); c.textContent = +c.textContent + 1;
+        document.querySelector('.tab[data-tab="recl"]').click();
+      } } });
+  });
+
   document.getElementById("turnDep").addEventListener("change", function () { renderTurnos(App.prop()); });
 
   // Marcación manual: 3 clics desde el menú (Gestión Humana → Marcación manual → Registrar)

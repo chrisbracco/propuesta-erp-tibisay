@@ -58,3 +58,9 @@
     });
   });
 })();
+
+/* Etiqueta cada celda con su encabezado para la vista apilada en móvil */
+document.querySelectorAll("table.table").forEach(function (t) {
+  var hs = [].map.call(t.querySelectorAll("thead th"), function (th) { return th.textContent.trim(); });
+  t.querySelectorAll("tbody tr").forEach(function (tr) { [].forEach.call(tr.cells, function (td, i) { td.setAttribute("data-label", hs[i] || ""); }); });
+});
